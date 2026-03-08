@@ -6,7 +6,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
+		"lint": "eslint src scripts next.config.ts middleware.ts --max-warnings=0",
+		"seo:crawl": "node scripts/crawl-legacy-urls.mjs",
+		"seo:redirects": "node scripts/generate-redirect-map.mjs",
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
 		"upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
@@ -14,7 +16,9 @@
 	},
 	"dependencies": {
 		"@opennextjs/cloudflare": "^1.17.1",
+		"lucide-react": "^0.577.0",
 		"next": "16.1.5",
+		"next-mdx-remote": "^6.0.0",
 		"react": "19.1.5",
 		"react-dom": "19.1.5"
 	},

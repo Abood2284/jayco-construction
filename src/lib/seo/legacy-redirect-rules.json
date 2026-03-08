@@ -1,0 +1,12 @@
+[
+	{ "oldPath": "/index.html", "newPath": "/", "notes": "Legacy home html" },
+	{ "oldPath": "/about-us.html", "newPath": "/about", "notes": "Legacy about page" },
+	{ "oldPath": "/clients.html", "newPath": "/clients", "notes": "Legacy clients page" },
+	{ "oldPath": "/gallery.html", "newPath": "/gallery", "notes": "Legacy gallery page" },
+	{ "oldPath": "/career.html", "newPath": "/careers", "notes": "Legacy careers page" },
+	{ "oldPath": "/contact-us.html", "newPath": "/contact", "notes": "Legacy contact page" },
+	{ "oldPath": "/products.html", "newPath": "/products", "notes": "Legacy products page" },
+	{ "oldPath": "/material-handling.html", "newPath": "/products/material-handling-systems", "notes": "Category migration" },
+	{ "oldPath": "/pressure-vessels.html", "newPath": "/products/pressure-vessels", "notes": "Category migration" },
+	{ "oldPath": "/fabrication.html", "newPath": "/products/fabrication-services", "notes": "Category migration" }
+]

@@ -1,0 +1,22 @@
+old_path,new_path,type,notes
+/about-us.html,/about,301,Legacy about page
+/about-us.html/,/about,301,Legacy about page
+/career.html,/careers,301,Legacy careers page
+/career.html/,/careers,301,Legacy careers page
+/clients.html,/clients,301,Legacy clients page
+/clients.html/,/clients,301,Legacy clients page
+/contact-us.html,/contact,301,Legacy contact page
+/contact-us.html/,/contact,301,Legacy contact page
+/fabrication.html,/products/fabrication-services,301,Category migration
+/fabrication.html/,/products/fabrication-services,301,Category migration
+/gallery.html,/gallery,301,Legacy gallery page
+/gallery.html/,/gallery,301,Legacy gallery page
+/index.html,/,301,Legacy home html
+/index.html/,/,301,Index normalization
+/index/,/,301,Index normalization
+/material-handling.html,/products/material-handling-systems,301,Category migration
+/material-handling.html/,/products/material-handling-systems,301,Category migration
+/pressure-vessels.html,/products/pressure-vessels,301,Category migration
+/pressure-vessels.html/,/products/pressure-vessels,301,Category migration
+/products.html,/products,301,Legacy products page
+/products.html/,/products,301,Legacy products page
