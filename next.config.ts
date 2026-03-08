@@ -19,9 +19,13 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default nextConfig;
+// Only load Cloudflare dev init when not on Vercel (avoids workerd/GLIBC on Vercel builds).
+async function getConfig(): Promise<NextConfig> {
+	if (process.env.VERCEL !== "1") {
+		const { initOpenNextCloudflareForDev } = await import("@opennextjs/cloudflare");
+		initOpenNextCloudflareForDev();
+	}
+	return nextConfig;
+}
 
-// Enable calling `getCloudflareContext()` in `next dev`.
-// See https://opennext.js.org/cloudflare/bindings#local-access-to-bindings.
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev();
+export default getConfig();
