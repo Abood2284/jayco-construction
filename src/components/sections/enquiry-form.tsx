@@ -16,7 +16,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 
 	return (
 		<form
-			className="bg-white rounded-2xl border-t-4 border-t-amber-500 p-8 lg:p-10 shadow-xl ring-1 ring-slate-200 relative overflow-hidden"
+			className="bg-white border-2 border-slate-900 p-8 lg:p-10 shadow-[6px_6px_0_0_rgba(15,23,42,1)] relative overflow-hidden"
 			onSubmit={async (event) => {
 				event.preventDefault();
 				setStatus("loading");
@@ -54,7 +54,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 							required 
 							name="name" 
 							type="text" 
-							className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+							className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0"
 							placeholder="John Doe"
 						/>
 					</div>
@@ -67,7 +67,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 							required 
 							name="email" 
 							type="email" 
-							className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+							className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0"
 							placeholder="john@company.com"
 						/>
 					</div>
@@ -83,7 +83,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 							required 
 							name="phone" 
 							type="tel" 
-							className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+							className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0"
 							placeholder="+1 (555) 000-0000"
 						/>
 					</div>
@@ -96,7 +96,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 							name="product" 
 							type="text" 
 							defaultValue={product} 
-							className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+							className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0"
 							placeholder="e.g. Structural Steel"
 						/>
 					</div>
@@ -111,20 +111,20 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 						required 
 						name="message" 
 						rows={5} 
-						className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all resize-none"
+						className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0 resize-y min-h-[120px]"
 						placeholder="Please share details about your project or enquiry..."
 					/>
 				</div>
 
 				{status === "success" && (
-					<div className="flex items-start gap-3 p-4 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-100">
+					<div className="flex items-start gap-3 p-4 bg-emerald-50 text-emerald-800 border-2 border-emerald-200">
 						<CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
 						<p className="text-sm font-medium">{message}</p>
 					</div>
 				)}
 
 				{status === "error" && (
-					<div className="flex items-start gap-3 p-4 bg-red-50 text-red-800 rounded-lg border border-red-100">
+					<div className="flex items-start gap-3 p-4 bg-red-50 text-red-800 border-2 border-red-200">
 						<AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
 						<p className="text-sm font-medium">{message}</p>
 					</div>
@@ -133,7 +133,7 @@ export function EnquiryForm({ defaultProduct, sourcePath, title = "Send Us a Mes
 				<button 
 					type="submit" 
 					disabled={status === "loading" || status === "success"}
-					className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-2xl transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed uppercase tracking-widest text-sm"
+					className="mt-6 flex w-full items-center justify-center gap-2 bg-amber-500 px-8 py-5 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition-all hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-1 active:shadow-none"
 				>
 					{status === "loading" ? (
 						<>

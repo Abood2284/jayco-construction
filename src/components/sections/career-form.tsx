@@ -43,7 +43,7 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 					name="name" 
 					type="text" 
 					placeholder="John Doe"
-					className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/10"
+					className="w-full border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-0"
 				/>
 			</div>
 			
@@ -56,7 +56,7 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 						name="email" 
 						type="email" 
 						placeholder="john@example.com"
-						className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/10"
+						className="w-full border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-0"
 					/>
 				</div>
 				<div className="space-y-1">
@@ -67,7 +67,7 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 						name="phone" 
 						type="tel" 
 						placeholder="(555) 123-4567"
-						className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/10"
+						className="w-full border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-0"
 					/>
 				</div>
 			</div>
@@ -80,13 +80,13 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 					name="message" 
 					rows={4} 
 					placeholder="Tell us about your experience..."
-					className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/10"
+					className="w-full resize-y min-h-[120px] border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-0"
 				/>
 			</div>
 			
 			<div className="space-y-1">
 				<label htmlFor="resume" className="text-sm font-semibold text-slate-700">Resume Setup (PDF, DOCX)</label>
-				<div className="relative overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-50 transition-colors hover:bg-slate-100 focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-500/10">
+				<div className="relative overflow-hidden border-2 border-dashed border-slate-300 bg-slate-50 transition-colors hover:bg-slate-100 focus-within:border-amber-500 focus-within:ring-0">
 					<input 
 						id="resume"
 						name="resume" 
@@ -94,13 +94,13 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 						accept=".pdf,.doc,.docx" 
 						className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
 					/>
-					<div className="pointer-events-none flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium text-slate-500">
-						<svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+					<div className="pointer-events-none flex items-center justify-center gap-2 px-4 py-4 text-sm font-bold uppercase tracking-wider text-slate-500">
+						<svg viewBox="0 0 24 24" className="h-5 w-5 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
 							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
 							<polyline points="17 8 12 3 7 8" />
 							<line x1="12" y1="3" x2="12" y2="15" />
 						</svg>
-						Click to attach file
+						Attach Document
 					</div>
 				</div>
 			</div>
@@ -108,7 +108,7 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 			<button 
 				type="submit" 
 				disabled={status === "loading"}
-				className="mt-2 flex w-full items-center justify-center rounded-2xl bg-amber-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-slate-950 transition-all hover:bg-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-70"
+				className="mt-4 flex w-full items-center justify-center bg-amber-500 px-6 py-4 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition-all hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-1 active:shadow-none"
 			>
 				{status === "loading" ? (
 					<span className="flex items-center gap-2">

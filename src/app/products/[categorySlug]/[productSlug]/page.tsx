@@ -92,17 +92,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <JsonLd data={buildBreadcrumbSchema(breadcrumbItems)} />
       <JsonLd data={buildProductSchema(product, category.name)} />
 
-      {/* Immersive Product Hero Block */}
-      <section className="relative overflow-hidden bg-slate-950 px-4 pb-16 pt-28 sm:px-6 lg:px-8 lg:pb-24 lg:pt-36 text-white">
+      {/* Immersive Product Hero Block - Light Theme */}
+      <section className="relative overflow-hidden border-b-4 border-slate-900 bg-slate-50 px-4 pb-16 pt-28 sm:px-6 lg:px-8 lg:pb-24 lg:pt-36">
         {/* Background Texture Overlay */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(0deg,transparent,transparent 40px,#fff 40px,#fff 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,#fff 40px,#fff 41px)",
+              "repeating-linear-gradient(0deg,transparent,transparent 40px,#0f172a 40px,#0f172a 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,#0f172a 40px,#0f172a 41px)",
           }}
         />
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-amber-500 opacity-10 blur-[120px]" />
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] bg-amber-500 opacity-10 blur-[120px]" />
 
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-8 lg:mb-10">
@@ -113,14 +113,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Left: Text + CTAs */}
             <div className="flex flex-col gap-8 lg:flex-1">
               <div>
-                <p className="mb-4 inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-amber-500">
+                <p className="mb-4 inline-flex items-center gap-2 text-[0.65rem] font-black uppercase tracking-[0.22em] text-amber-600">
                   <span className="block h-px w-6 bg-amber-500" />
                   {category.name}
                 </p>
-                <h1 className="mb-5 text-[clamp(2.2rem,4.5vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight text-white drop-shadow-sm">
+                <h1 className="mb-5 text-[clamp(2.5rem,5vw,4.5rem)] font-black leading-[1.05] tracking-tighter text-slate-900">
                   {product?.name}
                 </h1>
-                <p className="max-w-[52ch] text-base text-slate-300 leading-relaxed sm:text-lg">
+                <p className="max-w-[52ch] text-base font-medium text-slate-600 leading-relaxed sm:text-lg">
                   {product?.description}
                 </p>
               </div>
@@ -128,13 +128,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className="flex flex-wrap items-center gap-3">
                 <Link
                   href="#enquiry"
-                  className="inline-flex h-12 items-center justify-center rounded-2xl bg-amber-500 px-8 text-xs font-bold uppercase tracking-[0.16em] text-slate-950 transition hover:bg-amber-400 hover:scale-105 active:scale-95"
+                  className="inline-flex h-12 items-center justify-center bg-amber-500 px-8 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] active:translate-y-1 active:shadow-none"
                 >
                   {product.ctaLabel ?? "Request Specifications"}
                 </Link>
                 <Link
                   href="#specs"
-                  className="inline-flex h-12 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900/50 px-8 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-slate-800"
+                  className="inline-flex h-12 items-center justify-center border-2 border-slate-900 bg-white px-8 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-900 transition hover:bg-slate-50 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] active:translate-y-1 active:shadow-none"
                 >
                   View Details
                 </Link>
@@ -144,7 +144,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Right: Hero Image — desktop only */}
             {product.heroImages[0] && (
               <div className="hidden lg:block relative w-[45%] shrink-0">
-                <div className="relative aspect-4/3 overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-black/60">
+                <div className="relative aspect-4/3 overflow-hidden border-2 border-slate-900 shadow-[6px_6px_0_0_rgba(15,23,42,1)] bg-slate-200">
                   <Image
                     src={product.heroImages[0].src}
                     alt={product.heroImages[0].alt}
@@ -153,24 +153,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     priority
                     sizes="45vw"
                   />
-                  <div className="absolute inset-0 bg-linear-to-br from-transparent to-slate-950/25" />
+                  <div className="absolute inset-0 bg-linear-to-br from-transparent to-slate-900/10" />
                 </div>
-                <div className="pointer-events-none absolute -bottom-10 -right-10 h-64 w-64 rounded-full bg-amber-500 opacity-15 blur-[80px]" />
+                <div className="pointer-events-none absolute -bottom-10 -right-10 h-64 w-64 bg-amber-500 opacity-15 blur-[80px]" />
               </div>
             )}
           </div>
         </div>
 
-        {/* Caution stripe decoration */}
-        <div className="absolute bottom-0 left-0 right-0 h-[6px] bg-[repeating-linear-gradient(45deg,#f59e0b_0,#f59e0b_15px,#0f172a_15px,#0f172a_30px)] opacity-80" />
+        {/* Heavy Hazard Stripe Border */}
+        <div className="absolute bottom-0 left-0 right-0 h-2 bg-[repeating-linear-gradient(45deg,#f59e0b_0,#f59e0b_10px,#0f172a_10px,#0f172a_20px)]" />
       </section>
 
       {/* Product Image Showcase — immediately below hero */}
       {product.heroImages.length > 0 && (
-        <section className="mx-auto mt-6 w-full max-w-7xl px-4 sm:px-6 lg:mt-8 lg:px-8">
-          <div className="flex flex-col gap-2 sm:gap-3 lg:flex-row lg:items-start lg:gap-3">
+        <section className="mx-auto mt-6 w-full max-w-7xl px-4 sm:px-6 lg:mt-10 lg:px-8">
+          <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start lg:gap-6">
             {/* Primary large image */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-sm lg:flex-1">
+            <div className="relative aspect-video w-full overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0_0_rgba(15,23,42,1)] lg:flex-1">
               <Image
                 src={product.heroImages[0].src}
                 alt={product.heroImages[0].alt}
@@ -183,32 +183,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Thumbnail grid — only when 2+ images exist */}
             {product.heroImages.length > 1 && (
-              <div className="grid grid-cols-4 gap-2 sm:gap-3 lg:w-[36%] lg:grid-cols-2 lg:grid-rows-2">
-                {product.heroImages.slice(1, 5).map((image, idx) => {
-                  const showOverlay =
-                    idx === 3 && product.heroImages.length > 5
-                  return (
-                    <div
-                      key={image.src}
-                      className="relative aspect-square overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm"
-                    >
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        className={`object-cover transition-transform duration-500 hover:scale-[1.04] ${showOverlay ? "brightness-[0.4]" : ""}`}
-                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 25vw, 18vw"
-                      />
-                      {showOverlay && (
-                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                          <span className="text-2xl font-black text-white drop-shadow-lg">
-                            +{product.heroImages.length - 4}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+              <div className="grid grid-cols-4 gap-3 lg:w-[36%] lg:grid-cols-2 lg:gap-6">
+                {product.heroImages.slice(1).map((image) => (
+                  <div
+                    key={image.src}
+                    className="relative aspect-square overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[2px_2px_0_0_rgba(15,23,42,1)]"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover transition-transform duration-500 hover:scale-[1.04]"
+                      sizes="(max-width: 640px) 25vw, (max-width: 1024px) 25vw, 18vw"
+                    />
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -275,7 +264,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {product.applications.map((application) => (
                     <span
                       key={application}
-                      className="inline-flex rounded-lg bg-white border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm"
+                      className="inline-flex bg-white border-2 border-slate-900 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-slate-900 shadow-[2px_2px_0_0_rgba(15,23,42,1)]"
                     >
                       {application}
                     </span>
@@ -325,21 +314,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     Technical Data
                   </h2>
                 </div>
-                <div className="overflow-hidden rounded-3xl border-2 border-slate-200 bg-white">
+                <div className="border-4 border-slate-900 bg-white shadow-[6px_6px_0_0_rgba(15,23,42,1)]">
                   <table className="w-full text-left text-sm sm:text-base">
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody>
                       {product.specs.map((spec) => (
                         <tr
                           key={spec.label}
-                          className="transition-colors hover:bg-slate-50"
+                          className="border-b-2 border-slate-900 last:border-b-0 transition-colors hover:bg-amber-50"
                         >
                           <th
                             scope="row"
-                            className="w-[40%] bg-slate-50/50 px-6 py-5 font-bold text-slate-800 border-r border-slate-100 sm:w-1/3 sm:px-8"
+                            className="w-[40%] bg-slate-100 px-6 py-5 font-black uppercase tracking-wide text-slate-900 border-r-2 border-slate-900 sm:w-1/3 sm:px-8"
                           >
                             {spec.label}
                           </th>
-                          <td className="px-6 py-5 text-slate-700 font-medium sm:px-8">
+                          <td className="px-6 py-5 text-slate-800 font-bold sm:px-8">
                             {spec.value}
                           </td>
                         </tr>
@@ -362,14 +351,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {product.faq.map((faq) => (
                     <details
                       key={faq.question}
-                      className="group rounded-3xl border border-slate-200 bg-slate-50 shadow-sm transition-all open:border-slate-900 open:bg-white open:shadow-md"
+                      className="group border-2 border-slate-900 bg-slate-50 shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all open:bg-white open:shadow-[6px_6px_0_0_rgba(245,158,11,1)]"
                     >
-                      <summary className="cursor-pointer list-none px-6 py-6 font-bold text-slate-900 transition hover:text-amber-600 sm:px-8">
+                      <summary className="cursor-pointer list-none px-6 py-6 font-black text-slate-900 transition hover:text-amber-600 sm:px-8">
                         <div className="flex items-center justify-between gap-6">
-                          <span className="text-lg leading-tight sm:text-xl">
+                          <span className="text-lg leading-tight uppercase tracking-tight sm:text-xl">
                             {faq.question}
                           </span>
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 border border-slate-200 text-slate-500 transition group-open:rotate-180 group-open:border-slate-900 group-open:bg-slate-900 group-open:text-white">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-slate-200 bg-slate-100 text-slate-500 transition group-open:rotate-180 group-open:border-slate-900 group-open:bg-slate-900 group-open:text-white">
                             <svg
                               viewBox="0 0 24 24"
                               className="h-5 w-5"
@@ -379,15 +368,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                 d="M19 9l-7 7-7-7"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                strokeWidth="3"
+                                strokeLinecap="square"
+                                strokeLinejoin="miter"
                               />
                             </svg>
                           </span>
                         </div>
                       </summary>
-                      <div className="border-t border-slate-100 px-6 py-6 text-base leading-relaxed text-slate-600 sm:px-8">
+                      <div className="border-t-2 border-slate-900 bg-white px-6 py-6 text-base font-medium leading-relaxed text-slate-700 sm:px-8">
                         <p>{faq.answer}</p>
                       </div>
                     </details>
@@ -417,9 +406,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   key={entry.slug}
                   href={`/products/${entry.categorySlug}/${entry.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-amber-500 hover:shadow-md"
+                  className="group flex flex-col overflow-hidden border-2 border-slate-900 bg-white shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all hover:-translate-y-1 hover:border-amber-500 hover:shadow-[6px_6px_0_0_rgba(245,158,11,1)]"
                 >
-                  <div className="aspect-video w-full bg-slate-100 relative overflow-hidden">
+                  <div className="aspect-video w-full bg-slate-100 relative overflow-hidden border-b-2 border-slate-900">
                     {entry.heroImages?.[0] ? (
                       <Image
                         src={entry.heroImages[0].src}
@@ -428,16 +417,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+                      <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest text-xs">
                         No image
                       </div>
                     )}
                   </div>
                   <div className="p-5">
-                    <h3 className="mb-1 text-base font-bold text-slate-900 transition group-hover:text-amber-600">
+                    <h3 className="mb-1 text-base font-black uppercase tracking-tight text-slate-900 transition group-hover:text-amber-600">
                       {entry.name}
                     </h3>
-                    <p className="line-clamp-2 text-sm text-slate-600">
+                    <p className="line-clamp-2 text-sm font-medium text-slate-600">
                       {entry.description}
                     </p>
                   </div>
@@ -463,7 +452,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               required specifications for the {product.name}.
             </p>
           </div>
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-[inset_0_2px_10px_rgba(0,0,0,0.02)] sm:p-10">
+          <div className="mx-auto max-w-4xl">
             <EnquiryForm
               title={product?.ctaLabel ?? "Request Specs"}
               sourcePath={`/products/${category?.slug || ""}/${product?.slug || ""}`}

@@ -30,7 +30,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
 
   const headerBackgroundClass = isScrolled
     ? "bg-white/95 text-slate-900 shadow-sm border-b border-slate-200"
-    : "bg-transparent text-slate-50";
+    : "bg-transparent text-slate-900"; // Changed to slate-900 for light theme visibility
 
   const toggleMobile = () => {
     setIsMobileOpen((open) => !open);
@@ -50,11 +50,10 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
           <Link href="/" className="group flex items-center gap-3" aria-label={settings.companyName}>
             <div className="flex h-5 w-4 gap-0.5">
               <div className="h-full w-1.5 bg-amber-500" />
-              <div className="h-full w-1.5 bg-orange-500" />
+              <div className="h-full w-1.5 bg-amber-700" />
             </div>
             <span
-              className="text-sm font-bold uppercase tracking-[0.16em] text-slate-50 transition group-hover:text-amber-400 data-[scrolled=true]:text-slate-900 lg:text-base lg:tracking-[0.2em]"
-              data-scrolled={isScrolled}
+              className="text-sm font-bold uppercase tracking-[0.16em] text-slate-900 transition group-hover:text-amber-600 lg:text-base lg:tracking-[0.2em]"
             >
               Jayco Industrial
             </span>
@@ -66,8 +65,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
           >
             <Link
               href="/about"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-              data-scrolled={isScrolled}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
             >
               About
             </Link>
@@ -79,8 +77,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
               <button
                 type="button"
                 onClick={toggleProducts}
-                className="inline-flex h-full items-center gap-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-                data-scrolled={isScrolled}
+                className="inline-flex h-full items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
                 aria-expanded={isProductsOpen}
                 aria-haspopup="true"
               >
@@ -99,7 +96,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
                       d="M6 9l6 6 6-6"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="1.5"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
@@ -115,29 +112,25 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
             </div>
             <Link
               href="/gallery"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-              data-scrolled={isScrolled}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
             >
               Gallery
             </Link>
             <Link
               href="/clients"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-              data-scrolled={isScrolled}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
             >
               Clients
             </Link>
             <Link
               href="/careers"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-              data-scrolled={isScrolled}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
             >
               Careers
             </Link>
             <Link
               href="/contact"
-              className="text-xs font-medium uppercase tracking-[0.16em] text-slate-200 transition hover:text-amber-400 data-[scrolled=true]:text-slate-700"
-              data-scrolled={isScrolled}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
             >
               Contact
             </Link>
@@ -146,30 +139,30 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
           <div className="flex items-center gap-4">
             <Link
               href="/contact"
-              className="hidden items-center justify-center rounded-full bg-amber-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 shadow-sm transition hover:bg-amber-400 lg:inline-flex"
+              className="hidden items-center justify-center bg-amber-600 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-amber-500 lg:inline-flex"
             >
               Request Quote
             </Link>
             <button
               type="button"
               onClick={toggleMobile}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-500/40 text-slate-100 transition hover:border-amber-400 hover:text-amber-400 lg:hidden"
+              className="inline-flex h-9 w-9 items-center justify-center border border-slate-300 text-slate-900 transition hover:border-amber-500 hover:text-amber-600 lg:hidden"
               aria-label={isMobileOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={isMobileOpen}
             >
               <span className="relative block h-3 w-4">
                 <span
-                  className={`absolute left-0 top-0 h-[1.5px] w-full origin-center bg-current transition-transform ${
+                  className={`absolute left-0 top-0 h-[2px] w-full origin-center bg-current transition-transform ${
                     isMobileOpen ? "translate-y-[6px] rotate-45" : ""
                   }`}
                 />
                 <span
-                  className={`absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-1/2 bg-current transition-opacity ${
+                  className={`absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 bg-current transition-opacity ${
                     isMobileOpen ? "opacity-0" : "opacity-100"
                   }`}
                 />
                 <span
-                  className={`absolute bottom-0 left-0 h-[1.5px] w-full origin-center bg-current transition-transform ${
+                  className={`absolute bottom-0 left-0 h-[2px] w-full origin-center bg-current transition-transform ${
                     isMobileOpen ? "-translate-y-[6px] -rotate-45" : ""
                   }`}
                 />
@@ -182,24 +175,24 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
       {isMobileOpen ? (
         <>
           <div
-            className="fixed inset-0 z-30 bg-slate-950/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm lg:hidden"
             onClick={closeMobile}
           />
-          <div className="fixed inset-y-0 right-0 z-40 w-full max-w-sm bg-slate-950 text-slate-50 shadow-xl lg:hidden">
+          <div className="fixed inset-y-0 right-0 z-40 w-full max-w-sm border-l-4 border-slate-900 bg-white text-slate-900 shadow-xl lg:hidden">
             <div className="flex h-full flex-col px-4 py-4">
               <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                <span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">
                   Menu
                 </span>
                 <button
                   type="button"
                   onClick={closeMobile}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-600 text-slate-200"
+                  className="inline-flex h-8 w-8 items-center justify-center border-2 border-slate-200 text-slate-500 hover:border-slate-900 hover:text-slate-900"
                   aria-label="Close navigation"
                 >
                   <span className="relative block h-3 w-3">
-                    <span className="absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-1/2 rotate-45 bg-current" />
-                    <span className="absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-1/2 -rotate-45 bg-current" />
+                    <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rotate-45 bg-current" />
+                    <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 -rotate-45 bg-current" />
                   </span>
                 </button>
               </div>
@@ -211,12 +204,12 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
                 <Link
                   href="/about"
                   onClick={closeMobile}
-                  className="block rounded-lg px-2 py-2 text-sm font-medium tracking-wide hover:bg-slate-800"
+                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
                 >
                   About
                 </Link>
-                <div className="rounded-lg bg-slate-900/70 px-2 py-3">
-                  <div className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <div className="bg-slate-50 px-2 py-3 border-b border-slate-100">
+                  <div className="mb-2 text-xs font-black uppercase tracking-[0.16em] text-slate-400">
                     Products
                   </div>
                   <ul className="space-y-1 text-sm">
@@ -225,10 +218,10 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
                         <Link
                           href={`/products/${category.slug}`}
                           onClick={closeMobile}
-                          className="flex items-center justify-between rounded-md px-2 py-2 hover:bg-slate-800"
+                          className="flex items-center justify-between py-2 font-bold text-slate-700 hover:text-amber-600"
                         >
-                          <span className="font-medium">{category.name}</span>
-                          <span className="text-[0.7rem] uppercase tracking-[0.16em] text-amber-400">
+                          <span>{category.name}</span>
+                          <span className="text-[0.7rem] uppercase tracking-[0.16em] text-amber-500">
                             View
                           </span>
                         </Link>
@@ -239,38 +232,38 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
                 <Link
                   href="/gallery"
                   onClick={closeMobile}
-                  className="block rounded-lg px-2 py-2 text-sm font-medium tracking-wide hover:bg-slate-800"
+                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
                 >
                   Gallery
                 </Link>
                 <Link
                   href="/clients"
                   onClick={closeMobile}
-                  className="block rounded-lg px-2 py-2 text-sm font-medium tracking-wide hover:bg-slate-800"
+                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
                 >
                   Clients
                 </Link>
                 <Link
                   href="/careers"
                   onClick={closeMobile}
-                  className="block rounded-lg px-2 py-2 text-sm font-medium tracking-wide hover:bg-slate-800"
+                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
                 >
                   Careers
                 </Link>
                 <Link
                   href="/contact"
                   onClick={closeMobile}
-                  className="block rounded-lg px-2 py-2 text-sm font-medium tracking-wide hover:bg-slate-800"
+                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide hover:text-amber-600"
                 >
                   Contact
                 </Link>
               </nav>
 
-              <div className="border-t border-slate-800 pt-3">
+              <div className="border-t-4 border-slate-900 pt-4">
                 <Link
                   href="/contact"
                   onClick={closeMobile}
-                  className="flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 shadow-sm transition hover:bg-amber-400"
+                  className="flex w-full items-center justify-center bg-amber-600 px-4 py-4 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:bg-amber-500"
                 >
                   Request Quote
                 </Link>
