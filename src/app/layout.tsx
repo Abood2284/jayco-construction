@@ -8,9 +8,9 @@ import "./globals.css"
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
-	title: "Jayco Industrial Manufacturing",
+	title: "Jayco Hoist & Cranes Mfg. Co.",
 	description:
-		"Premium heavy-industrial manufacturing systems with engineered fabrication, pressure equipment, and field-ready support.",
+		"Manufacturers of hoists, cranes, and material handling equipment. Trusted by industries across India.",
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -8,22 +8,25 @@ const image = (src: string, alt: string): { src: string; alt: string; width: num
 });
 
 export const siteSettings: SiteSettings = {
-	companyName: "Jayco Industrial Manufacturing",
-	address: "2145 Industry Park Drive, Houston, TX 77032",
-	phones: ["+1 (713) 555-0192", "+1 (713) 555-0148"],
-	emails: ["sales@jaycoindustrial.com", "support@jaycoindustrial.com"],
-	seoTitleTemplate: "%s | Jayco Industrial Manufacturing",
+	companyName: "Jayco Hoist & Cranes Mfg. Co.",
+	shortName: "Jayco Cranes",
+	address:
+		"Unit No. 17, Dewan & Shah Industrial Estate No. 3, Navghar, Vasai Road Station (E), Dist. Palghar - 401210",
+	phones: ["+91 93213 13691", "+91 93213 13692", "+91 98201 57818", "+91 0250-2390252"],
+	emails: ["jaycohoist@yahoo.com", "jaycohoist@gmail.com"],
+	website: "www.jaycocranes.in",
+	seoTitleTemplate: "%s | Jayco Hoist & Cranes Mfg. Co.",
 	seoDescriptionTemplate:
-		"Jayco Industrial Manufacturing delivers engineered heavy-industrial systems, fabrication, and field support across critical process industries.",
+		"Jayco Hoist & Cranes Mfg. Co. manufactures hoists, cranes, and material handling equipment trusted by industries across India.",
 	logo: {
 		src: "/images/logo.svg",
-		alt: "Jayco Industrial Manufacturing",
+		alt: "Jayco Hoist & Cranes Mfg. Co.",
 		width: 480,
 		height: 120,
 	},
 	defaultOgImage: {
 		src: "/images/og-default.svg",
-		alt: "Jayco Industrial Manufacturing facility",
+		alt: "Jayco Hoist & Cranes manufacturing facility",
 		width: 1200,
 		height: 630,
 	},

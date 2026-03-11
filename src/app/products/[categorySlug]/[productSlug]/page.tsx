@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { EnquiryForm } from "@/components/sections/enquiry-form";
 import { JsonLd } from "@/components/ui/json-ld";
 import { ProductArticleLayout } from "@/components/products/product-article-layout";
+import { ImageGallery } from "@/components/products/image-gallery";
 import {
   getGalleryByProductSlug,
   getProductByCategoryAndSlug,
@@ -149,7 +150,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     src={product.heroImages[0].src}
                     alt={product.heroImages[0].alt}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     priority
                     sizes="45vw"
                   />
@@ -168,39 +169,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Product Image Showcase — immediately below hero */}
       {product.heroImages.length > 0 && (
         <section className="mx-auto mt-6 w-full max-w-7xl px-4 sm:px-6 lg:mt-10 lg:px-8">
-          <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start lg:gap-6">
-            {/* Primary large image */}
-            <div className="relative aspect-video w-full overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0_0_rgba(15,23,42,1)] lg:flex-1">
-              <Image
-                src={product.heroImages[0].src}
-                alt={product.heroImages[0].alt}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 62vw"
-              />
-            </div>
-
-            {/* Thumbnail grid — only when 2+ images exist */}
-            {product.heroImages.length > 1 && (
-              <div className="grid grid-cols-4 gap-3 lg:w-[36%] lg:grid-cols-2 lg:gap-6">
-                {product.heroImages.slice(1).map((image) => (
-                  <div
-                    key={image.src}
-                    className="relative aspect-square overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[2px_2px_0_0_rgba(15,23,42,1)]"
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      className="object-cover transition-transform duration-500 hover:scale-[1.04]"
-                      sizes="(max-width: 640px) 25vw, (max-width: 1024px) 25vw, 18vw"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ImageGallery images={product.heroImages} />
         </section>
       )}
 

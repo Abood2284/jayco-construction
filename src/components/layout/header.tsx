@@ -55,7 +55,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
             <span
               className="text-sm font-bold uppercase tracking-[0.16em] text-slate-900 transition group-hover:text-amber-600 lg:text-base lg:tracking-[0.2em]"
             >
-              Jayco Industrial
+              Jayco Cranes
             </span>
           </Link>
 

@@ -11,7 +11,7 @@ export async function generateMetadata() {
 export default function AboutPage() {
 	return (
 		<main className="container section narrow">
-			<h1>About Jayco Industrial Manufacturing</h1>
+			<h1>About Jayco Hoist &amp; Cranes Mfg. Co.</h1>
 			<p>
 				We build high-load industrial systems and fabricated assemblies for process-critical operations. Our team combines
 				design understanding, fabrication control, and site delivery planning to keep projects predictable.

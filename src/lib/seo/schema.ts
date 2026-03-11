@@ -47,17 +47,17 @@ export const buildProductSchema = (product: Product, categoryName: string) => ({
 	image: product.heroImages.map((image) => absoluteUrl(image.src)),
 	brand: {
 		"@type": "Brand",
-		name: "Jayco Industrial Manufacturing",
+		name: "Jayco Hoist & Cranes Mfg. Co.",
 	},
 	offers: {
 		"@type": "Offer",
-		priceCurrency: "USD",
+		priceCurrency: "INR",
 		availability: "https://schema.org/InStock",
 		url: absoluteUrl(`/products/${product.categorySlug}/${product.slug}`),
 		priceSpecification: {
 			"@type": "PriceSpecification",
 			price: "0",
-			priceCurrency: "USD",
+			priceCurrency: "INR",
 			description: "Price on request",
 		},
 	},

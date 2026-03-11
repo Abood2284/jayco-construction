@@ -12,9 +12,11 @@ export type SeoFields = {
 
 export type SiteSettings = {
 	companyName: string;
+	shortName: string;
 	address: string;
 	phones: string[];
 	emails: string[];
+	website: string;
 	seoTitleTemplate: string;
 	seoDescriptionTemplate: string;
 	logo: ImageAsset;

@@ -3,12 +3,12 @@ import { JsonLd } from "@/components/ui/json-ld";
 import { getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { buildLocalBusinessSchema } from "@/lib/seo/schema";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Globe } from "lucide-react";
 
 export async function generateMetadata() {
 	return buildMetadata({
 		title: "Contact Us",
-		description: "Contact Jayco Industrial Manufacturing for project enquiries, support, and quote requests.",
+		description: "Contact Jayco Hoist & Cranes Mfg. Co. for project enquiries, support, and quote requests.",
 		path: "/contact",
 	});
 }
@@ -86,28 +86,46 @@ export default async function ContactPage() {
 										</div>
 									)}
 
-									{/* Emails */}
-									{settings.emails.length > 0 && (
-										<div className="flex items-start gap-5 p-5 bg-slate-50">
-											<div className="w-11 h-11 border-2 border-slate-900 bg-amber-500 flex items-center justify-center shrink-0 shadow-[2px_2px_0_0_rgba(15,23,42,1)]">
-												<Mail className="w-5 h-5 text-slate-950" />
-											</div>
-											<div>
-												<p className="text-[0.65rem] font-black text-slate-500 uppercase tracking-[0.18em] mb-2">Email Us</p>
-												{settings.emails.map((email) => (
-													<a
-														key={email}
-														href={`mailto:${email}`}
-														className="block text-base font-black text-slate-900 hover:text-amber-600 transition-colors tracking-tight break-all"
-													>
-														{email}
-													</a>
-												))}
-											</div>
+								{/* Emails */}
+								{settings.emails.length > 0 && (
+									<div className="flex items-start gap-5 p-5 bg-slate-50">
+										<div className="w-11 h-11 border-2 border-slate-900 bg-amber-500 flex items-center justify-center shrink-0 shadow-[2px_2px_0_0_rgba(15,23,42,1)]">
+											<Mail className="w-5 h-5 text-slate-950" />
 										</div>
-									)}
+										<div>
+											<p className="text-[0.65rem] font-black text-slate-500 uppercase tracking-[0.18em] mb-2">Email Us</p>
+											{settings.emails.map((email) => (
+												<a
+													key={email}
+													href={`mailto:${email}`}
+													className="block text-base font-black text-slate-900 hover:text-amber-600 transition-colors tracking-tight break-all"
+												>
+													{email}
+												</a>
+											))}
+										</div>
+									</div>
+								)}
 
-									{/* Address */}
+								{/* Website */}
+								<div className="flex items-start gap-5 p-5 bg-white">
+									<div className="w-11 h-11 border-2 border-slate-900 bg-amber-500 flex items-center justify-center shrink-0 shadow-[2px_2px_0_0_rgba(15,23,42,1)]">
+										<Globe className="w-5 h-5 text-slate-950" />
+									</div>
+									<div>
+										<p className="text-[0.65rem] font-black text-slate-500 uppercase tracking-[0.18em] mb-2">Website</p>
+										<a
+											href={`https://${settings.website}`}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="block text-base font-black text-slate-900 hover:text-amber-600 transition-colors tracking-tight"
+										>
+											{settings.website}
+										</a>
+									</div>
+								</div>
+
+								{/* Address */}
 									<div className="flex items-start gap-5 p-5 bg-white">
 										<div className="w-11 h-11 border-2 border-slate-900 bg-amber-500 flex items-center justify-center shrink-0 shadow-[2px_2px_0_0_rgba(15,23,42,1)]">
 											<MapPin className="w-5 h-5 text-slate-950" />

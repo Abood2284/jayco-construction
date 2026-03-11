@@ -70,7 +70,7 @@ export default async function CareersPage() {
 								<svg viewBox="0 0 24 24" className="h-6 w-6 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
 									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
 								</svg>
-								Why Jayco Construction?
+								Why Jayco Cranes?
 							</h3>
 							
 							<ul className="space-y-6">

@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import type { SiteSettings } from "@/lib/cms/types"
 import { ArrowRight } from "lucide-react"
@@ -39,7 +38,7 @@ export function Footer({ settings }: FooterProps) {
 							<span
 								className="text-sm font-black uppercase tracking-[0.16em] text-slate-900 lg:text-base lg:tracking-[0.2em]"
 							>
-								Jayco Industrial
+								Jayco Cranes
 							</span>
 						</Link>
 						<p className="mt-4 max-w-[32ch] text-[0.75rem] font-medium leading-relaxed text-slate-600">
@@ -117,6 +116,16 @@ export function Footer({ settings }: FooterProps) {
 									</a>
 								</li>
 							))}
+							<li>
+								<a
+									href={`https://${settings.website}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-[0.78rem] font-medium text-slate-600 transition hover:text-amber-600"
+								>
+									{settings.website}
+								</a>
+							</li>
 						</ul>
 
 						<Link
