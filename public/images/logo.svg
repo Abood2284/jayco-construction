@@ -1,6 +1,1 @@
-<svg width="480" height="120" viewBox="0 0 480 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jayco Industrial Manufacturing logo">
-  <rect width="480" height="120" rx="8" fill="#111827"/>
-  <path d="M36 24H56V84H36V24Z" fill="#F59E0B"/>
-  <path d="M64 24H84V84H64V24Z" fill="#F97316"/>
-  <text x="102" y="72" fill="#F9FAFB" font-size="36" font-family="Arial, sans-serif" font-weight="700">JAYCO INDUSTRIAL</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="120" fill="none" aria-label="Jayco Industrial Manufacturing logo" role="img" viewBox="0 0 480 120"><rect width="480" height="120" fill="#111827" rx="8"/><path fill="#F59E0B" d="M36 24H56V84H36V24Z"/><path fill="#F97316" d="M64 24H84V84H64V24Z"/><text x="102" y="72" fill="#F9FAFB" font-family="Arial, sans-serif" font-size="36" font-weight="700">JAYCO INDUSTRIAL</text></svg>
