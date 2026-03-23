@@ -89,7 +89,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
                 aria-expanded={isProductsOpen}
                 aria-haspopup="true"
               >
-                <span>Products</span>
+                <span>Categories</span>
                 <span
                   className={`inline-block h-4 w-4 transition-transform ${
                     isProductsOpen ? "rotate-180" : "rotate-0"

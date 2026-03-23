@@ -23,7 +23,7 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 			<div className="relative mb-4">
 				<div
 					className="flex w-max gap-4 lg:gap-6"
-					style={{ animation: "marquee-left 52s linear infinite" }}
+					style={{ animation: "marquee-left 100s linear infinite" }}
 				>
 					{doubled.map((client, idx) => (
 						<div
@@ -47,7 +47,7 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 			<div className="relative">
 				<div
 					className="flex w-max gap-4 lg:gap-6"
-					style={{ animation: "marquee-right 60s linear infinite" }}
+					style={{ animation: "marquee-right 115s linear infinite" }}
 				>
 					{row2Clients.map((client, idx) => (
 						<div

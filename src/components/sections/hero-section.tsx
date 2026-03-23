@@ -90,8 +90,45 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Right — Heavy Angular Image / Banner panel */}
-        <div className="mt-16 lg:mt-0 lg:w-[45%]">
+        {/* Mobile — same banner images as desktop panel (crossfade; no Why Choose card) */}
+        <div
+          className="relative mt-10 w-full md:hidden"
+          role="region"
+          aria-label="Featured facilities and equipment"
+        >
+          <div className="relative aspect-video w-full overflow-hidden border-4 border-slate-900 bg-slate-900 shadow-[6px_6px_0px_0px_rgba(245,158,11,1)]">
+            {banners.map((src, idx) => (
+              <div
+                key={src}
+                className={`absolute inset-0 ${idx === 0 ? "hero-mobile-car-0" : "hero-mobile-car-1"}`}
+              >
+                <Image
+                  src={src}
+                  alt={
+                    idx === 0
+                      ? "Jayco manufacturing and lifting equipment"
+                      : "Industrial cranes and material handling"
+                  }
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority={idx === 0}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-slate-900/15" />
+              </div>
+            ))}
+          </div>
+          <div
+            className="mt-3 flex justify-center gap-2"
+            aria-hidden="true"
+          >
+            <span className="hero-mobile-dot-0 h-2 w-2 rounded-full bg-amber-400" />
+            <span className="hero-mobile-dot-1 h-2 w-2 rounded-full bg-white/50" />
+          </div>
+        </div>
+
+        {/* Right — Heavy Angular Image / Banner panel (tablet/desktop only) */}
+        <div className="mt-16 hidden md:mt-16 md:block lg:mt-0 lg:w-[45%]">
           <div className="relative border-4 border-slate-900 bg-slate-900 p-2 shadow-[8px_8px_0px_0px_rgba(245,158,11,1)]">
             {/* Auto Scrolling Banner */}
             <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-800">
@@ -156,6 +193,34 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
         @keyframes slide {
              0% { transform: translateX(0); }
            100% { transform: translateX(-50%); }
+        }
+        @keyframes heroMobileFade0 {
+          0%, 42% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        @keyframes heroMobileFade1 {
+          0%, 42% { opacity: 0; }
+          50%, 100% { opacity: 1; }
+        }
+        @keyframes heroMobileDot0 {
+          0%, 42% { opacity: 1; transform: scale(1.15); }
+          50%, 100% { opacity: 0.35; transform: scale(1); }
+        }
+        @keyframes heroMobileDot1 {
+          0%, 42% { opacity: 0.35; transform: scale(1); }
+          50%, 100% { opacity: 1; transform: scale(1.15); }
+        }
+        .hero-mobile-car-0 {
+          animation: heroMobileFade0 9s ease-in-out infinite;
+        }
+        .hero-mobile-car-1 {
+          animation: heroMobileFade1 9s ease-in-out infinite;
+        }
+        .hero-mobile-dot-0 {
+          animation: heroMobileDot0 9s ease-in-out infinite;
+        }
+        .hero-mobile-dot-1 {
+          animation: heroMobileDot1 9s ease-in-out infinite;
         }
       `}</style>
     </section>
