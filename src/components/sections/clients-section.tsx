@@ -21,19 +21,22 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 
 			{/* Row 1 — scrolls left */}
 			<div className="relative mb-4">
-				<div className="flex w-max gap-4" style={{ animation: "marquee-left 52s linear infinite" }}>
+				<div
+					className="flex w-max gap-4 lg:gap-6"
+					style={{ animation: "marquee-left 52s linear infinite" }}
+				>
 					{doubled.map((client, idx) => (
 						<div
 							key={`${client.name}-${idx}`}
-							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm"
+							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm lg:h-24 lg:w-52 lg:px-5"
 						>
 							<Image
 								src={client.logo.src}
 								alt={client.logo.alt}
 								width={client.logo.width}
 								height={client.logo.height}
-								sizes="120px"
-								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-80"
+								sizes="(min-width: 1024px) 200px, 120px"
+								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-80 lg:p-2.5"
 							/>
 						</div>
 					))}
@@ -42,19 +45,22 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 
 			{/* Row 2 — scrolls right */}
 			<div className="relative">
-				<div className="flex w-max gap-4" style={{ animation: "marquee-right 60s linear infinite" }}>
+				<div
+					className="flex w-max gap-4 lg:gap-6"
+					style={{ animation: "marquee-right 60s linear infinite" }}
+				>
 					{row2Clients.map((client, idx) => (
 						<div
 							key={`${client.name}-r${idx}`}
-							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm"
+							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm lg:h-24 lg:w-52 lg:px-5"
 						>
 							<Image
 								src={client.logo.src}
 								alt={client.logo.alt}
 								width={client.logo.width}
 								height={client.logo.height}
-								sizes="120px"
-								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-90"
+								sizes="(min-width: 1024px) 200px, 120px"
+								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-90 lg:p-2.5"
 							/>
 						</div>
 					))}

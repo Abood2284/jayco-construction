@@ -38,10 +38,10 @@ export default async function Home() {
 			<JsonLd data={buildOrganizationSchema(settings)} />
 			<HeroSection settings={settings} />
 			<CapabilityBand settings={settings} />
+			<ClientsSection clients={clientList} />
 			<CategoriesSection categories={categories} />
 			<FeaturedProductsSection products={featuredProducts} />
-			<ClientsSection clients={clientList} />
-			<GalleryTeaserSection galleryCategories={galleryCategories} />
+			{/* <GalleryTeaserSection galleryCategories={galleryCategories} /> */}
 		</main>
 	)
 }

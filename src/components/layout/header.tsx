@@ -31,7 +31,15 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
 
   const headerBackgroundClass = isScrolled
     ? "bg-white/95 text-slate-900 shadow-sm border-b border-slate-200"
-    : "bg-transparent text-slate-900"; // Changed to slate-900 for light theme visibility
+    : "bg-transparent"
+
+  const navLinkClass = isScrolled
+    ? "text-slate-700 transition hover:text-amber-600"
+    : "text-yellow-300 transition hover:text-yellow-100"
+
+  const menuButtonClass = isScrolled
+    ? "border-slate-300 text-slate-900 transition hover:border-amber-500 hover:text-amber-600"
+    : "border-yellow-300/60 text-yellow-300 transition hover:border-yellow-200 hover:text-yellow-100"
 
   const toggleMobile = () => {
     setIsMobileOpen((open) => !open);
@@ -65,7 +73,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
           >
             <Link
               href="/about"
-              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
             >
               About
             </Link>
@@ -77,7 +85,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
               <button
                 type="button"
                 onClick={toggleProducts}
-                className="inline-flex h-full items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+                className={`inline-flex h-full items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
                 aria-expanded={isProductsOpen}
                 aria-haspopup="true"
               >
@@ -112,25 +120,25 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
             </div>
             <Link
               href="/gallery"
-              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
             >
               Gallery
             </Link>
             <Link
               href="/clients"
-              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
             >
               Clients
             </Link>
             <Link
               href="/careers"
-              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
             >
               Careers
             </Link>
             <Link
               href="/contact"
-              className="text-xs font-bold uppercase tracking-[0.16em] text-slate-700 transition hover:text-amber-600"
+              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
             >
               Contact
             </Link>
@@ -146,7 +154,7 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
             <button
               type="button"
               onClick={toggleMobile}
-              className="inline-flex h-9 w-9 items-center justify-center border border-slate-300 text-slate-900 transition hover:border-amber-500 hover:text-amber-600 lg:hidden"
+              className={`inline-flex h-9 w-9 items-center justify-center border lg:hidden ${menuButtonClass}`}
               aria-label={isMobileOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={isMobileOpen}
             >

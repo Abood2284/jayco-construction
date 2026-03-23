@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type { SiteSettings } from "@/lib/cms/types"
 import { ArrowRight } from "lucide-react"
 
@@ -30,16 +31,14 @@ export function Footer({ settings }: FooterProps) {
 				<div className="grid gap-12 lg:grid-cols-4 lg:gap-8">
 					{/* Brand */}
 					<div className="lg:col-span-1 border-b border-slate-200 pb-8 lg:border-none lg:pb-0">
-						<Link href="/" aria-label={settings.companyName} className="mb-5 group flex items-center gap-3">
-							<div className="flex h-5 w-4 gap-0.5">
-								<div className="h-full w-1.5 bg-amber-500" />
-								<div className="h-full w-1.5 bg-orange-500" />
-							</div>
-							<span
-								className="text-sm font-black uppercase tracking-[0.16em] text-slate-900 lg:text-base lg:tracking-[0.2em]"
-							>
-								Jayco Cranes
-							</span>
+						<Link href="/" className="group mb-5 flex items-center" aria-label={settings.companyName}>
+							<Image
+								src="/images/jayco-logo.png"
+								alt={settings.companyName}
+								width={280}
+								height={58}
+								className="h-9 w-auto transition-opacity group-hover:opacity-90 lg:h-10"
+							/>
 						</Link>
 						<p className="mt-4 max-w-[32ch] text-[0.75rem] font-medium leading-relaxed text-slate-600">
 							Engineering heavy-duty material handling solutions for over 4 decades. Built for extreme environments, designed for safety, and trusted by core industries worldwide.

@@ -49,7 +49,7 @@ export function CapabilityBand({ settings }: CapabilityBandProps) {
 						alt="" 
 						width={32} 
 						height={24} 
-						className="h-7 w-auto drop-shadow-[2px_2px_0_rgba(15,23,42,1)]"
+						className="h-7 w-auto"
 						unoptimized
 					/>
 				</div>
@@ -63,7 +63,7 @@ export function CapabilityBand({ settings }: CapabilityBandProps) {
               className="border-2 border-slate-200 bg-slate-50 p-3 transition-all hover:border-slate-400 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] sm:p-6"
             >
 							{item.icon}
-							<h3 className="mb-1 text-[0.65rem] font-black uppercase tracking-wide text-slate-900 sm:mb-2 sm:text-sm sm:tracking-wider">
+							<h3 className="mb-1 w-fit max-w-full bg-yellow-400 px-1.5 py-0.5 text-[0.65rem] font-black uppercase tracking-wide text-slate-900 sm:mb-2 sm:px-2 sm:py-1 sm:text-sm sm:tracking-wider">
 								{item.title}
 							</h3>
 							<p className="text-[0.6rem] font-medium leading-relaxed text-slate-600 sm:text-sm">

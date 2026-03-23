@@ -23,16 +23,16 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 		<section className="bg-slate-50 py-20 lg:py-28">
 			<div className="mx-auto max-w-7xl px-4 lg:px-8">
 				{/* Section header */}
-				<div className="mb-14 flex flex-col items-center text-center">
-					<p className="mb-4 inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-amber-700">
-						<span className="block h-px w-6 bg-amber-700" />
+				<div className="mb-14 flex w-full flex-col items-start text-left">
+					<p className="mb-4 inline-flex items-center gap-2 self-start text-[0.65rem] font-bold uppercase tracking-[0.22em] text-amber-700">
+						<span className="block h-px w-6 shrink-0 bg-amber-700" />
 						JAYCO Core Capability
 					</p>
-					<h2 className="mb-6 text-[clamp(2rem,4vw,3rem)] font-extrabold text-slate-900 leading-tight">
+					<h2 className="mb-6 w-full text-[clamp(2rem,4vw,3rem)] font-extrabold leading-tight text-slate-900">
 						Comprehensive Material Handling <br className="hidden sm:block" />
 						&amp; Lifting Solutions
 					</h2>
-					<p className="mx-auto max-w-2xl text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
+					<p className="w-full max-w-none text-sm font-medium leading-relaxed text-slate-600 sm:text-base">
 						From safe loading and unloading to shifting heavy materials across multiple floors, our custom-built equipment is manufactured using high-quality raw materials for maximum corrosion resistance and longevity.
 					</p>
 				</div>
@@ -72,26 +72,33 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 								href={`/products/${category.slug}`}
 								className={`group relative overflow-hidden border-2 border-slate-900 bg-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(15,23,42,1)] ${spanClass} ${mobileHiddenClass}`}
 							>
-								{/* Image with Industrial Overlay */}
+								{/* Image — full opacity; readability via bottom gradient + yellow titles */}
 								<div className="absolute inset-0 z-0 bg-slate-100">
 									<Image
 										src={category.heroImage.src}
 										alt={category.heroImage.alt}
 										fill
-										className={`object-cover transition-transform duration-700 max-w-full ${
-											isFeatured ? "opacity-60 group-hover:scale-105" : "opacity-40 group-hover:scale-105"
-										}`}
+										className="max-w-full object-cover transition-transform duration-700 group-hover:scale-105"
 										sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
 									/>
-									{/* Gradients */}
-									<div className={`absolute inset-0 block bg-gradient-to-t from-slate-950/95 ${isFeatured ? "via-slate-950/50" : "via-slate-950/60"} to-slate-950/10`} />
-									{/* Subtle Accent Glow */}
-									<div className="absolute inset-0 z-10 pointer-events-none transition-colors group-hover:bg-amber-500/10" />
+									<div
+										className={`pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-slate-950/90 to-transparent ${
+											isFeatured ? "h-[min(55%,320px)]" : "h-[min(65%,200px)]"
+										}`}
+										aria-hidden
+									/>
+									<div className="pointer-events-none absolute inset-0 z-10 transition-colors group-hover:bg-amber-500/10" />
 								</div>
 								
 								{/* Content block */}
 								<div className="absolute inset-0 z-20 flex flex-col justify-end p-5 lg:p-6">
-									<h3 className={`font-black uppercase tracking-tight text-white leading-tight ${isFeatured ? "text-xl sm:text-2xl md:text-3xl mb-3" : "text-base sm:text-xl mb-2"}`}>
+									<h3
+										className={`w-fit max-w-full bg-yellow-400 px-2 py-1 font-black uppercase leading-tight tracking-tight text-slate-900 ${
+											isFeatured
+												? "mb-3 text-xl sm:text-2xl md:text-3xl sm:px-3 sm:py-1.5"
+												: "mb-2 text-base sm:text-xl sm:px-2.5 sm:py-1"
+										}`}
+									>
 										{category.name}
 									</h3>
 									
