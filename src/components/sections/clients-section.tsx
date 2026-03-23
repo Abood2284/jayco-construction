@@ -9,6 +9,7 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 	if (!clients.length) return null
 
 	const doubled = [...clients, ...clients]
+	const row2Clients = [...doubled].reverse()
 
 	return (
 		<section className="overflow-hidden border-y border-slate-100 bg-slate-50 py-16">
@@ -26,15 +27,14 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 							key={`${client.name}-${idx}`}
 							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm"
 						>
-							<div className="relative h-full w-full">
-								<Image
-									src={client.logo.src}
-									alt={client.logo.alt}
-									fill
-									sizes="120px"
-									className="object-contain p-2 opacity-80"
-								/>
-							</div>
+							<Image
+								src={client.logo.src}
+								alt={client.logo.alt}
+								width={client.logo.width}
+								height={client.logo.height}
+								sizes="120px"
+								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-80"
+							/>
 						</div>
 					))}
 				</div>
@@ -43,20 +43,19 @@ export function ClientsSection({ clients }: ClientsSectionProps) {
 			{/* Row 2 — scrolls right */}
 			<div className="relative">
 				<div className="flex w-max gap-4" style={{ animation: "marquee-right 60s linear infinite" }}>
-					{[...doubled].reverse().map((client, idx) => (
+					{row2Clients.map((client, idx) => (
 						<div
 							key={`${client.name}-r${idx}`}
 							className="flex h-16 w-36 shrink-0 items-center justify-center rounded-sm border border-slate-200 bg-white px-4 shadow-sm"
 						>
-							<div className="relative h-full w-full">
-								<Image
-									src={client.logo.src}
-									alt={client.logo.alt}
-									fill
-									sizes="120px"
-									className="object-contain p-2 opacity-90"
-								/>
-							</div>
+							<Image
+								src={client.logo.src}
+								alt={client.logo.alt}
+								width={client.logo.width}
+								height={client.logo.height}
+								sizes="120px"
+								className="max-h-[calc(100%-0.5rem)] w-auto max-w-full object-contain p-2 opacity-90"
+							/>
 						</div>
 					))}
 				</div>

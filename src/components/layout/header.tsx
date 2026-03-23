@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Product, ProductCategory, SiteSettings } from "@/lib/cms/types";
 import { NavMegaMenu } from "./nav-mega-menu";
 
@@ -47,16 +48,15 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
         className={`fixed inset-x-0 top-0 z-40 transition-colors duration-200 backdrop-blur-lg ${headerBackgroundClass}`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-6 lg:py-4">
-          <Link href="/" className="group flex items-center gap-3" aria-label={settings.companyName}>
-            <div className="flex h-5 w-4 gap-0.5">
-              <div className="h-full w-1.5 bg-amber-500" />
-              <div className="h-full w-1.5 bg-amber-700" />
-            </div>
-            <span
-              className="text-sm font-bold uppercase tracking-[0.16em] text-slate-900 transition group-hover:text-amber-600 lg:text-base lg:tracking-[0.2em]"
-            >
-              Jayco Cranes
-            </span>
+          <Link href="/" className="group flex items-center" aria-label={settings.companyName}>
+            <Image
+              src="/images/jayco-logo.png"
+              alt={settings.companyName}
+              width={280}
+              height={58}
+              priority
+              className="h-9 w-auto transition-opacity group-hover:opacity-90 lg:h-10"
+            />
           </Link>
 
           <nav
