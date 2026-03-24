@@ -17,7 +17,7 @@ export function ProductCard({ product }: ProductCardProps) {
 					className="object-cover transition-transform duration-700 group-hover:scale-105"
 					sizes="(max-width: 640px) 50vw, (max-width: 768px) 100vw, 33vw"
 				/>
-				<span className="hidden sm:inline-block absolute left-3 top-3 border-2 border-amber-500 bg-slate-900 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-white">
+				<span className="absolute left-3 top-3 hidden border-2 border-amber-500 bg-slate-900 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-white sm:inline-block lg:hidden">
 					{product.categorySlug.replace(/-/g, " ")}
 				</span>
 			</div>
