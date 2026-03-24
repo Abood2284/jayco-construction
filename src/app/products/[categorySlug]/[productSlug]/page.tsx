@@ -5,9 +5,12 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { EnquiryForm } from "@/components/sections/enquiry-form";
 import { JsonLd } from "@/components/ui/json-ld";
 import { ProductArticleLayout } from "@/components/products/product-article-layout";
+import {
+  ProductTechnicalLead,
+  productHasTechnicalLead,
+} from "@/components/products/product-technical-lead";
 import { ImageGallery } from "@/components/products/image-gallery";
 import {
-  getGalleryByProductSlug,
   getProductByCategoryAndSlug,
   getProductCategoryBySlug,
   getProducts,
@@ -73,10 +76,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const [relatedProducts, linkedGallery] = await Promise.all([
-    getRelatedProducts(product as any, 4),
-    getGalleryByProductSlug(product?.slug || ""),
-  ]);
+  const relatedProducts = await getRelatedProducts(product, 4);
+
+  const hasTechnicalLead = productHasTechnicalLead(product);
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },
@@ -173,6 +175,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
       )}
 
+      <ProductTechnicalLead product={product} />
+
       {/* Editorial Layout Grid */}
       <section className="mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:mt-20 lg:px-8">
         <div className="flex flex-col gap-12 xl:flex-row xl:gap-16">
@@ -184,11 +188,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 On this page
               </h3>
               <ul className="flex flex-col gap-3 text-sm font-medium text-slate-600">
-                <li>
-                  <Link href="#" className="transition hover:text-amber-600">
-                    Product Overview
-                  </Link>
-                </li>
+                {hasTechnicalLead && (
+                  <li>
+                    <Link
+                      href="#specs"
+                      className="transition hover:text-amber-600"
+                    >
+                      Technical Data
+                    </Link>
+                  </li>
+                )}
+                {article && (
+                  <li>
+                    <Link
+                      href="#product-overview"
+                      className="transition hover:text-amber-600"
+                    >
+                      Product Overview
+                    </Link>
+                  </li>
+                )}
                 {article?.headings
                   .filter((h) => h.depth === 2)
                   .map((head) => (
@@ -201,16 +220,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       </Link>
                     </li>
                   ))}
-                {product?.specs && product.specs.length > 0 && (
-                  <li>
-                    <Link
-                      href="#specs"
-                      className="transition hover:text-amber-600"
-                    >
-                      Technical Data
-                    </Link>
-                  </li>
-                )}
                 {product?.faq && product.faq.length > 0 && (
                   <li>
                     <Link
@@ -266,46 +275,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="order-1 flex w-full max-w-4xl flex-col gap-16 xl:order-2">
             {article && (
               <article className="w-full">
-                <ProductArticleLayout
-                  frontmatter={article.frontmatter}
-                  headings={article.headings}
-                >
+                <ProductArticleLayout frontmatter={article.frontmatter}>
                   {article.content}
                 </ProductArticleLayout>
               </article>
-            )}
-
-            {/* Specifications Matrix - Clean & Wide */}
-            {product?.specs && product.specs.length > 0 && (
-              <section id="specs" className="w-full scroll-mt-32">
-                <div className="mb-8 border-b-2 border-slate-900 pb-4 text-center">
-                  <h2 className="text-3xl font-black tracking-tight text-slate-900">
-                    Technical Data
-                  </h2>
-                </div>
-                <div className="border-4 border-slate-900 bg-white shadow-[6px_6px_0_0_rgba(15,23,42,1)]">
-                  <table className="w-full text-left text-sm sm:text-base">
-                    <tbody>
-                      {product.specs.map((spec) => (
-                        <tr
-                          key={spec.label}
-                          className="border-b-2 border-slate-900 last:border-b-0 transition-colors hover:bg-amber-50"
-                        >
-                          <th
-                            scope="row"
-                            className="w-[40%] bg-slate-100 px-6 py-5 font-black uppercase tracking-wide text-slate-900 border-r-2 border-slate-900 sm:w-1/3 sm:px-8"
-                          >
-                            {spec.label}
-                          </th>
-                          <td className="px-6 py-5 text-slate-800 font-bold sm:px-8">
-                            {spec.value}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
             )}
 
             {/* FAQs Component - Centered Accordions */}

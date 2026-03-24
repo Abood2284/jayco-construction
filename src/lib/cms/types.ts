@@ -46,6 +46,10 @@ export type ProductArticleFrontmatter = {
 	updatedAt?: string;
 	toc?: boolean;
 	canonicalPath?: string;
+	specs?: ProductSpec[];
+	features?: string[];
+	additionalInfo?: ProductSpec[];
+	ctaLabel?: string;
 };
 
 export type ProductCategory = {
@@ -69,8 +73,9 @@ export type Product = {
 	features: string[];
 	applications: string[];
 	specs: ProductSpec[];
+	additionalInfo?: ProductSpec[];
 	complianceNotes: string[];
-	ctaLabel?: "Request Quote" | "Enquire Now";
+	ctaLabel?: string;
 	relatedProductSlugs: string[];
 	faq: Array<{ question: string; answer: string }>;
 	seo?: SeoFields;

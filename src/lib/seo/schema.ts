@@ -61,7 +61,7 @@ export const buildProductSchema = (product: Product, categoryName: string) => ({
 			description: "Price on request",
 		},
 	},
-	additionalProperty: product.specs.map((spec) => ({
+	additionalProperty: [...product.specs, ...(product.additionalInfo ?? [])].map((spec) => ({
 		"@type": "PropertyValue",
 		name: spec.label,
 		value: spec.value,

@@ -1,19 +1,17 @@
 import type { ReactNode } from "react"
 
 import type { ProductArticleFrontmatter } from "@/lib/cms/types"
-import type { ProductArticleHeading } from "@/lib/content/headings"
 
 interface ProductArticleLayoutProps {
 	frontmatter: ProductArticleFrontmatter
-	headings?: ProductArticleHeading[]
 	children: ReactNode
 }
 
-export function ProductArticleLayout({ frontmatter, headings, children }: ProductArticleLayoutProps) {
+export function ProductArticleLayout({ frontmatter, children }: ProductArticleLayoutProps) {
 	return (
 		<div className="product-article-content">
 			{(frontmatter.title || frontmatter.shortTitle) && (
-				<header className="mb-10 border-b-2 border-slate-100 pb-8 lg:mb-14">
+				<header id="product-overview" className="mb-10 scroll-mt-32 border-b-2 border-slate-100 pb-8 lg:mb-14">
 					<p className="mb-3 inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-amber-500">
 						<span className="block h-px w-5 bg-amber-500" />
 						Product Overview

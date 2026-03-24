@@ -3,7 +3,7 @@ import { join } from "node:path"
 
 import { compileMDX } from "next-mdx-remote/rsc"
 
-import type { Product, ProductCategory } from "@/lib/cms/types"
+import type { Product, ProductCategory, ProductSpec } from "@/lib/cms/types"
 
 const PRODUCTS_ROOT = join(process.cwd(), "content", "products")
 const PRODUCT_IMAGE_PUBLIC_ROOT = "/images/products"
@@ -25,6 +25,10 @@ interface ProductFrontmatter {
 	heroImage?: string
 	excerpt?: string
 	keywords?: string[]
+	specs?: ProductSpec[]
+	features?: string[]
+	additionalInfo?: ProductSpec[]
+	ctaLabel?: string
 }
 
 interface CategoryConfig {
@@ -49,6 +53,26 @@ function toTitleCaseFromSlug(slug: string) {
 		.split("-")
 		.map((part) => (part ? part[0]!.toUpperCase() + part.slice(1) : ""))
 		.join(" ")
+}
+
+function normalizeSpecRows(raw: unknown): ProductSpec[] {
+	if (!Array.isArray(raw)) return []
+	const out: ProductSpec[] = []
+	for (const row of raw) {
+		if (!row || typeof row !== "object") continue
+		const label = String((row as { label?: unknown }).label ?? "").trim()
+		const value = String((row as { value?: unknown }).value ?? "").trim()
+		if (!label || !value) continue
+		out.push({ label, value })
+	}
+	return out
+}
+
+function normalizeFeatureLines(raw: unknown): string[] {
+	if (!Array.isArray(raw)) return []
+	return raw
+		.map((line) => String(line ?? "").trim())
+		.filter(Boolean)
 }
 
 async function readCategoryConfig(categoryPath: string): Promise<CategoryConfig | null> {
@@ -179,17 +203,23 @@ async function loadProductFromMdx(categorySlug: string, productSlug: string): Pr
 					]
 				})()
 
+	const specs = normalizeSpecRows(frontmatter.specs)
+	const additionalInfo = normalizeSpecRows(frontmatter.additionalInfo)
+	const features = normalizeFeatureLines(frontmatter.features)
+	const ctaTrimmed = frontmatter.ctaLabel?.trim()
+
 	const product: Product = {
 		name: displayName,
 		slug: productSlug,
 		categorySlug,
 		heroImages,
 		description: frontmatter.description,
-		features: [],
+		features,
 		applications: [],
-		specs: [],
+		specs,
+		...(additionalInfo.length > 0 ? { additionalInfo } : {}),
 		complianceNotes: [],
-		ctaLabel: "Request Quote",
+		ctaLabel: ctaTrimmed || "Request Quote",
 		relatedProductSlugs: [],
 		faq: [],
 		seo: {
