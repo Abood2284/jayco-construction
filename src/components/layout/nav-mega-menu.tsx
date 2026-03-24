@@ -118,7 +118,20 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 										<div className="mb-1.5 text-sm font-bold text-slate-900 transition-colors group-hover:text-amber-600">
 											{product.name}
 										</div>
-										<p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{product.description}</p>
+										{product.features.length > 0 ? (
+											<ul className="list-none space-y-1.5 pl-0" role="list">
+												{product.features.slice(0, 3).map((line, i) => (
+													<li
+														key={`${product.slug}-mega-feature-${i}`}
+														className="relative pl-3.5 text-xs leading-snug text-slate-600 before:absolute before:left-0 before:top-[0.35rem] before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-amber-400 before:content-['']"
+													>
+														<span className="line-clamp-2">{line}</span>
+													</li>
+												))}
+											</ul>
+										) : (
+											<p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{product.description}</p>
+										)}
 									</Link>
 								))}
 							</div>

@@ -90,7 +90,7 @@ export default async function ClientsPage() {
             {clients.map((client, idx) => (
               <div
                 key={`${client.name}-${idx}`}
-                className="group relative flex aspect-video flex-col items-center justify-center overflow-hidden border-2 border-slate-900 bg-white p-6 shadow-[2px_2px_0_0_rgba(15,23,42,1)] transition-all hover:-translate-y-1 hover:border-amber-500 hover:shadow-[4px_4px_0_0_rgba(245,158,11,1)]"
+                className="group relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-xl border border-slate-200/90 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
               >
                 {/* Image Container */}
                 <div className="relative h-full w-full transition-transform duration-300 group-hover:scale-105">

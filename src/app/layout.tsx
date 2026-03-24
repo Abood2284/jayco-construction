@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
-import { getFeaturedProducts, getProductCategories, getSiteSettings } from "@/lib/cms"
+import {
+	getFeaturedProducts,
+	getProductCategories,
+	getProducts,
+	getSiteSettings,
+} from "@/lib/cms"
 import { headingFont, bodyFont } from "@/lib/font"
 import { siteUrl } from "@/lib/seo/config"
 import "./globals.css"
@@ -14,10 +19,11 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const [settings, categories, featuredProducts] = await Promise.all([
+	const [settings, categories, featuredProducts, products] = await Promise.all([
 		getSiteSettings(),
 		getProductCategories(),
 		getFeaturedProducts(),
+		getProducts(),
 	])
 
 	return (
@@ -25,7 +31,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 			<body className={`${headingFont.variable} ${bodyFont.variable}`}>
 				<Header settings={settings} categories={categories} featuredProducts={featuredProducts} />
 				{children}
-				<Footer settings={settings} />
+				<Footer settings={settings} products={products} />
 			</body>
 		</html>
 	)

@@ -1,18 +1,20 @@
 import Link from "next/link"
 import Image from "next/image"
-import type { SiteSettings } from "@/lib/cms/types"
+import type { Product, SiteSettings } from "@/lib/cms/types"
 import { ArrowRight } from "lucide-react"
 
 interface FooterProps {
 	settings: SiteSettings
+	products: Product[]
 }
 
-const productLinks = [
-	{ href: "/products/material-handling-systems", label: "Material Handling" },
-	{ href: "/products/pressure-vessels", label: "Pressure Vessels" },
-	{ href: "/products/fabrication-services", label: "Fabrication Services" },
-	{ href: "/products", label: "View all products" },
-]
+function sortProductsForFooter(products: Product[]) {
+	return [...products].sort((a, b) => {
+		const byCat = a.categorySlug.localeCompare(b.categorySlug)
+		if (byCat !== 0) return byCat
+		return a.name.localeCompare(b.name)
+	})
+}
 
 const companyLinks = [
 	{ href: "/about", label: "About" },
@@ -22,8 +24,12 @@ const companyLinks = [
 	{ href: "/contact", label: "Contact" },
 ]
 
-export function Footer({ settings }: FooterProps) {
+export function Footer({ settings, products }: FooterProps) {
 	const year = new Date().getFullYear()
+	const productLinks = sortProductsForFooter(products).map((product) => ({
+		href: `/products/${product.categorySlug}/${product.slug}`,
+		label: product.name,
+	}))
 
 	return (
 		<footer className="border-t-4 border-amber-600 bg-slate-50 text-slate-600">
@@ -52,18 +58,27 @@ export function Footer({ settings }: FooterProps) {
                             <span className="block h-px w-3 bg-amber-500" />
 							Products
 						</h3>
-						<ul className="space-y-3">
+						<ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
 							{productLinks.map((link) => (
 								<li key={link.href}>
 									<Link
 										href={link.href}
 										className="group flex items-center gap-2 text-[0.75rem] font-medium text-slate-600 transition hover:text-amber-600"
 									>
-                                        <ArrowRight className="h-3 w-3 opacity-0 -ml-5 transition-all group-hover:opacity-100 group-hover:ml-0 group-hover:text-amber-600" />
-										{link.label}
+										<ArrowRight className="h-3 w-3 opacity-0 -ml-5 shrink-0 transition-all group-hover:opacity-100 group-hover:ml-0 group-hover:text-amber-600" />
+										<span className="min-w-0 leading-snug">{link.label}</span>
 									</Link>
 								</li>
 							))}
+							<li className="col-span-full sm:col-span-2">
+								<Link
+									href="/products"
+									className="group inline-flex items-center gap-2 pt-2 text-[0.75rem] font-bold uppercase tracking-wide text-amber-600 transition hover:text-amber-500"
+								>
+									<ArrowRight className="h-3 w-3 opacity-0 -ml-5 shrink-0 transition-all group-hover:opacity-100 group-hover:ml-0" />
+									View all products
+								</Link>
+							</li>
 						</ul>
 					</div>
 
