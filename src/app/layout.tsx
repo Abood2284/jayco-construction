@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import {
@@ -29,7 +30,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 	return (
 		<html lang="en">
 			<body className={`${headingFont.variable} ${bodyFont.variable}`}>
-				<Header settings={settings} categories={categories} featuredProducts={featuredProducts} />
+				<Suspense fallback={null}>
+					<Header settings={settings} categories={categories} featuredProducts={featuredProducts} />
+				</Suspense>
 				<div className="lg:pt-[155px]">
 					{children}
 				</div>
