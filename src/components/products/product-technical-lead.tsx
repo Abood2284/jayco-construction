@@ -9,21 +9,21 @@ interface ProductTechnicalLeadProps {
 function SpecTable({ rows }: { rows: ProductSpec[] }) {
 	if (!rows.length) return null
 	return (
-		<div className="border-4 border-slate-900 bg-white shadow-[6px_6px_0_0_rgba(15,23,42,1)]">
+		<div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
 			<table className="w-full text-left text-sm sm:text-base">
 				<tbody>
 					{rows.map((spec, index) => (
 						<tr
 							key={`${spec.label}-${index}`}
-							className="border-b-2 border-slate-900 last:border-b-0 transition-colors hover:bg-amber-50"
+							className="border-b border-slate-200 last:border-b-0 transition-colors hover:bg-slate-50"
 						>
 							<th
 								scope="row"
-								className="w-[40%] border-r-2 border-slate-900 bg-slate-100 px-6 py-5 font-black uppercase tracking-wide text-slate-900 sm:w-1/3 sm:px-8"
+								className="w-[40%] border-r border-slate-200 bg-slate-50 px-4 py-4 text-xs font-semibold uppercase tracking-wide text-slate-700 sm:w-1/3 sm:px-6 sm:py-4"
 							>
 								{spec.label}
 							</th>
-							<td className="px-6 py-5 font-bold text-slate-800 sm:px-8">{spec.value}</td>
+							<td className="px-4 py-4 font-medium text-slate-900 sm:px-6">{spec.value}</td>
 						</tr>
 					))}
 				</tbody>
@@ -46,10 +46,10 @@ export function ProductTechnicalLead({ product }: ProductTechnicalLeadProps) {
 			className="mx-auto mt-12 w-full max-w-7xl scroll-mt-32 px-4 sm:px-6 lg:mt-16 lg:px-8"
 			aria-labelledby="product-technical-lead-heading"
 		>
-			<div className="mb-8 border-b-2 border-slate-900 pb-4 text-center">
+			<div className="mb-8 border-b border-slate-200 pb-4 text-center">
 				<h2
 					id="product-technical-lead-heading"
-					className="text-3xl font-black tracking-tight text-slate-900"
+					className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
 				>
 					Technical specifications
 				</h2>
@@ -73,7 +73,7 @@ export function ProductTechnicalLead({ product }: ProductTechnicalLeadProps) {
 						<h3 className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-slate-900">
 							Features
 						</h3>
-						<ul className="flex flex-col gap-2 border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0_0_rgba(15,23,42,1)] sm:p-8">
+						<ul className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 							{product.features.map((feature) => (
 								<li
 									key={feature}
@@ -99,7 +99,7 @@ export function ProductTechnicalLead({ product }: ProductTechnicalLeadProps) {
 				<div className="flex flex-wrap justify-center gap-3 pt-2">
 					<Link
 						href="#enquiry"
-						className="inline-flex h-12 items-center justify-center bg-amber-500 px-8 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] active:translate-y-1 active:shadow-none"
+						className="inline-flex h-11 items-center justify-center rounded-md bg-amber-600 px-8 text-[0.8rem] font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-700"
 					>
 						{ctaLabel}
 					</Link>

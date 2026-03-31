@@ -41,35 +41,34 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
         {/* Left — editorial copy */}
         <div className="lg:w-[55%] rounded-2xl border border-white/15 bg-slate-950/50 px-5 py-7 pt-8 backdrop-blur-md lg:border-white/10 lg:bg-slate-950/45 lg:px-6 lg:py-8 lg:pt-8">
 
-          <h1 className="mb-6 text-[clamp(2.5rem,5vw,5rem)] font-extrabold leading-[1.05] tracking-tight text-white [text-shadow:0_2px_24px_rgba(2,6,23,0.65)]">
-            Industrial Lifting
-            <br />
-            <span className="text-amber-400">&amp; Material Handling</span>
-            <br />
-            Equipments.
+          <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-amber-200/90">
+            Jayco Hoist &amp; Cranes
+          </p>
+          <h1 className="mb-6 text-[clamp(2rem,4.5vw,3.5rem)] font-bold leading-[1.08] tracking-tight text-white [text-shadow:0_2px_24px_rgba(2,6,23,0.65)]">
+            Industrial lifting and material handling equipment, engineered for duty
           </h1>
 
-          <p className="mb-8 max-w-xl text-base font-medium leading-relaxed text-white sm:text-lg [text-shadow:0_1px_2px_rgba(0,0,0,0.95),0_2px_14px_rgba(2,6,23,0.9)]">
+          <p className="mb-8 max-w-xl text-base font-medium leading-relaxed text-white/95 sm:text-lg [text-shadow:0_1px_2px_rgba(0,0,0,0.95),0_2px_14px_rgba(2,6,23,0.9)]">
             With over four decades of expertise, JAYCO designs and manufactures robust electric hoists, cranes, and custom lifts to ensure safe and efficient operations across all core industries.
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
             <Link
               href="/products"
-              className="hidden h-14 items-center justify-center gap-2 bg-amber-500 px-8 text-sm font-bold uppercase tracking-wider text-slate-950 shadow-[4px_4px_0px_0px_rgba(2,6,23,0.75)] transition-all hover:-translate-y-1 hover:bg-amber-400 hover:shadow-[6px_6px_0px_0px_rgba(2,6,23,0.9)] md:inline-flex"
+              className="hidden h-12 items-center justify-center gap-2 rounded-md bg-amber-500 px-7 text-sm font-semibold uppercase tracking-wide text-slate-950 shadow-sm transition-colors hover:bg-amber-400 md:inline-flex"
             >
-              Explore Our Solutions
-              <ArrowRight className="h-4 w-4" />
+              Explore solutions
+              <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex h-14 w-full items-center justify-center gap-2 border-2 border-white/80 bg-white/10 px-8 text-sm font-bold uppercase tracking-wider text-white shadow-[4px_4px_0px_0px_rgba(2,6,23,0.65)] backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/20 hover:shadow-[6px_6px_0px_0px_rgba(2,6,23,0.85)] md:w-auto"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border border-white/75 bg-white/10 px-7 text-sm font-semibold uppercase tracking-wide text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-white/20 md:w-auto"
             >
-              Request a Quote
+              Request a quote
             </Link>
           </div>
 
-          <div className="mt-10 flex flex-col gap-4 border-l-4 border-amber-400 pl-4 text-xs font-semibold text-white sm:mt-12 sm:flex-row sm:items-center sm:gap-6 sm:border-0 sm:pl-0 sm:text-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_1px_10px_rgba(2,6,23,0.8)]">
+          <div className="mt-10 flex flex-col gap-4 border-l-2 border-amber-500/80 pl-4 text-xs font-medium text-white sm:mt-12 sm:flex-row sm:items-center sm:gap-6 sm:border-0 sm:pl-0 sm:text-sm [text-shadow:0_1px_2px_rgba(0,0,0,0.85),0_1px_10px_rgba(2,6,23,0.8)]">
             <div className="flex -space-x-1 sm:-space-x-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/45 bg-white/15 text-white shadow-sm backdrop-blur-sm sm:h-12 sm:w-12" title="Heavy Engineering / Steel">
                   <Factory className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -85,7 +84,7 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
               </div>
             </div>
             <p className="max-w-[30ch] text-white sm:max-w-none">
-              Trusted for <span className="font-bold text-amber-300">Heavy Duty</span> applications across key sectors.
+              Trusted for <span className="font-semibold text-amber-200">heavy-duty</span> applications across key sectors.
             </p>
           </div>
         </div>
@@ -96,7 +95,7 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
           role="region"
           aria-label="Featured facilities and equipment"
         >
-          <div className="relative aspect-video w-full overflow-hidden border-4 border-slate-900 bg-slate-900 shadow-[6px_6px_0px_0px_rgba(245,158,11,1)]">
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/20 bg-slate-900 shadow-xl ring-1 ring-white/10">
             {banners.map((src, idx) => (
               <div
                 key={src}
@@ -129,9 +128,9 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
 
         {/* Right — Heavy Angular Image / Banner panel (tablet/desktop only) */}
         <div className="mt-16 hidden md:mt-16 md:block lg:mt-0 lg:w-[45%]">
-          <div className="relative border-4 border-slate-900 bg-slate-900 p-2 shadow-[8px_8px_0px_0px_rgba(245,158,11,1)]">
+          <div className="relative rounded-xl border border-white/15 bg-slate-900/50 p-1.5 shadow-2xl ring-1 ring-white/10 backdrop-blur-sm">
             {/* Auto Scrolling Banner */}
-            <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-800">
+            <div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-slate-800">
               <div 
                 className="flex h-full w-[200%]"
                 style={{ animation: "slide 20s linear infinite" }}
@@ -163,29 +162,26 @@ export function HeroSection({ settings: _settings }: HeroSectionProps) {
               </div>
 
               {/* Solid Angular Value Prop Box over Image (hidden on small screens) */}
-              <div className="absolute bottom-0 left-0 hidden border-r-4 border-t-4 border-slate-900 bg-white p-5 md:block lg:p-6">
+              <div className="absolute bottom-0 left-0 hidden max-w-[min(100%,26rem)] rounded-tr-lg border border-slate-200/90 bg-white/95 p-5 shadow-lg backdrop-blur-md md:block lg:p-6">
                 <div className="mb-4 flex items-center gap-3">
-                   <div className="h-6 w-2 bg-amber-500" />
-                   <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">
-                     Why Choose Jayco
+                   <div className="h-5 w-1 rounded-full bg-amber-600" />
+                   <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900">
+                     Why choose Jayco
                    </h3>
                 </div>
                 <ul className="space-y-3">
                   {values.map((value, idx) => (
                     <li
                       key={idx}
-                      className="flex items-start gap-3 text-sm font-bold text-slate-700"
+                      className="flex items-start gap-3 text-sm font-medium text-slate-700"
                     >
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" strokeWidth={3} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" strokeWidth={2.5} />
                       <span>{value}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
-            
-            {/* Decorative Hazard Stripe */}
-            <div className="absolute -left-4 -top-4 h-8 w-24 bg-[repeating-linear-gradient(-45deg,#f59e0b_0,#f59e0b_10px,#0f172a_10px,#0f172a_20px)] border-2 border-slate-900" />
           </div>
         </div>
       </div>

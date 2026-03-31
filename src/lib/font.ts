@@ -1,4 +1,4 @@
-import { Inter, Libre_Baskerville, Montserrat, Open_Sans } from "next/font/google";
+import { Libre_Baskerville, Open_Sans } from "next/font/google";
 
 export const headingFont = Open_Sans({
   subsets: ["latin"],

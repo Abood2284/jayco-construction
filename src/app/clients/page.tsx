@@ -51,7 +51,7 @@ export default async function ClientsPage() {
         </div>
 
         {/* Heavy Hazard Stripe Border */}
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-[repeating-linear-gradient(45deg,#f59e0b_0,#f59e0b_10px,#0f172a_10px,#0f172a_20px)]" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-slate-700/80" aria-hidden />
       </section>
 
       {/* Clients Grid Section */}

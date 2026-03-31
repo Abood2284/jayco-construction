@@ -32,7 +32,7 @@ export function Footer({ settings, products }: FooterProps) {
 	}))
 
 	return (
-		<footer className="border-t-4 border-amber-600 bg-slate-50 text-slate-600">
+		<footer className="border-t border-slate-200 bg-slate-50 text-slate-600">
 			<div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
 				<div className="grid gap-12 lg:grid-cols-4 lg:gap-8">
 					{/* Brand */}
@@ -144,10 +144,10 @@ export function Footer({ settings, products }: FooterProps) {
 
 						<Link
 							href="/contact"
-							className="mt-8 inline-flex h-10 items-center justify-center gap-2 bg-slate-900 px-6 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-white shadow-[4px_4px_0_0_rgba(245,158,11,1)] transition-all hover:-translate-y-1 hover:bg-slate-800 hover:shadow-[6px_6px_0_0_rgba(245,158,11,1)] shrink-0"
+							className="mt-8 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md bg-slate-900 px-6 text-[0.7rem] font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-slate-800"
 						>
-							Request Quote
-                            <ArrowRight className="h-4 w-4" />
+							Request quote
+							<ArrowRight className="h-4 w-4" aria-hidden />
 						</Link>
 					</div>
 				</div>

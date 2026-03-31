@@ -15,7 +15,7 @@ function ArrowRight() {
 }
 
 export function CategoriesSection({ categories }: CategoriesSectionProps) {
-	const [featured, ...rest] = categories
+	const featured = categories[0]
 
 	if (!featured) return null
 
@@ -70,7 +70,7 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 							<Link
 								key={category.slug}
 								href={`/products/${category.slug}`}
-								className={`group relative overflow-hidden border-2 border-slate-900 bg-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(15,23,42,1)] ${spanClass} ${mobileHiddenClass}`}
+								className={`group relative overflow-hidden rounded-lg border border-slate-200 bg-slate-900 shadow-md transition-shadow hover:shadow-lg ${spanClass} ${mobileHiddenClass}`}
 							>
 								{/* Image — full opacity; readability via bottom gradient + yellow titles */}
 								<div className="absolute inset-0 z-0 bg-slate-100">
@@ -93,10 +93,10 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 								{/* Content block */}
 								<div className="absolute inset-0 z-20 flex flex-col justify-end p-5 lg:p-6">
 									<h3
-										className={`w-fit max-w-full bg-yellow-400 px-2 py-1 font-black uppercase leading-tight tracking-tight text-slate-900 ${
+										className={`w-fit max-w-full rounded-sm bg-slate-950/80 px-2 py-1 font-semibold uppercase leading-tight tracking-tight text-white backdrop-blur-sm ${
 											isFeatured
-												? "mb-3 text-xl sm:text-2xl md:text-3xl sm:px-3 sm:py-1.5"
-												: "mb-2 text-base sm:text-xl sm:px-2.5 sm:py-1"
+												? "mb-3 text-lg sm:text-xl md:text-2xl sm:px-3 sm:py-1.5"
+												: "mb-2 text-sm sm:text-base sm:px-2.5 sm:py-1"
 										}`}
 									>
 										{category.name}
@@ -109,8 +109,8 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 									)}
 
 									<div className="mt-auto flex items-center justify-between">
-										<span className="inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-amber-500 transition-all group-hover:text-amber-400 group-hover:gap-2">
-											Explore Machinery <ArrowRight />
+										<span className="inline-flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-amber-400 transition-all group-hover:gap-2 group-hover:text-amber-300">
+											View category <ArrowRight />
 										</span>
 									</div>
 								</div>
@@ -122,9 +122,9 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 				<div className="mt-16 flex justify-center">
 					<Link
 						href="/products"
-						className="inline-flex h-14 items-center justify-center gap-2 border-2 border-slate-900 bg-white px-8 text-sm font-bold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all hover:-translate-y-1 hover:bg-slate-50 hover:shadow-[6px_6px_0_0_rgba(15,23,42,1)]"
+						className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-8 text-sm font-semibold uppercase tracking-wide text-slate-900 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50"
 					>
-						View Full Product Catalog
+						View full product catalog
 						<ArrowRight />
 					</Link>
 				</div>

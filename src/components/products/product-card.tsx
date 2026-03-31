@@ -8,8 +8,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
 	return (
-		<article className="group relative overflow-hidden border-2 border-slate-900 bg-white shadow-[4px_4px_0_0_rgba(15,23,42,1)] transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_rgba(245,158,11,1)] hover:border-amber-500">
-			<div className="relative aspect-3/2 sm:aspect-4/3 overflow-hidden bg-slate-100 border-b-2 border-slate-900">
+		<article className="group relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+			<div className="relative aspect-3/2 overflow-hidden border-b border-slate-200 bg-slate-100 sm:aspect-4/3">
 				<Image
 					src={product.heroImages[0].src}
 					alt={product.heroImages[0].alt}
@@ -17,19 +17,19 @@ export function ProductCard({ product }: ProductCardProps) {
 					className="object-cover transition-transform duration-700 group-hover:scale-105"
 					sizes="(max-width: 640px) 50vw, (max-width: 768px) 100vw, 33vw"
 				/>
-				<span className="absolute left-3 top-3 hidden border-2 border-amber-500 bg-slate-900 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.16em] text-white sm:inline-block lg:hidden">
+				<span className="absolute left-3 top-3 hidden rounded-md border border-slate-200/80 bg-slate-950/85 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white backdrop-blur-sm sm:inline-block lg:hidden">
 					{product.categorySlug.replace(/-/g, " ")}
 				</span>
 			</div>
 			<div className="p-3 sm:p-5">
-				<h3 className="mb-1 sm:mb-2 text-sm sm:text-base font-black uppercase tracking-tight text-slate-900 group-hover:text-amber-600">
+				<h3 className="mb-1 text-sm font-semibold text-slate-900 transition-colors group-hover:text-amber-800 sm:mb-2 sm:text-base">
 					<Link href={`/products/${product.categorySlug}/${product.slug}`} className="before:absolute before:inset-0 block">
 						{product.name}
 					</Link>
 				</h3>
 				<p className="mb-4 line-clamp-2 text-sm font-medium text-slate-600 hidden sm:block">{product.description}</p>
 				<div
-					className="hidden sm:inline-flex items-center gap-1.5 text-[0.7rem] font-black uppercase tracking-[0.18em] text-slate-900 transition group-hover:text-amber-600"
+					className="hidden items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-slate-600 transition-colors group-hover:text-amber-800 sm:inline-flex"
 				>
 					View details
 					<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>

@@ -48,7 +48,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 				<button
 					type="button"
 					onClick={() => setLightboxIndex(0)}
-					className="relative aspect-video w-full cursor-zoom-in overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0_0_rgba(15,23,42,1)] lg:flex-1"
+					className="relative aspect-video w-full cursor-zoom-in overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-sm lg:flex-1"
 				>
 					<Image
 						src={images[0].src}
@@ -68,7 +68,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 								key={image.src}
 								type="button"
 								onClick={() => setLightboxIndex(i + 1)}
-								className="relative aspect-square cursor-zoom-in overflow-hidden border-2 border-slate-900 bg-slate-100 shadow-[2px_2px_0_0_rgba(15,23,42,1)]"
+								className="relative aspect-square cursor-zoom-in overflow-hidden rounded-md border border-slate-200 bg-slate-100 shadow-sm"
 							>
 								<Image
 									src={image.src}

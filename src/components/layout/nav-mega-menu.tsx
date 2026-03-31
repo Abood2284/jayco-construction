@@ -29,7 +29,7 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 	if (!open || !categoryEntries.length || !activeEntry) return null
 
 	return (
-		<div className="absolute left-1/2 top-full z-40 w-[min(960px,100vw-2rem)] -translate-x-1/2 pt-4">
+		<div className="absolute left-[50vw] top-full z-40 w-[min(960px,calc(100vw-2rem))] -translate-x-1/2 pt-4">
 			<div className="overflow-hidden rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-md shadow-2xl shadow-slate-900/10">
 				<div className="flex min-h-[440px] max-h-[min(540px,80vh)]">
 					{/* Left Sidebar - Categories */}
@@ -44,10 +44,10 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 										href={`/products/${entry.category.slug}`}
 										onMouseEnter={() => setActiveSlug(entry.category.slug)}
 										onClick={onClose}
-										className={`group flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-all ${
+										className={`group flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${
 											activeEntry.category.slug === entry.category.slug
-												? "bg-amber-500 text-slate-950 font-bold shadow-md"
-												: "text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm"
+												? "border-red-200 bg-red-50 font-semibold text-slate-900 shadow-sm"
+												: "border-transparent text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-900"
 										}`}
 									>
 										<span>{entry.category.name}</span>
@@ -55,8 +55,8 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 											viewBox="0 0 24 24" 
 											className={`h-4 w-4 transition-transform ${
 												activeEntry.category.slug === entry.category.slug 
-													? "translate-x-0 opacity-100 text-slate-900" 
-													: "-translate-x-2 opacity-0 text-amber-500 group-hover:translate-x-0 group-hover:opacity-100"
+													? "translate-x-0 opacity-100 text-red-800" 
+													: "-translate-x-2 opacity-0 text-red-700 group-hover:translate-x-0 group-hover:opacity-100"
 											}`} 
 											aria-hidden="true"
 										>
@@ -70,7 +70,7 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 							<Link
 								href="/products"
 								onClick={onClose}
-								className="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-slate-600 transition hover:border-amber-500 hover:text-amber-600 shadow-sm"
+								className="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-wide text-slate-600 shadow-sm transition-colors hover:border-red-500 hover:text-red-800"
 							>
 								View All Products
 							</Link>
@@ -102,20 +102,20 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 										key={product.slug}
 										href={`/products/${product.categorySlug}/${product.slug}`}
 										onClick={onClose}
-										className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-amber-400 hover:bg-white hover:shadow-lg"
+										className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 p-4 shadow-sm transition-all hover:border-red-300 hover:bg-white hover:shadow-md"
 									>
 										{/* Top section */}
 										<div className="mb-3 flex items-start justify-between gap-2">
-											<span className="inline-flex rounded-md bg-amber-100 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.16em] text-amber-800">
+											<span className="inline-flex rounded-md bg-red-100/90 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-wide text-red-900">
 												Featured
 											</span>
-											<div className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition-all group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-white">
+											<div className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition-colors group-hover:border-red-600 group-hover:bg-red-600 group-hover:text-white">
 												<svg viewBox="0 0 24 24" className="h-3 w-3" aria-hidden="true">
 													<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 												</svg>
 											</div>
 										</div>
-										<div className="mb-1.5 text-sm font-bold text-slate-900 transition-colors group-hover:text-amber-600">
+										<div className="mb-1.5 text-sm font-bold text-slate-900 transition-colors group-hover:text-red-700">
 											{product.name}
 										</div>
 										{product.features.length > 0 ? (
@@ -123,7 +123,7 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 												{product.features.slice(0, 3).map((line, i) => (
 													<li
 														key={`${product.slug}-mega-feature-${i}`}
-														className="relative pl-3.5 text-xs leading-snug text-slate-600 before:absolute before:left-0 before:top-[0.35rem] before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-amber-400 before:content-['']"
+														className="relative pl-3.5 text-xs leading-snug text-slate-600 before:absolute before:left-0 before:top-[0.35rem] before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-red-400 before:content-['']"
 													>
 														<span className="line-clamp-2">{line}</span>
 													</li>

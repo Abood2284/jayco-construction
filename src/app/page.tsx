@@ -1,15 +1,18 @@
 import { JsonLd } from "@/components/ui/json-ld"
 import { HeroSection } from "@/components/sections/hero-section"
+import { EquipmentGridSection } from "@/components/sections/equipment-grid-section"
 import { CapabilityBand } from "@/components/sections/capability-band"
 import { CategoriesSection } from "@/components/sections/categories-section"
 import { FeaturedProductsSection } from "@/components/sections/featured-products-section"
 import { ClientsSection } from "@/components/sections/clients-section"
 import { GalleryTeaserSection } from "@/components/sections/gallery-teaser-section"
+import { CareersDisciplinedSection } from "@/components/sections/careers-disciplined-section"
 import {
 	getClients,
 	getFeaturedProducts,
 	getGalleryCategories,
 	getProductCategories,
+	getProducts,
 	getSiteSettings,
 } from "@/lib/cms"
 import { buildMetadata } from "@/lib/seo/metadata"
@@ -25,10 +28,11 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-	const [settings, categories, featuredProducts, clientList, galleryCategories] = await Promise.all([
+	const [settings, categories, featuredProducts, products, clientList, galleryCategories] = await Promise.all([
 		getSiteSettings(),
 		getProductCategories(),
 		getFeaturedProducts(),
+		getProducts(),
 		getClients(),
 		getGalleryCategories(),
 	])
@@ -37,11 +41,13 @@ export default async function Home() {
 		<main>
 			<JsonLd data={buildOrganizationSchema(settings)} />
 			<HeroSection settings={settings} />
-			<CapabilityBand settings={settings} />
+			<EquipmentGridSection products={products} />
+			{/* <CapabilityBand settings={settings} /> */}
 			<ClientsSection clients={clientList} />
 			<CategoriesSection categories={categories} />
 			<FeaturedProductsSection products={featuredProducts} />
-			{/* <GalleryTeaserSection galleryCategories={galleryCategories} /> */}
+			<CareersDisciplinedSection />
+			<GalleryTeaserSection galleryCategories={galleryCategories} />
 		</main>
 	)
 }

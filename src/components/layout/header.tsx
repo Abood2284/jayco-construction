@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronDown, Globe, Menu, Search, X } from "lucide-react";
 import type { Product, ProductCategory, SiteSettings } from "@/lib/cms/types";
 import { NavMegaMenu } from "./nav-mega-menu";
 
@@ -17,264 +19,349 @@ function Header({ settings, categories, featuredProducts }: HeaderProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryFromUrl = searchParams.get("query") ?? "";
+
+  const [searchQuery, setSearchQuery] = useState(queryFromUrl);
+
+  useEffect(() => {
+    setSearchQuery(queryFromUrl);
+  }, [queryFromUrl]);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 80) {
-        if (!isScrolled) setIsScrolled(true);
-      } else if (isScrolled) setIsScrolled(false);
+      setIsScrolled(window.scrollY > 24);
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isScrolled]);
+  }, []);
 
-  const headerBackgroundClass = isScrolled
-    ? "bg-white/95 text-slate-900 shadow-sm border-b border-slate-200"
-    : "bg-transparent"
+  const handleSearchSubmit = (
+    event: FormEvent<HTMLFormElement>,
+    shouldCloseMobile: boolean,
+  ) => {
+    event.preventDefault();
 
-  const navLinkClass = isScrolled
-    ? "text-slate-700 transition hover:text-amber-600"
-    : "text-yellow-300 transition hover:text-yellow-100"
+    const query = searchQuery.trim();
 
-  const menuButtonClass = isScrolled
-    ? "border-slate-300 text-slate-900 transition hover:border-amber-500 hover:text-amber-600"
-    : "border-yellow-300/60 text-yellow-300 transition hover:border-yellow-200 hover:text-yellow-100"
+    if (shouldCloseMobile) {
+      setIsMobileOpen(false);
+    }
 
-  const toggleMobile = () => {
-    setIsMobileOpen((open) => !open);
-    if (isProductsOpen) setIsProductsOpen(false);
+    if (!query) {
+      router.push("/products");
+      return;
+    }
+
+    router.push(`/products?query=${encodeURIComponent(query)}`);
   };
 
   const closeMobile = () => setIsMobileOpen(false);
 
-  const toggleProducts = () => setIsProductsOpen((open) => !open);
-
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-40 transition-colors duration-200 backdrop-blur-lg ${headerBackgroundClass}`}
+        className={`fixed inset-x-0 top-0 z-50 bg-white transition-shadow duration-200 ${
+          isScrolled ? "shadow-[0_12px_30px_rgba(15,23,42,0.08)]" : ""
+        }`}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-6 lg:py-4">
-          <Link href="/" className="group flex items-center" aria-label={settings.companyName}>
-            <Image
-              src="/images/jayco-logo.png"
-              alt={settings.companyName}
-              width={280}
-              height={58}
-              priority
-              className="h-9 w-auto transition-opacity group-hover:opacity-90 lg:h-10"
-            />
-          </Link>
-
-          <nav
-            aria-label="Main navigation"
-            className="hidden items-center gap-8 lg:flex"
-          >
-            <Link
-              href="/about"
-              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-            >
-              About
-            </Link>
-            <div
-              className="relative block py-4 -my-4"
-              onMouseEnter={() => setIsProductsOpen(true)}
-              onMouseLeave={() => setIsProductsOpen(false)}
-            >
-              <button
-                type="button"
-                onClick={toggleProducts}
-                className={`inline-flex h-full items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-                aria-expanded={isProductsOpen}
-                aria-haspopup="true"
+        {/* Desktop header */}
+        <div className="hidden lg:block">
+          {/* Top row */}
+          <div className="border-b border-black/10">
+            <div className="mx-auto flex max-w-[1440px] items-center gap-6 px-8 py-5">
+              <Link
+                href="/"
+                aria-label={settings.companyName}
+                className="shrink-0"
               >
-                <span>Categories</span>
-                <span
-                  className={`inline-block h-4 w-4 transition-transform ${
-                    isProductsOpen ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M6 9l6 6 6-6"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </button>
-              <NavMegaMenu
-                open={isProductsOpen}
-                onClose={() => setIsProductsOpen(false)}
-                categories={categories}
-                featuredProducts={featuredProducts}
-              />
-            </div>
-            <Link
-              href="/gallery"
-              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-            >
-              Gallery
-            </Link>
-            <Link
-              href="/clients"
-              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-            >
-              Clients
-            </Link>
-            <Link
-              href="/careers"
-              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-            >
-              Careers
-            </Link>
-            <Link
-              href="/contact"
-              className={`text-xs font-bold uppercase tracking-[0.16em] ${navLinkClass}`}
-            >
-              Contact
-            </Link>
-          </nav>
+                <Image
+                  src="/images/jayco-logo.png"
+                  alt={settings.companyName}
+                  width={280}
+                  height={58}
+                  priority
+                  className="h-12 w-auto object-contain"
+                />
+              </Link>
 
-          <div className="flex items-center gap-4">
-            <Link
-              href="/contact"
-              className="hidden items-center justify-center bg-amber-600 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-amber-500 lg:inline-flex"
-            >
-              Request Quote
+              <form
+                role="search"
+                aria-label="Search products"
+                onSubmit={(e) => handleSearchSubmit(e, false)}
+                className="flex min-w-0 flex-1 items-center"
+              >
+                <div className="flex h-14 w-full overflow-hidden rounded-none border border-black bg-white">
+                  <label htmlFor="header-product-search" className="sr-only">
+                    Search products
+                  </label>
+                  <input
+                    id="header-product-search"
+                    name="query"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search"
+                    autoComplete="off"
+                    className="h-full flex-1 bg-transparent px-5 text-[0.95rem] text-slate-900 outline-none placeholder:text-slate-500"
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Search"
+                    className="flex h-full w-14 items-center justify-center bg-[#c62828] text-white transition hover:bg-[#b71c1c]"
+                  >
+                    <Search className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                </div>
+              </form>
+
+              <Link
+                href="/contact"
+                className="shrink-0 text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom row */}
+          <div className="border-b border-black/10 bg-white">
+            <div className="mx-auto flex h-12 max-w-[1440px] items-center justify-between px-8">
+              <nav
+                aria-label="Main navigation"
+                className="flex h-full items-center gap-10"
+              >
+                <Link
+                  href="/about"
+                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+                >
+                  <span className="mr-2">Company</span>
+                  <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
+
+                <div
+                  className="relative flex h-full items-center"
+                  onMouseEnter={() => setIsProductsOpen(true)}
+                  onMouseLeave={() => setIsProductsOpen(false)}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setIsProductsOpen((open) => !open)}
+                    className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+                    aria-expanded={isProductsOpen}
+                    aria-haspopup="true"
+                  >
+                    <span className="mr-2">Brands</span>
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform ${
+                        isProductsOpen ? "rotate-180" : ""
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  <NavMegaMenu
+                    open={isProductsOpen}
+                    onClose={() => setIsProductsOpen(false)}
+                    categories={categories}
+                    featuredProducts={featuredProducts}
+                  />
+                </div>
+
+                <Link
+                  href="/gallery"
+                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+                >
+                  Gallery
+                </Link>
+
+                <Link
+                  href="/clients"
+                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+                >
+                  Clients
+                </Link>
+
+                <Link
+                  href="/careers"
+                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+                >
+                  <span className="mr-2">Careers</span>
+                  <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
+              </nav>
+
+              <Link
+                href="#"
+                className="inline-flex items-center gap-2 text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
+              >
+                <Globe className="h-4.5 w-4.5" aria-hidden="true" />
+                <span>English</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Red accent strip */}
+          <div className="w-full">
+            <div className="h-[6px] bg-[#c62828]" />
+            <div className="h-[2px] bg-[#a61d24]" />
+            <div className="h-px bg-[#ef9a9a]" />
+          </div>
+        </div>
+
+        {/* Mobile header */}
+        <div className="lg:hidden">
+          <div className="flex items-center justify-between px-4 py-4">
+            <Link href="/" aria-label={settings.companyName}>
+              <Image
+                src="/images/jayco-logo.png"
+                alt={settings.companyName}
+                width={220}
+                height={50}
+                priority
+                className="h-9 w-auto object-contain"
+              />
             </Link>
+
             <button
               type="button"
-              onClick={toggleMobile}
-              className={`inline-flex h-9 w-9 items-center justify-center border lg:hidden ${menuButtonClass}`}
+              onClick={() => setIsMobileOpen((open) => !open)}
+              className="inline-flex h-11 w-11 items-center justify-center border border-black text-black"
               aria-label={isMobileOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={isMobileOpen}
             >
-              <span className="relative block h-3 w-4">
-                <span
-                  className={`absolute left-0 top-0 h-[2px] w-full origin-center bg-current transition-transform ${
-                    isMobileOpen ? "translate-y-[6px] rotate-45" : ""
-                  }`}
-                />
-                <span
-                  className={`absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 bg-current transition-opacity ${
-                    isMobileOpen ? "opacity-0" : "opacity-100"
-                  }`}
-                />
-                <span
-                  className={`absolute bottom-0 left-0 h-[2px] w-full origin-center bg-current transition-transform ${
-                    isMobileOpen ? "-translate-y-[6px] -rotate-45" : ""
-                  }`}
-                />
-              </span>
+              {isMobileOpen ? (
+                <X className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              )}
             </button>
+          </div>
+
+          <div className="w-full">
+            <div className="h-[5px] bg-[#c62828]" />
+            <div className="h-[2px] bg-[#a61d24]" />
           </div>
         </div>
       </header>
 
+      {/* Mobile drawer */}
       {isMobileOpen ? (
         <>
           <div
-            className="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
             onClick={closeMobile}
           />
-          <div className="fixed inset-y-0 right-0 z-40 w-full max-w-sm border-l-4 border-slate-900 bg-white text-slate-900 shadow-xl lg:hidden">
-            <div className="flex h-full flex-col px-4 py-4">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl lg:hidden">
+            <div className="flex h-full flex-col">
+              <div className="flex items-center justify-between border-b border-black/10 px-4 py-4">
+                <span className="text-sm font-semibold tracking-wide text-slate-900">
                   Menu
                 </span>
                 <button
                   type="button"
                   onClick={closeMobile}
-                  className="inline-flex h-8 w-8 items-center justify-center border-2 border-slate-200 text-slate-500 hover:border-slate-900 hover:text-slate-900"
+                  className="inline-flex h-10 w-10 items-center justify-center border border-black text-black"
                   aria-label="Close navigation"
                 >
-                  <span className="relative block h-3 w-3">
-                    <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rotate-45 bg-current" />
-                    <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 -rotate-45 bg-current" />
-                  </span>
+                  <X className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
 
-              <nav
-                className="flex-1 space-y-2 overflow-y-auto py-2"
-                aria-label="Mobile navigation"
-              >
-                <Link
-                  href="/about"
-                  onClick={closeMobile}
-                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
+              <div className="flex-1 overflow-y-auto px-4 py-5">
+                <form
+                  role="search"
+                  aria-label="Search products"
+                  onSubmit={(e) => handleSearchSubmit(e, true)}
+                  className="mb-6"
                 >
-                  About
-                </Link>
-                <div className="bg-slate-50 px-2 py-3 border-b border-slate-100">
-                  <div className="mb-2 text-xs font-black uppercase tracking-[0.16em] text-slate-400">
-                    Products
+                  <div className="flex h-12 overflow-hidden border border-black bg-white">
+                    <label htmlFor="mobile-product-search" className="sr-only">
+                      Search products
+                    </label>
+                    <input
+                      id="mobile-product-search"
+                      name="query"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search"
+                      autoComplete="off"
+                      className="h-full flex-1 bg-transparent px-4 text-sm text-slate-900 outline-none placeholder:text-slate-500"
+                    />
+                    <button
+                      type="submit"
+                      aria-label="Search"
+                      className="flex h-full w-12 items-center justify-center bg-[#c62828] text-white"
+                    >
+                      <Search className="h-5 w-5" aria-hidden="true" />
+                    </button>
                   </div>
-                  <ul className="space-y-1 text-sm">
-                    {categories.map((category) => (
-                      <li key={category.slug}>
-                        <Link
-                          href={`/products/${category.slug}`}
-                          onClick={closeMobile}
-                          className="flex items-center justify-between py-2 font-bold text-slate-700 hover:text-amber-600"
-                        >
-                          <span>{category.name}</span>
-                          <span className="text-[0.7rem] uppercase tracking-[0.16em] text-amber-500">
-                            View
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Link
-                  href="/gallery"
-                  onClick={closeMobile}
-                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
-                >
-                  Gallery
-                </Link>
-                <Link
-                  href="/clients"
-                  onClick={closeMobile}
-                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
-                >
-                  Clients
-                </Link>
-                <Link
-                  href="/careers"
-                  onClick={closeMobile}
-                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide border-b border-slate-100 hover:text-amber-600"
-                >
-                  Careers
-                </Link>
-                <Link
-                  href="/contact"
-                  onClick={closeMobile}
-                  className="block px-2 py-3 text-sm font-bold uppercase tracking-wide hover:text-amber-600"
-                >
-                  Contact
-                </Link>
-              </nav>
+                </form>
 
-              <div className="border-t-4 border-slate-900 pt-4">
-                <Link
-                  href="/contact"
-                  onClick={closeMobile}
-                  className="flex w-full items-center justify-center bg-amber-600 px-4 py-4 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:bg-amber-500"
-                >
-                  Request Quote
-                </Link>
+                <nav aria-label="Mobile navigation" className="space-y-1">
+                  <Link
+                    href="/about"
+                    onClick={closeMobile}
+                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
+                  >
+                    Company
+                  </Link>
+
+                  <div className="border-b border-slate-200 py-3">
+                    <div className="mb-3 flex items-center justify-between text-base font-medium text-slate-900">
+                      <span>Brands</span>
+                    </div>
+
+                    <ul className="space-y-2 pl-1">
+                      {categories.map((category) => (
+                        <li key={category.slug}>
+                          <Link
+                            href={`/products/${category.slug}`}
+                            onClick={closeMobile}
+                            className="block text-sm text-slate-600 transition hover:text-[#b71c1c]"
+                          >
+                            {category.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Link
+                    href="/gallery"
+                    onClick={closeMobile}
+                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
+                  >
+                    Gallery
+                  </Link>
+
+                  <Link
+                    href="/clients"
+                    onClick={closeMobile}
+                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
+                  >
+                    Clients
+                  </Link>
+
+                  <Link
+                    href="/careers"
+                    onClick={closeMobile}
+                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
+                  >
+                    Careers
+                  </Link>
+
+                  <Link
+                    href="/contact"
+                    onClick={closeMobile}
+                    className="block py-3 text-base font-medium text-slate-900"
+                  >
+                    Contact Us
+                  </Link>
+                </nav>
               </div>
             </div>
           </div>

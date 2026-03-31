@@ -108,7 +108,7 @@ export function CareerForm({ sourcePath }: CareerFormProps) {
 			<button 
 				type="submit" 
 				disabled={status === "loading"}
-				className="mt-4 flex w-full items-center justify-center bg-amber-500 px-6 py-4 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition-all hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-1 active:shadow-none"
+				className="mt-4 flex w-full items-center justify-center rounded-md bg-amber-600 px-6 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70"
 			>
 				{status === "loading" ? (
 					<span className="flex items-center gap-2">

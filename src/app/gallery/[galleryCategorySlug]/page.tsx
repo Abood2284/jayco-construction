@@ -78,7 +78,7 @@ export default async function GalleryCategoryPage({ params }: GalleryCategoryPag
 				</div>
 
 				{/* Caution stripe decoration */}
-				<div className="absolute bottom-0 left-0 right-0 h-1 bg-[repeating-linear-gradient(45deg,#f59e0b_0,#f59e0b_10px,#0f172a_10px,#0f172a_20px)] opacity-60" />
+				<div className="absolute bottom-0 left-0 right-0 h-px bg-slate-700/70" aria-hidden />
 			</section>
 
 			{/* Masonry-style Image Grid */}

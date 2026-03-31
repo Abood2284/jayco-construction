@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CareerForm } from "@/components/sections/career-form";
 import { getCareersPage } from "@/lib/cms";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -16,7 +17,7 @@ export default async function CareersPage() {
 	return (
 		<main className="flex min-h-screen flex-col bg-slate-50 pb-20 lg:pb-28">
 			{/* Page Hero */}
-			<section className="relative overflow-hidden border-b-4 border-slate-900 bg-slate-50 px-4 pb-20 pt-32 lg:px-6 lg:pb-28 lg:pt-40">
+			<section className="relative overflow-hidden border-b border-slate-200 bg-slate-50 px-4 pb-20 pt-32 lg:px-6 lg:pb-28 lg:pt-40">
 				{/* Industrial Background Grid */}
 				<div
 					className="pointer-events-none absolute inset-0 opacity-[0.06]"
@@ -43,8 +44,6 @@ export default async function CareersPage() {
 					</p>
 				</div>
 
-				{/* Heavy Hazard Stripe Border */}
-				<div className="absolute bottom-0 left-0 right-0 h-2 bg-[repeating-linear-gradient(45deg,#f59e0b_0,#f59e0b_10px,#0f172a_10px,#0f172a_20px)]" />
 			</section>
 
 			<section className="mx-auto mt-12 w-full max-w-6xl px-4 lg:mt-24 lg:px-6">
@@ -61,12 +60,8 @@ export default async function CareersPage() {
 							</div>
 						</div>
 
-						<div className="border-2 border-slate-900 bg-white p-8 shadow-[4px_4px_0_0_rgba(15,23,42,1)] relative">
-                            {/* Decorative Corner Accents */}
-                            <div className="absolute left-0 top-0 h-4 w-4 border-l-4 border-t-4 border-amber-500 -mt-1 -ml-1" />
-                            <div className="absolute right-0 top-0 h-4 w-4 border-r-4 border-t-4 border-amber-500 -mt-1 -mr-1" />
-
-							<h3 className="mb-8 flex items-center gap-3 text-lg font-black uppercase tracking-widest text-slate-900">
+						<div className="relative rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+							<h3 className="mb-8 flex items-center gap-3 text-lg font-bold uppercase tracking-wide text-slate-900">
 								<svg viewBox="0 0 24 24" className="h-6 w-6 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
 									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
 								</svg>
@@ -86,26 +81,28 @@ export default async function CareersPage() {
 						</div>
 
 						{/* Small promo block */}
-						<div className="border-2 border-slate-900 bg-slate-900 p-8 shadow-[4px_4px_0_0_rgba(245,158,11,1)] flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
-                            <div className="absolute right-0 top-0 h-full w-1/3 bg-amber-500/10 skew-x-12 translate-x-1/2 transition-transform duration-500 group-hover:translate-x-full" />
-							<div className="relative text-center sm:text-left z-10">
-								<h3 className="text-lg font-black uppercase tracking-wider text-white mb-2">Our Capabilities</h3>
-								<p className="text-sm font-medium text-slate-400 max-w-[40ch]">From pressure vessels to towering structural platforms, discover what our teams build every single day.</p>
+						<div className="relative flex flex-col items-center justify-between gap-6 overflow-hidden rounded-xl border border-slate-700 bg-slate-900 p-8 shadow-md sm:flex-row">
+							<div className="relative z-10 text-center sm:text-left">
+								<h3 className="mb-2 text-lg font-bold uppercase tracking-wide text-white">Our capabilities</h3>
+								<p className="max-w-[40ch] text-sm font-medium text-slate-400">From pressure vessels to towering structural platforms, discover what our teams build every single day.</p>
 							</div>
-							<a href="/products" className="relative z-10 inline-flex shrink-0 h-12 items-center justify-center gap-2 bg-amber-500 px-6 text-xs font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-amber-400 shadow-[4px_4px_0_0_rgba(255,255,255,0.1)] active:translate-y-1 active:shadow-none">
-								View Products
+							<Link
+								href="/products"
+								className="relative z-10 inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-amber-500 px-6 text-xs font-semibold uppercase tracking-wide text-slate-950 shadow-sm transition-colors hover:bg-amber-400"
+							>
+								View products
 								<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter" /></svg>
-							</a>
+							</Link>
 						</div>
 					</div>
 					
 					{/* Right Column: Application Form */}
-					<div className="w-full shrink-0 border-2 border-slate-900 bg-white p-6 sm:p-8 shadow-[6px_6px_0_0_rgba(15,23,42,1)] lg:w-[480px]">
-						<div className="mb-8 text-center border-b-2 border-slate-100 pb-6">
-							<span className="inline-block bg-amber-500 px-4 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-950 mb-4">
-								Open Application
+					<div className="w-full shrink-0 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:w-[480px]">
+						<div className="mb-8 border-b border-slate-100 pb-6 text-center">
+							<span className="mb-4 inline-block rounded-md bg-amber-100 px-4 py-1.5 text-[0.65rem] font-semibold uppercase tracking-wide text-amber-950">
+								Open application
 							</span>
-							<h3 className="mb-3 text-3xl font-black uppercase tracking-tight text-slate-900">Apply Now</h3>
+							<h3 className="mb-3 text-2xl font-bold tracking-tight text-slate-900">Apply now</h3>
 							<p className="text-sm font-medium text-slate-500 px-4">
 								Submit your details to join our specialized crews and manufacturing teams.
 							</p>

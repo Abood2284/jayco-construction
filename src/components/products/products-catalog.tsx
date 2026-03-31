@@ -107,8 +107,8 @@ export function ProductsCatalog({ categories, products }: ProductsCatalogProps) 
 						onClick={() => setActiveCategorySlug(ALL_CATEGORIES_SLUG)}
 						className={`${sidebarBtnBase} ${
 							activeCategorySlug === ALL_CATEGORIES_SLUG
-								? "border-amber-500 bg-slate-900 text-white shadow-[4px_4px_0_0_rgba(245,158,11,1)]"
-								: "border-slate-900 bg-white text-slate-800 shadow-[4px_4px_0_0_rgba(15,23,42,1)] hover:border-amber-500 hover:bg-slate-50"
+								? "border-amber-600 bg-slate-900 text-white shadow-sm"
+								: "border-slate-200 bg-white text-slate-800 shadow-sm hover:border-amber-400 hover:bg-slate-50"
 						}`}
 					>
 						{activeCategorySlug === ALL_CATEGORIES_SLUG && (
@@ -137,8 +137,8 @@ export function ProductsCatalog({ categories, products }: ProductsCatalogProps) 
 								onClick={() => setActiveCategorySlug(category.slug)}
 								className={`${sidebarBtnBase} ${
 									isActive
-										? "border-amber-500 bg-slate-900 text-white shadow-[4px_4px_0_0_rgba(245,158,11,1)]"
-										: "border-slate-900 bg-white text-slate-700 shadow-[4px_4px_0_0_rgba(15,23,42,1)] hover:border-amber-500 hover:bg-slate-50"
+										? "border-amber-600 bg-slate-900 text-white shadow-sm"
+										: "border-slate-200 bg-white text-slate-700 shadow-sm hover:border-amber-400 hover:bg-slate-50"
 								}`}
 							>
 								{isActive && <span className="absolute bottom-0 left-0 top-0 w-1 bg-amber-500" aria-hidden />}

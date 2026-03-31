@@ -21,9 +21,10 @@ export async function POST(request: Request) {
 
 	const name = String(formData.get("name") ?? "").trim();
 	const email = String(formData.get("email") ?? "").trim();
+	const company = String(formData.get("company") ?? "").trim();
 	const phone = String(formData.get("phone") ?? "").trim();
 	const message = String(formData.get("message") ?? "").trim();
-	const productSlug = String(formData.get("product") ?? "").trim();
+	const productNote = String(formData.get("product") ?? "").trim();
 	const sourcePath = String(formData.get("sourcePath") ?? "/contact").trim();
 
 	if (!name || !email || !phone || !message || !isEmail(email)) {
@@ -33,9 +34,10 @@ export async function POST(request: Request) {
 	const payload = {
 		name,
 		email,
+		company: company || undefined,
 		phone,
 		message,
-		productSlug: productSlug || undefined,
+		product: productNote || undefined,
 		sourcePath,
 		createdAt: new Date().toISOString(),
 	};

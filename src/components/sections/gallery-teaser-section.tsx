@@ -7,76 +7,99 @@ interface GalleryTeaserSectionProps {
 }
 
 export function GalleryTeaserSection({ galleryCategories }: GalleryTeaserSectionProps) {
-	const allImages = galleryCategories.flatMap((cat) =>
-		cat.images.map((img) => ({ ...img, categoryName: cat.name, categorySlug: cat.slug })),
-	)
+	void galleryCategories
 
-	const displayImages = allImages.slice(0, 4)
-
-	if (!displayImages.length) return null
+	const displayImages = [
+		{
+			src: "/images/gallery-section-1.jpg",
+			alt: "Jayco overhead crane installation across a production bay",
+			categoryName: "Installations & Projects",
+			categorySlug: "",
+		},
+		{
+			src: "/images/gallery-section-2.jpg",
+			alt: "Material handling equipment configured inside an active industrial facility",
+			categoryName: "Production Facilities",
+			categorySlug: "",
+		},
+		{
+			src: "/images/gallery-section-3.jpeg",
+			alt: "Heavy-duty equipment deployed for field-ready lifting operations",
+			categoryName: "Field Applications",
+			categorySlug: "",
+		},
+	]
 
 	return (
-		<section className="bg-slate-50 py-20">
+		<section className="border-t border-slate-200 bg-(--bg) py-16 lg:py-24">
 			<div className="mx-auto max-w-6xl px-4 lg:px-6">
-				{/* Section header */}
-				<div className="mb-10 flex items-baseline justify-between gap-4">
+				<div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 					<div>
-						<p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-amber-600">
-							Real Work
+						<p className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-red-800">
+							Installations &amp; projects
 						</p>
-						<h2 className="text-[clamp(1.6rem,3vw,2.4rem)] font-bold text-slate-900">
-							Project Gallery
+						<h2 className="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-tight text-slate-900">
+							Field-proven equipment in real facilities
 						</h2>
+						<p className="mt-2 max-w-xl text-sm font-medium text-slate-600">
+							See how our systems are deployed across industrial sites—then explore the full gallery for more context.
+						</p>
 					</div>
 					<Link
 						href="/gallery"
-						className="hidden items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-600 transition hover:text-amber-600 sm:inline-flex"
+						className="hidden shrink-0 items-center gap-1.5 rounded-md border border-red-200 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-sm transition-colors hover:border-red-400 hover:text-red-800 sm:inline-flex"
 					>
-						View all
+						View all projects
 						<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-							<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+							<path
+								d="M5 12h14M13 6l6 6-6 6"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="1.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
 						</svg>
 					</Link>
 				</div>
 
-				{/* Responsive Grid */}
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-4 lg:auto-rows-[200px] lg:gap-5">
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(200px,1fr)] lg:grid-cols-4 lg:gap-5">
 					{displayImages.map((image, idx) => (
 						<Link
-							key={`${image.categorySlug}-${idx}`}
-							href={`/gallery/${image.categorySlug}`}
-							className={`group relative flex flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-sm transition-all hover:-translate-y-1 hover:border-amber-500 hover:shadow-xl ${
-								idx === 0 ? "col-span-2 aspect-[16/9] sm:aspect-square lg:col-span-2 lg:row-span-2 lg:aspect-auto" : "col-span-1 aspect-square lg:aspect-auto"
+							key={`${image.src}-${idx}`}
+							href="/gallery"
+							className={`group relative flex flex-col overflow-hidden rounded-2xl border border-red-200/60 bg-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition-all hover:border-red-400 hover:shadow-[0_24px_54px_rgba(127,29,29,0.18)] ${
+								idx === 0
+									? "aspect-16/10 sm:col-span-2 sm:aspect-video lg:col-span-2 lg:row-span-2 lg:min-h-[430px]"
+									: "aspect-4/3 lg:min-h-[210px]"
 							}`}
 						>
 							<Image
 								src={image.src}
 								alt={image.alt}
 								fill
-								className="object-cover opacity-50 transition-transform duration-700 group-hover:scale-105"
-								sizes="(max-width: 1024px) 70vw, 25vw"
+								className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 32vw"
 							/>
-							<div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
-							<div className="absolute inset-x-0 bottom-0 translate-y-2 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:p-6">
-								<p className="mb-1 text-[0.6rem] font-bold uppercase tracking-[0.2em] text-amber-500 drop-shadow-md">
+							<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/65 to-slate-950/10" />
+							<div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-slate-950/95 via-slate-950/80 to-transparent p-5 lg:p-6">
+								<p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-red-200">
 									{image.categoryName}
 								</p>
-								<p className="text-sm font-medium text-white drop-shadow-md lg:text-base">{image.alt}</p>
+								<p className="max-w-[34ch] text-base font-semibold leading-snug text-white [text-shadow:0_2px_18px_rgba(2,6,23,0.7)] lg:text-lg">
+									{image.alt}
+								</p>
 							</div>
 						</Link>
 					))}
 				</div>
 
-				{/* CTA */}
-				<div className="mt-6 flex justify-center">
+				<div className="mt-8 flex justify-center sm:hidden">
 					<Link
 						href="/gallery"
-						className="inline-flex items-center gap-2 rounded-sm border border-slate-300 bg-white px-6 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-700 shadow-sm transition hover:border-amber-400 hover:text-amber-600"
+						className="inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-md border border-red-200 bg-white px-6 py-3 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-sm transition-colors hover:border-red-400 hover:bg-red-50"
 					>
-						Explore the full gallery
-						<svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden>
-							<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-						</svg>
+						Explore full gallery
 					</Link>
 				</div>
 			</div>

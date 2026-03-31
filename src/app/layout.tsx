@@ -30,7 +30,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 		<html lang="en">
 			<body className={`${headingFont.variable} ${bodyFont.variable}`}>
 				<Header settings={settings} categories={categories} featuredProducts={featuredProducts} />
-				{children}
+				<div className="lg:pt-[155px]">
+					{children}
+				</div>
 				<Footer settings={settings} products={products} />
 			</body>
 		</html>

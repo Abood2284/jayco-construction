@@ -16,7 +16,7 @@ export function ProductArticleLayout({ frontmatter, children }: ProductArticleLa
 						<span className="block h-px w-5 bg-amber-500" />
 						Product Overview
 					</p>
-					<h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 lg:text-4xl">
+					<h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 lg:text-4xl">
 						{frontmatter.shortTitle ?? frontmatter.title}
 					</h2>
 					{frontmatter.excerpt && (

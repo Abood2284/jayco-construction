@@ -26,7 +26,7 @@ export function EnquiryForm({
 
 	const formClassName = isQuiet
 		? "relative overflow-hidden"
-		: "relative overflow-hidden bg-white border-2 border-slate-900 p-8 lg:p-10 shadow-[6px_6px_0_0_rgba(15,23,42,1)]";
+		: "relative overflow-hidden rounded-xl border border-slate-200 bg-white p-8 shadow-sm lg:p-10";
 
 	const labelClassName = isQuiet
 		? "text-sm font-medium text-slate-700"
@@ -37,8 +37,8 @@ export function EnquiryForm({
 		: "w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0";
 
 	const titleClassName = isQuiet
-		? "text-2xl font-semibold tracking-tight text-slate-900 mb-8"
-		: "text-2xl font-black text-slate-900 mb-8 tracking-tight uppercase";
+		? "mb-8 text-2xl font-semibold tracking-tight text-slate-900"
+		: "mb-8 text-2xl font-bold tracking-tight text-slate-900";
 
 	const successBoxClassName = isQuiet
 		? "flex items-start gap-3 rounded-lg p-4 bg-emerald-50 text-emerald-800 border border-emerald-200"
@@ -49,8 +49,8 @@ export function EnquiryForm({
 		: "flex items-start gap-3 p-4 bg-red-50 text-red-800 border-2 border-red-200";
 
 	const buttonClassName = isQuiet
-		? "mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-amber-500 px-8 py-3.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-		: "mt-6 flex w-full items-center justify-center gap-2 bg-amber-500 px-8 py-5 text-[0.8rem] font-black uppercase tracking-[0.16em] text-slate-950 transition-all hover:bg-amber-400 hover:shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 active:translate-y-1 active:shadow-none";
+		? "mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-amber-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+		: "mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-amber-600 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70";
 
 	return (
 		<form
@@ -91,7 +91,7 @@ export function EnquiryForm({
 							name="name"
 							type="text"
 							className={fieldClassName}
-							placeholder="John Doe"
+							placeholder="Your name"
 						/>
 					</div>
 					<div className="space-y-2">
@@ -104,12 +104,24 @@ export function EnquiryForm({
 							name="email"
 							type="email"
 							className={fieldClassName}
-							placeholder="john@company.com"
+							placeholder="you@company.com"
 						/>
 					</div>
 				</div>
 
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div className="space-y-2">
+						<label htmlFor="company" className={labelClassName}>
+							Company / organization
+						</label>
+						<input
+							id="company"
+							name="company"
+							type="text"
+							className={fieldClassName}
+							placeholder="Company name"
+						/>
+					</div>
 					<div className="space-y-2">
 						<label htmlFor="phone" className={labelClassName}>
 							Phone number
@@ -120,22 +132,23 @@ export function EnquiryForm({
 							name="phone"
 							type="tel"
 							className={fieldClassName}
-							placeholder="+1 (555) 000-0000"
+							placeholder="+91 98765 43210"
 						/>
 					</div>
-					<div className="space-y-2">
-						<label htmlFor="product" className={labelClassName}>
-							Related product / subject
-						</label>
-						<input
-							id="product"
-							name="product"
-							type="text"
-							defaultValue={product}
-							className={fieldClassName}
-							placeholder="e.g. Structural steel"
-						/>
-					</div>
+				</div>
+
+				<div className="space-y-2">
+					<label htmlFor="product" className={labelClassName}>
+						Related product or enquiry subject
+					</label>
+					<input
+						id="product"
+						name="product"
+						type="text"
+						defaultValue={product}
+						className={fieldClassName}
+						placeholder="e.g. Electric wire rope hoist"
+					/>
 				</div>
 
 				<div className="space-y-2">
