@@ -1,17 +1,5 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
-import {
-	Box,
-	Cable,
-	Factory,
-	Forklift,
-	HandMetal,
-	Package,
-	PanelsTopLeft,
-	Shield,
-	Truck,
-	Wrench,
-} from "lucide-react"
 import type { Product } from "@/lib/cms/types"
 
 interface EquipmentGridSectionProps {
@@ -22,39 +10,189 @@ interface CategoryIconDefinition {
 	icon: ReactNode
 }
 
+interface EquipmentIconProps {
+	children: ReactNode
+}
+
+function EquipmentIcon({ children }: EquipmentIconProps) {
+	return (
+		<svg
+			viewBox="0 0 48 48"
+			aria-hidden="true"
+			className="h-9 w-9 text-red-600 sm:h-10 sm:w-10"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		>
+			{children}
+		</svg>
+	)
+}
+
+function HoistIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M12 10h24" />
+			<path d="M24 10v8" />
+			<path d="M18 18h12v8H18z" />
+			<path d="M24 26v8" />
+			<path d="M24 34c0 3 2 5 5 5" />
+			<path d="M29 39c0-2 1-3 3-3" />
+		</EquipmentIcon>
+	)
+}
+
+function CraneIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M10 40h28" />
+			<path d="M14 40V12" />
+			<path d="M14 12h22" />
+			<path d="M20 18h10" />
+			<path d="M24 12v16" />
+			<path d="M24 28c0 3 2 5 5 5" />
+			<path d="M29 33c0-2 1-3 3-3" />
+		</EquipmentIcon>
+	)
+}
+
+function GantryIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M10 14h28" />
+			<path d="M14 14v20" />
+			<path d="M34 14v20" />
+			<path d="M24 14v10" />
+			<path d="M24 24c0 3 2 5 5 5" />
+			<path d="M13 34h4" />
+			<path d="M31 34h4" />
+			<circle cx="15" cy="38" r="2" />
+			<circle cx="33" cy="38" r="2" />
+		</EquipmentIcon>
+	)
+}
+
+function LiftIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M12 36h24" />
+			<path d="M16 12v20" />
+			<path d="M32 12v20" />
+			<path d="M18 16h12v12H18z" />
+			<path d="M24 10v4" />
+		</EquipmentIcon>
+	)
+}
+
+function StackerIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M14 38V14" />
+			<path d="M14 16h8" />
+			<path d="M22 22h8v10H22z" />
+			<path d="M12 38h18" />
+			<path d="M30 34h6" />
+			<circle cx="18" cy="38" r="2" />
+			<circle cx="30" cy="38" r="2" />
+		</EquipmentIcon>
+	)
+}
+
+function PlatformIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M10 34h28" />
+			<path d="M16 34l8-14 8 14" />
+			<path d="M20 18l4-6 4 6" />
+		</EquipmentIcon>
+	)
+}
+
+function TransportIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M10 32h20l4-8h4" />
+			<path d="M14 24h10" />
+			<path d="M30 24h4" />
+			<circle cx="18" cy="36" r="2.5" />
+			<circle cx="32" cy="36" r="2.5" />
+		</EquipmentIcon>
+	)
+}
+
+function DrumHandlingIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M18 14h12" />
+			<path d="M16 18h16" />
+			<path d="M18 14v20" />
+			<path d="M30 14v20" />
+			<path d="M16 30h16" />
+			<path d="M12 24h4" />
+			<path d="M32 24h4" />
+		</EquipmentIcon>
+	)
+}
+
+function SlingIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M16 14c0 10 4 18 8 20" />
+			<path d="M32 14c0 10-4 18-8 20" />
+			<path d="M16 14c0-3 2-5 4-5h8c2 0 4 2 4 5" />
+			<path d="M22 34h4" />
+		</EquipmentIcon>
+	)
+}
+
+function BulldozerIcon() {
+	return (
+		<EquipmentIcon>
+			<path d="M10 32h24" />
+			<path d="M14 32v-8h10l4 4h6" />
+			<path d="M34 32l4-4" />
+			<path d="M14 24l4-8h8" />
+			<circle cx="18" cy="36" r="2.5" />
+			<circle cx="30" cy="36" r="2.5" />
+		</EquipmentIcon>
+	)
+}
+
 const categoryIcons: Record<string, CategoryIconDefinition> = {
 	"chain-pulley-block": {
-		icon: <Cable className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <HoistIcon />,
 	},
 	"electric-hoist": {
-		icon: <Factory className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <HoistIcon />,
 	},
 	"eot-cranes": {
-		icon: <PanelsTopLeft className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <CraneIcon />,
 	},
 	"floor-gantry-cranes": {
-		icon: <Truck className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <GantryIcon />,
 	},
 	"goods-lift": {
-		icon: <Package className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <LiftIcon />,
 	},
 	"hydraulic-stacker": {
-		icon: <Forklift className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <StackerIcon />,
 	},
 	"jib-cranes": {
-		icon: <Factory className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <CraneIcon />,
 	},
 	"lifting-platforms": {
-		icon: <Shield className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <PlatformIcon />,
 	},
 	"material-transport-docking": {
-		icon: <HandMetal className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <TransportIcon />,
 	},
 	"pallet-drum-handling": {
-		icon: <Box className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <DrumHandlingIcon />,
 	},
 	sling: {
-		icon: <Cable className="h-9 w-9 text-slate-950 sm:h-10 sm:w-10" strokeWidth={1.75} />,
+		icon: <SlingIcon />,
 	},
 }
 
@@ -87,11 +225,11 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 					</h2>
 				</div>
 
-				<div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:hidden">
+				<div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pr-10 sm:hidden">
 					{mobileProductGroups.map((productGroup, index) => (
 						<div
 							key={`mobile-group-${index}`}
-							className="grid min-w-full shrink-0 snap-center grid-cols-2 gap-3"
+							className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-3"
 						>
 							{productGroup.map((product) => (
 								<Link
@@ -103,9 +241,9 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 										{product.name}
 									</h3>
 
-									<div className="mt-4 flex justify-end text-slate-950 transition-transform duration-200 group-hover:scale-105">
+									<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
 										{categoryIcons[product.categorySlug]?.icon ?? (
-											<Wrench className="h-9 w-9" strokeWidth={1.75} />
+											<BulldozerIcon />
 										)}
 									</div>
 								</Link>
@@ -125,9 +263,9 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 								{product.name}
 							</h3>
 
-							<div className="mt-4 flex justify-end text-slate-950 transition-transform duration-200 group-hover:scale-105">
+							<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
 								{categoryIcons[product.categorySlug]?.icon ?? (
-									<Wrench className="h-9 w-9 sm:h-10 sm:w-10" strokeWidth={1.75} />
+									<BulldozerIcon />
 								)}
 							</div>
 						</Link>

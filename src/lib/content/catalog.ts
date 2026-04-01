@@ -26,8 +26,10 @@ interface ProductFrontmatter {
 	excerpt?: string
 	keywords?: string[]
 	specs?: ProductSpec[]
+	applications?: string[]
 	features?: string[]
 	additionalInfo?: ProductSpec[]
+	complianceNotes?: string[]
 	ctaLabel?: string
 }
 
@@ -205,7 +207,9 @@ async function loadProductFromMdx(categorySlug: string, productSlug: string): Pr
 
 	const specs = normalizeSpecRows(frontmatter.specs)
 	const additionalInfo = normalizeSpecRows(frontmatter.additionalInfo)
+	const applications = normalizeFeatureLines(frontmatter.applications)
 	const features = normalizeFeatureLines(frontmatter.features)
+	const complianceNotes = normalizeFeatureLines(frontmatter.complianceNotes)
 	const ctaTrimmed = frontmatter.ctaLabel?.trim()
 
 	const product: Product = {
@@ -214,11 +218,12 @@ async function loadProductFromMdx(categorySlug: string, productSlug: string): Pr
 		categorySlug,
 		heroImages,
 		description: frontmatter.description,
+		excerpt: frontmatter.excerpt?.trim() || undefined,
+		applications,
 		features,
-		applications: [],
 		specs,
 		...(additionalInfo.length > 0 ? { additionalInfo } : {}),
-		complianceNotes: [],
+		complianceNotes,
 		ctaLabel: ctaTrimmed || "Request Quote",
 		relatedProductSlugs: [],
 		faq: [],
@@ -322,4 +327,3 @@ export async function loadProducts(): Promise<Product[]> {
 	const catalog = await loadCatalog()
 	return catalog.products
 }
-

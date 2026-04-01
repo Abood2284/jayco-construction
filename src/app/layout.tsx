@@ -3,7 +3,6 @@ import { Suspense } from "react"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import {
-	getFeaturedProducts,
 	getProductCategories,
 	getProducts,
 	getSiteSettings,
@@ -20,20 +19,19 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const [settings, categories, featuredProducts, products] = await Promise.all([
+	const [settings, categories, products] = await Promise.all([
 		getSiteSettings(),
 		getProductCategories(),
-		getFeaturedProducts(),
 		getProducts(),
 	])
 
 	return (
 		<html lang="en">
-			<body className={`${headingFont.variable} ${bodyFont.variable}`}>
+			<body className={`${headingFont.variable} ${bodyFont.variable} pb-24 lg:pb-0`}>
 				<Suspense fallback={null}>
-					<Header settings={settings} categories={categories} featuredProducts={featuredProducts} />
+					<Header settings={settings} categories={categories} />
 				</Suspense>
-				<div className="lg:pt-[155px]">
+				<div className="lg:pt-[124px]">
 					{children}
 				</div>
 				<Footer settings={settings} products={products} />

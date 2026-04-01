@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 	const name = String(formData.get("name") ?? "").trim();
 	const email = String(formData.get("email") ?? "").trim();
 	const phone = String(formData.get("phone") ?? "").trim();
+	const role = String(formData.get("role") ?? "").trim();
 	const message = String(formData.get("message") ?? "").trim();
 	const sourcePath = String(formData.get("sourcePath") ?? "/careers").trim();
 	const resume = formData.get("resume");
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
 		name,
 		email,
 		phone,
+		role: role || undefined,
 		message,
 		sourcePath,
 		resumePath,

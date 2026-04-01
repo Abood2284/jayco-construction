@@ -47,8 +47,10 @@ export type ProductArticleFrontmatter = {
 	toc?: boolean;
 	canonicalPath?: string;
 	specs?: ProductSpec[];
+	applications?: string[];
 	features?: string[];
 	additionalInfo?: ProductSpec[];
+	complianceNotes?: string[];
 	ctaLabel?: string;
 };
 
@@ -70,6 +72,7 @@ export type Product = {
 	categorySlug: string;
 	heroImages: ImageAsset[];
 	description: string;
+	excerpt?: string;
 	features: string[];
 	applications: string[];
 	specs: ProductSpec[];

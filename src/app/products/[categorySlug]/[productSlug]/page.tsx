@@ -1,17 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { EnquiryForm } from "@/components/sections/enquiry-form";
+import { ProductDetailTemplate } from "@/components/products/product-detail-template";
 import { JsonLd } from "@/components/ui/json-ld";
-import { ProductArticleLayout } from "@/components/products/product-article-layout";
 import {
-  ProductTechnicalLead,
-  productHasTechnicalLead,
-} from "@/components/products/product-technical-lead";
-import { ImageGallery } from "@/components/products/image-gallery";
-import { ProductStickyCta } from "@/components/products/product-sticky-cta";
-import {
+  getSiteSettings,
   getProductByCategoryAndSlug,
   getProductCategoryBySlug,
   getProducts,
@@ -67,10 +58,11 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { categorySlug, productSlug } = await params;
-  const [product, category, article] = await Promise.all([
+  const [product, category, article, siteSettings] = await Promise.all([
     getProductByCategoryAndSlug(categorySlug, productSlug),
     getProductCategoryBySlug(categorySlug),
     getProductArticle({ categorySlug, productSlug }),
+    getSiteSettings(),
   ]);
 
   if (!product || !category) {
@@ -78,17 +70,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const relatedProducts = await getRelatedProducts(product, 4);
-
-  const hasTechnicalLead = productHasTechnicalLead(product);
-
-  const secondarySectionNav = (() => {
-    if (hasTechnicalLead) return { href: "#specs" as const, label: "Technical details" };
-    if (article) return { href: "#product-overview" as const, label: "Product overview" };
-    if (product.faq.length > 0) return { href: "#faqs" as const, label: "FAQ" };
-    if (product.heroImages.length > 0)
-      return { href: "#gallery" as const, label: "Photos & views" };
-    return null;
-  })();
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },
@@ -101,336 +82,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
   ];
 
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50 pb-24 lg:pb-32">
+    <>
       <JsonLd data={buildBreadcrumbSchema(breadcrumbItems)} />
       <JsonLd data={buildProductSchema(product, category.name)} />
-
-      {/* Immersive Product Hero Block - Light Theme */}
-      <section className="relative overflow-hidden border-b border-slate-200 bg-slate-50 px-4 pb-16 pt-28 sm:px-6 lg:px-8 lg:pb-24 lg:pt-36">
-        {/* Background Texture Overlay */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg,transparent,transparent 40px,#0f172a 40px,#0f172a 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,#0f172a 40px,#0f172a 41px)",
-          }}
-        />
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] bg-amber-500 opacity-10 blur-[120px]" />
-
-        <div className="relative mx-auto max-w-7xl">
-          <div className="mb-8 lg:mb-10">
-            <Breadcrumbs items={breadcrumbItems} />
-          </div>
-
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-14">
-            {/* Left: Text + CTAs */}
-            <div className="flex flex-col gap-8 lg:flex-1">
-              <div>
-                <p className="mb-4 inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-amber-800">
-                  <span className="block h-px w-6 bg-amber-600" />
-                  {category.name}
-                </p>
-                <h1 className="mb-5 text-[clamp(2rem,4.5vw,3.25rem)] font-bold leading-[1.08] tracking-tight text-slate-900">
-                  {product?.name}
-                </h1>
-                <p className="max-w-[52ch] text-base font-medium text-slate-600 leading-relaxed sm:text-lg">
-                  {product?.description}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  href="#enquiry"
-                  className="inline-flex h-11 items-center justify-center rounded-md bg-amber-600 px-7 text-sm font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-700"
-                >
-                  {product.ctaLabel ?? "Request specifications"}
-                </Link>
-                {secondarySectionNav ? (
-                  <Link
-                    href={secondarySectionNav.href}
-                    className="inline-flex h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-7 text-sm font-semibold uppercase tracking-wide text-slate-900 shadow-sm transition-colors hover:border-slate-400 hover:bg-slate-50"
-                  >
-                    {secondarySectionNav.label}
-                  </Link>
-                ) : null}
-              </div>
-            </div>
-
-            {/* Right: Hero Image — desktop only */}
-            {product.heroImages[0] && (
-              <div className="hidden lg:block relative w-[45%] shrink-0">
-                <div className="relative aspect-4/3 overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-md">
-                  <Image
-                    src={product.heroImages[0].src}
-                    alt={product.heroImages[0].alt}
-                    fill
-                    className="object-contain"
-                    priority
-                    sizes="45vw"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-br from-transparent to-slate-900/10" />
-                </div>
-                <div className="pointer-events-none absolute -bottom-10 -right-10 h-64 w-64 bg-amber-500 opacity-15 blur-[80px]" />
-              </div>
-            )}
-          </div>
-        </div>
-
-      </section>
-
-      {/* Product Image Showcase — immediately below hero */}
-      {product.heroImages.length > 0 && (
-        <section
-          id="gallery"
-          className="mx-auto mt-6 w-full max-w-7xl scroll-mt-32 px-4 sm:px-6 lg:mt-10 lg:px-8"
-        >
-          <ImageGallery images={product.heroImages} />
-        </section>
-      )}
-
-      <ProductTechnicalLead product={product} />
-
-      {/* Editorial Layout Grid */}
-      <section className="mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:mt-20 lg:px-8">
-        <div className="flex flex-col gap-12 xl:flex-row xl:gap-16">
-          {/* Sidebar: TOC + Meta — on mobile shows below reading column */}
-          <div className="order-2 w-full shrink-0 xl:order-1 xl:sticky xl:top-32 h-fit mb-12 xl:mb-0 xl:w-72">
-            {/* Table of Contents */}
-            <div className="mb-8 hidden xl:block">
-              <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 border-b border-slate-100 pb-3">
-                On this page
-              </h3>
-              <ul className="flex flex-col gap-3 text-sm font-medium text-slate-600">
-                {hasTechnicalLead && (
-                  <li>
-                    <Link
-                      href="#specs"
-                      className="transition-colors hover:text-amber-800"
-                    >
-                      Technical specifications
-                    </Link>
-                  </li>
-                )}
-                {product.heroImages.length > 0 && (
-                  <li>
-                    <Link
-                      href="#gallery"
-                      className="transition-colors hover:text-amber-800"
-                    >
-                      Photos &amp; views
-                    </Link>
-                  </li>
-                )}
-                {article && (
-                  <li>
-                    <Link
-                      href="#product-overview"
-                      className="transition-colors hover:text-amber-800"
-                    >
-                      Product overview
-                    </Link>
-                  </li>
-                )}
-                {article?.headings
-                  .filter((h) => h.depth === 2)
-                  .map((head) => (
-                    <li key={head.id}>
-                      <Link
-                        href={`#${head.id}`}
-                        className="transition-colors hover:text-amber-800"
-                      >
-                        {head.text}
-                      </Link>
-                    </li>
-                  ))}
-                {product?.faq && product.faq.length > 0 && (
-                  <li>
-                    <Link
-                      href="#faqs"
-                      className="transition-colors hover:text-amber-800"
-                    >
-                      Frequently asked questions
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </div>
-            {/* Applications Badges (Moved from right sidebar) */}
-            {product.applications.length > 0 && (
-              <div className="mb-8">
-                <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 border-b border-slate-100 pb-3">
-                  Primary Uses
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.applications.map((application) => (
-                    <span
-                      key={application}
-                      className="inline-flex rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-slate-800"
-                    >
-                      {application}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Certifications (Moved from right sidebar) */}
-            {product.complianceNotes.length > 0 && (
-              <div>
-                <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 border-b border-slate-100 pb-3">
-                  Certifications
-                </h3>
-                <ul className="flex flex-col gap-3">
-                  {product.complianceNotes.map((note) => (
-                    <li
-                      key={note}
-                      className="flex gap-3 text-sm font-medium text-slate-600 leading-relaxed"
-                    >
-                      <span className="text-amber-500 mt-0.5">▪</span> {note}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {/* Reading Column */}
-          <div className="order-1 flex w-full max-w-4xl flex-col gap-16 xl:order-2">
-            {article && (
-              <article className="w-full">
-                <ProductArticleLayout frontmatter={article.frontmatter}>
-                  {article.content}
-                </ProductArticleLayout>
-              </article>
-            )}
-
-            {/* FAQs Component - Centered Accordions */}
-            {product.faq.length > 0 && (
-              <section id="faqs" className="w-full scroll-mt-32">
-                <div className="mb-8 border-b border-slate-200 pb-4 text-center">
-                  <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                    Frequently asked questions
-                  </h2>
-                </div>
-                <div className="flex flex-col gap-3">
-                  {product.faq.map((faq) => (
-                    <details
-                      key={faq.question}
-                      className="group rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow open:shadow-md"
-                    >
-                      <summary className="cursor-pointer list-none px-5 py-5 font-semibold text-slate-900 transition-colors hover:text-amber-800 sm:px-6">
-                        <div className="flex items-center justify-between gap-6">
-                          <span className="text-base leading-snug sm:text-lg">
-                            {faq.question}
-                          </span>
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500 transition group-open:rotate-180 group-open:border-slate-300 group-open:bg-slate-100 group-open:text-slate-900">
-                            <svg
-                              viewBox="0 0 24 24"
-                              className="h-5 w-5"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M19 9l-7 7-7-7"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="3"
-                                strokeLinecap="square"
-                                strokeLinejoin="miter"
-                              />
-                            </svg>
-                          </span>
-                        </div>
-                      </summary>
-                      <div className="border-t border-slate-200 bg-slate-50/50 px-5 py-5 text-base font-medium leading-relaxed text-slate-700 sm:px-6">
-                        <p>{faq.answer}</p>
-                      </div>
-                    </details>
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Related Systems - Moved to bottom full width */}
-      {relatedProducts.length > 0 && (
-        <section className="mt-16 w-full border-t border-slate-200 bg-slate-50 py-16 lg:mt-24 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-10 text-center">
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                Related products
-              </h2>
-              <p className="mt-3 text-slate-600">
-                Alternative configurations and complementary systems.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedProducts.map((entry) => (
-                <Link
-                  key={entry.slug}
-                  href={`/products/${entry.categorySlug}/${entry.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:border-amber-200 hover:shadow-md"
-                >
-                  <div className="relative aspect-video w-full overflow-hidden border-b border-slate-200 bg-slate-100">
-                    {entry.heroImages?.[0] ? (
-                      <Image
-                        src={entry.heroImages[0].src}
-                        alt={entry.heroImages[0].alt}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest text-xs">
-                        No image
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <h3 className="mb-1 text-base font-semibold text-slate-900 transition-colors group-hover:text-amber-800">
-                      {entry.name}
-                    </h3>
-                    <p className="line-clamp-2 text-sm font-medium text-slate-600">
-                      {entry.description}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Attached Enquiry Form - Clean & Integrated */}
-      <section
-        id="enquiry"
-        className="w-full border-t border-slate-200 bg-white pb-24 pt-20 lg:pt-24"
-      >
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Request technical specifications
-            </h2>
-            <p className="mx-auto max-w-[46ch] text-base text-slate-600 sm:text-lg">
-              Contact our engineering team to discuss customizations and
-              required specifications for the {product.name}.
-            </p>
-          </div>
-          <div className="mx-auto max-w-4xl">
-            <EnquiryForm
-              title={product?.ctaLabel ?? "Request specifications"}
-              sourcePath={`/products/${category?.slug || ""}/${product?.slug || ""}`}
-              defaultProduct={product?.name || ""}
-            />
-          </div>
-        </div>
-      </section>
-
-      <ProductStickyCta
-        label={product.ctaLabel ?? "Request specifications"}
-        enquiryHref="#enquiry"
+      <ProductDetailTemplate
+        product={product}
+        category={category}
+        article={article}
+        relatedProducts={relatedProducts}
+        breadcrumbItems={breadcrumbItems}
+        yearsInBusiness={siteSettings.yearsInBusiness}
+        serviceSupport={siteSettings.serviceSupport}
       />
-    </main>
+    </>
   );
 }

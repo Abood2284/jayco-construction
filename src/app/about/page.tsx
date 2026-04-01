@@ -1,25 +1,38 @@
-import { buildMetadata } from "@/lib/seo/metadata";
+import { AboutPage } from "@/components/about/about-page"
+import { JsonLd } from "@/components/ui/json-ld"
+import { getProductCategories, getProducts, getSiteSettings } from "@/lib/cms"
+import { buildAboutPageContent } from "@/lib/content/about"
+import { buildMetadata } from "@/lib/seo/metadata"
+import { buildBreadcrumbSchema, buildOrganizationSchema } from "@/lib/seo/schema"
 
 export async function generateMetadata() {
 	return buildMetadata({
-		title: "About",
-		description: "Industrial manufacturing company profile, capabilities, quality systems, and lifecycle support model.",
+		title: "About Jayco",
+		description:
+			"Company profile for Jayco Hoist & Cranes Mfg. Co., covering industrial lifting expertise, product scope, sectors served, and support capabilities.",
 		path: "/about",
-	});
+	})
 }
 
-export default function AboutPage() {
+export default async function About() {
+	const [settings, categories, products] = await Promise.all([
+		getSiteSettings(),
+		getProductCategories(),
+		getProducts(),
+	])
+
+	const content = buildAboutPageContent(settings, categories, products)
+
 	return (
-		<main className="container section narrow">
-			<h1>About Jayco Hoist &amp; Cranes Mfg. Co.</h1>
-			<p>
-				We build high-load industrial systems and fabricated assemblies for process-critical operations. Our team combines
-				design understanding, fabrication control, and site delivery planning to keep projects predictable.
-			</p>
-			<p>
-				From structural modules and pressure equipment to material handling packages, our work is built for service life,
-				not catalog shelf aesthetics.
-			</p>
-		</main>
-	);
+		<>
+			<JsonLd data={buildOrganizationSchema(settings)} />
+			<JsonLd
+				data={buildBreadcrumbSchema([
+					{ name: "Home", path: "/" },
+					{ name: "About", path: "/about" },
+				])}
+			/>
+			<AboutPage content={content} />
+		</>
+	)
 }

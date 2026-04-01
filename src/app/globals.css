@@ -29,6 +29,11 @@ body {
 	line-height: 1.5;
 }
 
+:focus-visible {
+	outline: 2px solid #b75a18;
+	outline-offset: 2px;
+}
+
 
 img {
 	height: auto;

@@ -1,374 +1,456 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import Link from "next/link";
+import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ChevronDown, Globe, Menu, Search, X } from "lucide-react";
-import type { Product, ProductCategory, SiteSettings } from "@/lib/cms/types";
-import { NavMegaMenu } from "./nav-mega-menu";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
+import type { ProductCategory, SiteSettings } from "@/lib/cms/types";
+import { buildPhoneHref, headerNavConfig } from "@/lib/content/navigation";
 
 interface HeaderProps {
-  settings: SiteSettings;
-  categories: ProductCategory[];
-  featuredProducts: Product[];
+	settings: SiteSettings;
+	categories: ProductCategory[];
 }
 
-function Header({ settings, categories, featuredProducts }: HeaderProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
+function isActivePath(pathname: string, href: string, match: "exact" | "prefix") {
+	if (match === "exact") {
+		return pathname === href;
+	}
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const queryFromUrl = searchParams.get("query") ?? "";
+	return pathname === href || pathname.startsWith(`${href}/`);
+}
 
-  const [searchQuery, setSearchQuery] = useState(queryFromUrl);
+function Header({ settings, categories }: HeaderProps) {
+	const pathname = usePathname();
+	const firstPhone = settings.phones[0] ?? "";
+	const phoneHref = firstPhone ? buildPhoneHref(firstPhone) : "/contact";
+	const drawerId = useId();
+	const productsPanelId = useId();
+	const productsMenuRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    setSearchQuery(queryFromUrl);
-  }, [queryFromUrl]);
+	const [isScrolled, setIsScrolled] = useState(false);
+	const [showMobileActionBar, setShowMobileActionBar] = useState(false);
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isProductsOpen, setIsProductsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 24);
-    };
+	useEffect(() => {
+		const onScroll = () => {
+			const scrolled = window.scrollY > 12;
+			setIsScrolled(scrolled);
+			setShowMobileActionBar(window.scrollY > 220);
+		};
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
+		onScroll();
+		window.addEventListener("scroll", onScroll, { passive: true });
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+		return () => window.removeEventListener("scroll", onScroll);
+	}, []);
 
-  const handleSearchSubmit = (
-    event: FormEvent<HTMLFormElement>,
-    shouldCloseMobile: boolean,
-  ) => {
-    event.preventDefault();
+	useEffect(() => {
+		setIsDrawerOpen(false);
+		setIsProductsOpen(false);
+	}, [pathname]);
 
-    const query = searchQuery.trim();
+	useEffect(() => {
+		if (!isDrawerOpen) {
+			document.body.style.overflow = "";
+			return;
+		}
 
-    if (shouldCloseMobile) {
-      setIsMobileOpen(false);
-    }
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
 
-    if (!query) {
-      router.push("/products");
-      return;
-    }
+		return () => {
+			document.body.style.overflow = previousOverflow;
+		};
+	}, [isDrawerOpen]);
 
-    router.push(`/products?query=${encodeURIComponent(query)}`);
-  };
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key !== "Escape") return;
 
-  const closeMobile = () => setIsMobileOpen(false);
+			setIsDrawerOpen(false);
+			setIsProductsOpen(false);
+		};
 
-  return (
-    <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 bg-white transition-shadow duration-200 ${
-          isScrolled ? "shadow-[0_12px_30px_rgba(15,23,42,0.08)]" : ""
-        }`}
-      >
-        {/* Desktop header */}
-        <div className="hidden lg:block">
-          {/* Top row */}
-          <div className="border-b border-black/10">
-            <div className="mx-auto flex max-w-[1440px] items-center gap-6 px-8 py-5">
-              <Link
-                href="/"
-                aria-label={settings.companyName}
-                className="shrink-0"
-              >
-                <Image
-                  src="/images/jayco-logo.png"
-                  alt={settings.companyName}
-                  width={280}
-                  height={58}
-                  priority
-                  className="h-12 w-auto object-contain"
-                />
-              </Link>
+		window.addEventListener("keydown", onKeyDown);
 
-              <form
-                role="search"
-                aria-label="Search products"
-                onSubmit={(e) => handleSearchSubmit(e, false)}
-                className="flex min-w-0 flex-1 items-center"
-              >
-                <div className="flex h-14 w-full overflow-hidden rounded-none border border-black bg-white">
-                  <label htmlFor="header-product-search" className="sr-only">
-                    Search products
-                  </label>
-                  <input
-                    id="header-product-search"
-                    name="query"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search"
-                    autoComplete="off"
-                    className="h-full flex-1 bg-transparent px-5 text-[0.95rem] text-slate-900 outline-none placeholder:text-slate-500"
-                  />
-                  <button
-                    type="submit"
-                    aria-label="Search"
-                    className="flex h-full w-14 items-center justify-center bg-[#c62828] text-white transition hover:bg-[#b71c1c]"
-                  >
-                    <Search className="h-5 w-5" aria-hidden="true" />
-                  </button>
-                </div>
-              </form>
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, []);
 
-              <Link
-                href="/contact"
-                className="shrink-0 text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
+	useEffect(() => {
+		if (!isProductsOpen) return;
 
-          {/* Bottom row */}
-          <div className="border-b border-black/10 bg-white">
-            <div className="mx-auto flex h-12 max-w-[1440px] items-center justify-between px-8">
-              <nav
-                aria-label="Main navigation"
-                className="flex h-full items-center gap-10"
-              >
-                <Link
-                  href="/about"
-                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-                >
-                  <span className="mr-2">Company</span>
-                  <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
+		const onPointerDown = (event: PointerEvent) => {
+			if (!productsMenuRef.current?.contains(event.target as Node)) {
+				setIsProductsOpen(false);
+			}
+		};
 
-                <div
-                  className="relative flex h-full items-center"
-                  onMouseEnter={() => setIsProductsOpen(true)}
-                  onMouseLeave={() => setIsProductsOpen(false)}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setIsProductsOpen((open) => !open)}
-                    className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-                    aria-expanded={isProductsOpen}
-                    aria-haspopup="true"
-                  >
-                    <span className="mr-2">Brands</span>
-                    <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${
-                        isProductsOpen ? "rotate-180" : ""
-                      }`}
-                      aria-hidden="true"
-                    />
-                  </button>
+		window.addEventListener("pointerdown", onPointerDown);
 
-                  <NavMegaMenu
-                    open={isProductsOpen}
-                    onClose={() => setIsProductsOpen(false)}
-                    categories={categories}
-                    featuredProducts={featuredProducts}
-                  />
-                </div>
+		return () => window.removeEventListener("pointerdown", onPointerDown);
+	}, [isProductsOpen]);
 
-                <Link
-                  href="/gallery"
-                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-                >
-                  Gallery
-                </Link>
+	return (
+		<>
+			<header
+				className={`fixed inset-x-0 top-0 z-50 border-b border-slate-900/10 bg-white/96 transition-all duration-200 supports-backdrop-filter:backdrop-blur-md ${
+					isScrolled ? "shadow-[0_18px_40px_rgba(15,23,42,0.08)]" : ""
+				}`}
+			>
+				<div className="hidden border-b border-slate-800 bg-slate-950 text-slate-200 lg:block">
+					<div className="mx-auto flex h-10 max-w-[1440px] items-center justify-between gap-6 px-8">
+						<p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-slate-300">
+							Industrial lifting, handling, and fabrication systems
+						</p>
+						<div className="flex items-center gap-5 text-[0.8rem]">
+							{headerNavConfig.utilityLinks.map((item) => {
+								const active = isActivePath(pathname, item.href, item.match);
 
-                <Link
-                  href="/clients"
-                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-                >
-                  Clients
-                </Link>
+								return (
+									<Link
+										key={item.href}
+										href={item.href}
+										aria-current={active ? "page" : undefined}
+										className={`font-medium transition-colors hover:text-white focus-visible:text-white ${
+											active ? "text-white" : "text-slate-300"
+										}`}
+									>
+										{item.label}
+									</Link>
+								);
+							})}
+							<a
+								href={phoneHref}
+								className="inline-flex h-10 items-center gap-2 font-semibold text-white transition-colors hover:text-rose-300 focus-visible:text-rose-300"
+							>
+								<Phone className="h-4 w-4" aria-hidden="true" />
+								<span>{firstPhone || "Call Now"}</span>
+							</a>
+						</div>
+					</div>
+				</div>
 
-                <Link
-                  href="/careers"
-                  className="inline-flex h-full items-center text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-                >
-                  <span className="mr-2">Careers</span>
-                  <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
-              </nav>
+				<div className="mx-auto flex h-[76px] max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:h-[84px] lg:px-8">
+					<Link href="/" aria-label={settings.companyName} className="shrink-0">
+						<Image
+							src="/images/jayco-logo.png"
+							alt={settings.companyName}
+							width={280}
+							height={58}
+							priority
+							className="h-9 w-auto object-contain sm:h-10 lg:h-11"
+						/>
+					</Link>
 
-              <Link
-                href="#"
-                className="inline-flex items-center gap-2 text-[0.95rem] font-medium text-slate-900 transition hover:text-[#b71c1c]"
-              >
-                <Globe className="h-4.5 w-4.5" aria-hidden="true" />
-                <span>English</span>
-              </Link>
-            </div>
-          </div>
+					<nav aria-label="Primary navigation" className="ml-6 hidden items-center gap-1 lg:flex">
+						<div
+							ref={productsMenuRef}
+							className="relative"
+							onMouseEnter={() => setIsProductsOpen(true)}
+							onMouseLeave={() => setIsProductsOpen(false)}
+							onFocus={() => setIsProductsOpen(true)}
+							onBlur={(event) => {
+								if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+									setIsProductsOpen(false);
+								}
+							}}
+						>
+							<button
+								type="button"
+								aria-expanded={isProductsOpen}
+								aria-controls={productsPanelId}
+								className={`inline-flex min-h-11 items-center gap-2 border-b-2 px-4 text-[0.92rem] font-semibold tracking-[0.01em] transition-colors focus-visible:outline-none ${
+									isActivePath(pathname, "/products", "prefix") || isProductsOpen
+										? "border-rose-700 text-slate-950"
+										: "border-transparent text-slate-600 hover:text-slate-950"
+								}`}
+								onClick={() => setIsProductsOpen((open) => !open)}
+							>
+								<span>Products</span>
+								<ChevronDown
+									className={`h-4 w-4 transition-transform ${isProductsOpen ? "rotate-180" : ""}`}
+									aria-hidden="true"
+								/>
+							</button>
 
-          {/* Red accent strip */}
-          <div className="w-full">
-            <div className="h-[6px] bg-[#c62828]" />
-            <div className="h-[2px] bg-[#a61d24]" />
-            <div className="h-px bg-[#ef9a9a]" />
-          </div>
-        </div>
+							<div
+								id={productsPanelId}
+								className={`absolute left-0 top-full z-20 w-[min(760px,calc(100vw-6rem))] pt-4 transition-all duration-150 ${
+									isProductsOpen
+										? "pointer-events-auto translate-y-0 opacity-100"
+										: "pointer-events-none -translate-y-1 opacity-0"
+								}`}
+							>
+								<div className="overflow-hidden rounded-sm border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.16)]">
+									<div className="grid gap-0 border-b border-slate-200 bg-slate-50/80 md:grid-cols-[220px_minmax(0,1fr)]">
+										<div className="border-b border-slate-200 px-6 py-5 md:border-b-0 md:border-r">
+											<p className="text-[0.68rem] font-bold uppercase tracking-[0.26em] text-slate-500">
+												Product Access
+											</p>
+											<p className="mt-3 text-sm leading-relaxed text-slate-600">
+												Start with the category that matches your lifting, handling, or access requirement.
+											</p>
+										</div>
+										<div className="grid gap-px bg-slate-200 md:grid-cols-2">
+											{categories.map((category) => (
+												<Link
+													key={category.slug}
+													href={`/products/${category.slug}`}
+													className="group min-h-[112px] bg-white px-6 py-5 transition-colors hover:bg-slate-50 focus-visible:bg-slate-50"
+												>
+													<div className="flex items-start justify-between gap-4">
+														<div>
+															<p className="text-base font-semibold text-slate-950">{category.name}</p>
+															<p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+																{category.intro}
+															</p>
+														</div>
+														<ArrowRight className="mt-1 h-4 w-4 shrink-0 text-rose-700 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+													</div>
+												</Link>
+											))}
+										</div>
+									</div>
+									<div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4">
+										<p className="text-sm text-slate-600">{headerNavConfig.primaryLinks[0]?.description}</p>
+										<div className="flex items-center gap-3">
+											<a
+												href={phoneHref}
+												className="inline-flex min-h-11 items-center gap-2 border border-slate-300 px-4 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-slate-700 transition-colors hover:border-slate-950 hover:text-slate-950"
+											>
+												<Phone className="h-4 w-4" aria-hidden="true" />
+												Call Now
+											</a>
+											<Link
+												href="/products"
+												className="inline-flex min-h-11 items-center gap-2 bg-slate-950 px-5 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-slate-800"
+											>
+												View All Products
+												<ArrowRight className="h-4 w-4" aria-hidden="true" />
+											</Link>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-        {/* Mobile header */}
-        <div className="lg:hidden">
-          <div className="flex items-center justify-between px-4 py-4">
-            <Link href="/" aria-label={settings.companyName}>
-              <Image
-                src="/images/jayco-logo.png"
-                alt={settings.companyName}
-                width={220}
-                height={50}
-                priority
-                className="h-9 w-auto object-contain"
-              />
-            </Link>
+						{headerNavConfig.primaryLinks
+							.filter((item) => item.href !== "/products")
+							.map((item) => {
+								const active = isActivePath(pathname, item.href, item.match);
 
-            <button
-              type="button"
-              onClick={() => setIsMobileOpen((open) => !open)}
-              className="inline-flex h-11 w-11 items-center justify-center border border-black text-black"
-              aria-label={isMobileOpen ? "Close navigation" : "Open navigation"}
-              aria-expanded={isMobileOpen}
-            >
-              {isMobileOpen ? (
-                <X className="h-5 w-5" aria-hidden="true" />
-              ) : (
-                <Menu className="h-5 w-5" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+								return (
+									<Link
+										key={item.href}
+										href={item.href}
+										aria-current={active ? "page" : undefined}
+										className={`inline-flex min-h-11 items-center border-b-2 px-4 text-[0.92rem] font-semibold tracking-[0.01em] transition-colors focus-visible:outline-none ${
+											active
+												? "border-rose-700 text-slate-950"
+												: "border-transparent text-slate-600 hover:text-slate-950"
+										}`}
+									>
+										{item.label}
+									</Link>
+								);
+							})}
+					</nav>
 
-          <div className="w-full">
-            <div className="h-[5px] bg-[#c62828]" />
-            <div className="h-[2px] bg-[#a61d24]" />
-          </div>
-        </div>
-      </header>
+					<div className="ml-auto hidden items-center gap-3 lg:flex">
+						<a
+							href={phoneHref}
+							className="inline-flex min-h-11 items-center gap-2 border border-slate-300 px-4 text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-slate-700 transition-colors hover:border-slate-950 hover:text-slate-950"
+						>
+							<Phone className="h-4 w-4" aria-hidden="true" />
+							Call Now
+						</a>
+						<Link
+							href={headerNavConfig.ctaActions.quote.href}
+							className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-rose-700 px-5 text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-white shadow-[0_16px_32px_rgba(190,24,93,0.18)] transition-colors hover:bg-rose-600"
+						>
+							{headerNavConfig.ctaActions.quote.label}
+							<ArrowRight className="h-4 w-4" aria-hidden="true" />
+						</Link>
+					</div>
 
-      {/* Mobile drawer */}
-      {isMobileOpen ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-            onClick={closeMobile}
-          />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl lg:hidden">
-            <div className="flex h-full flex-col">
-              <div className="flex items-center justify-between border-b border-black/10 px-4 py-4">
-                <span className="text-sm font-semibold tracking-wide text-slate-900">
-                  Menu
-                </span>
-                <button
-                  type="button"
-                  onClick={closeMobile}
-                  className="inline-flex h-10 w-10 items-center justify-center border border-black text-black"
-                  aria-label="Close navigation"
-                >
-                  <X className="h-5 w-5" aria-hidden="true" />
-                </button>
-              </div>
+					<div className="ml-auto flex items-center gap-2 lg:hidden">
+						<a
+							href={phoneHref}
+							className="inline-flex min-h-11 items-center gap-2 border border-slate-300 px-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-800"
+						>
+							<Phone className="h-4 w-4" aria-hidden="true" />
+							<span>Call Now</span>
+						</a>
+						<button
+							type="button"
+							aria-label={isDrawerOpen ? "Close navigation" : "Open navigation"}
+							aria-expanded={isDrawerOpen}
+							aria-controls={drawerId}
+							className="inline-flex min-h-11 min-w-11 items-center justify-center border border-slate-900 bg-slate-950 text-white"
+							onClick={() => setIsDrawerOpen((open) => !open)}
+						>
+							{isDrawerOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+						</button>
+					</div>
+				</div>
+			</header>
 
-              <div className="flex-1 overflow-y-auto px-4 py-5">
-                <form
-                  role="search"
-                  aria-label="Search products"
-                  onSubmit={(e) => handleSearchSubmit(e, true)}
-                  className="mb-6"
-                >
-                  <div className="flex h-12 overflow-hidden border border-black bg-white">
-                    <label htmlFor="mobile-product-search" className="sr-only">
-                      Search products
-                    </label>
-                    <input
-                      id="mobile-product-search"
-                      name="query"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search"
-                      autoComplete="off"
-                      className="h-full flex-1 bg-transparent px-4 text-sm text-slate-900 outline-none placeholder:text-slate-500"
-                    />
-                    <button
-                      type="submit"
-                      aria-label="Search"
-                      className="flex h-full w-12 items-center justify-center bg-[#c62828] text-white"
-                    >
-                      <Search className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                  </div>
-                </form>
+			{isDrawerOpen ? (
+				<>
+					<div className="fixed inset-0 z-40 bg-slate-950/50 lg:hidden" onClick={() => setIsDrawerOpen(false)} />
+					<div
+						id={drawerId}
+						role="dialog"
+						aria-modal="true"
+						aria-label="Mobile navigation"
+						className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col border-l border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.22)] lg:hidden"
+					>
+						<div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
+							<div>
+								<p className="text-[0.7rem] font-bold uppercase tracking-[0.24em] text-slate-500">Navigation</p>
+								<p className="mt-1 text-sm font-semibold text-slate-950">{settings.shortName}</p>
+							</div>
+							<button
+								type="button"
+								onClick={() => setIsDrawerOpen(false)}
+								className="inline-flex min-h-11 min-w-11 items-center justify-center border border-slate-300 text-slate-950"
+								aria-label="Close navigation"
+							>
+								<X className="h-5 w-5" aria-hidden="true" />
+							</button>
+						</div>
 
-                <nav aria-label="Mobile navigation" className="space-y-1">
-                  <Link
-                    href="/about"
-                    onClick={closeMobile}
-                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
-                  >
-                    Company
-                  </Link>
+						<div className="flex-1 overflow-y-auto">
+							<div className="border-b border-slate-200 bg-slate-50 px-4 py-5">
+								<p className="text-[0.7rem] font-bold uppercase tracking-[0.24em] text-slate-500">Quick Actions</p>
+								<div className="mt-4 grid grid-cols-2 gap-3">
+									<a
+										href={phoneHref}
+										className="inline-flex min-h-12 items-center justify-center gap-2 border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900"
+									>
+										<Phone className="h-4 w-4" aria-hidden="true" />
+										Call Now
+									</a>
+									<Link
+										href={headerNavConfig.ctaActions.quote.href}
+										className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-rose-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-rose-600"
+									>
+										Request Quote
+										<ArrowRight className="h-4 w-4" aria-hidden="true" />
+									</Link>
+								</div>
+							</div>
 
-                  <div className="border-b border-slate-200 py-3">
-                    <div className="mb-3 flex items-center justify-between text-base font-medium text-slate-900">
-                      <span>Brands</span>
-                    </div>
+							<div className="border-b border-slate-200 px-4 py-5">
+								<div className="flex items-center justify-between gap-3">
+									<div>
+										<p className="text-[0.7rem] font-bold uppercase tracking-[0.24em] text-slate-500">Products First</p>
+										
+									</div>
+									<Link
+										href="/products"
+										className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-red-200 bg-red-50 px-4 shadow-sm transition-shadow hover:shadow-md text-[0.76rem] font-semibold uppercase tracking-[0.16em] text-red-700"
+									>
+										All Products
+									</Link>
+								</div>
+								<div className="mt-4 grid gap-3">
+									{categories.map((category) => (
+										<Link
+											key={category.slug}
+											href={`/products/${category.slug}`}
+											className="block rounded-sm border border-slate-200 px-4 py-4 transition-colors hover:border-slate-900 hover:bg-slate-50 focus-visible:border-slate-900 focus-visible:bg-slate-50"
+										>
+											<p className="text-base font-semibold text-slate-950">{category.name}</p>
+											<p className="mt-1 line-clamp-2 text-sm leading-relaxed text-slate-600">{category.intro}</p>
+										</Link>
+									))}
+								</div>
+							</div>
 
-                    <ul className="space-y-2 pl-1">
-                      {categories.map((category) => (
-                        <li key={category.slug}>
-                          <Link
-                            href={`/products/${category.slug}`}
-                            onClick={closeMobile}
-                            className="block text-sm text-slate-600 transition hover:text-[#b71c1c]"
-                          >
-                            {category.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+							<nav aria-label="Mobile navigation links" className="px-4 py-4">
+								<ul className="space-y-1">
+									{headerNavConfig.primaryLinks
+										.filter((item) => item.href !== "/products")
+										.map((item) => {
+											const active = isActivePath(pathname, item.href, item.match);
 
-                  <Link
-                    href="/gallery"
-                    onClick={closeMobile}
-                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
-                  >
-                    Gallery
-                  </Link>
+											return (
+												<li key={item.href}>
+													<Link
+														href={item.href}
+														aria-current={active ? "page" : undefined}
+														className={`flex min-h-14 items-center justify-between gap-4 border-b border-slate-200 px-1 py-3 transition-colors ${
+															active ? "text-slate-950" : "text-slate-700 hover:text-slate-950"
+														}`}
+													>
+														<div>
+															<p className="text-base font-semibold">{item.label}</p>
+															{item.description ? (
+																<p className="mt-1 text-sm leading-relaxed text-slate-500">{item.description}</p>
+															) : null}
+														</div>
+														<ArrowRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+													</Link>
+												</li>
+											);
+										})}
+								</ul>
+							</nav>
 
-                  <Link
-                    href="/clients"
-                    onClick={closeMobile}
-                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
-                  >
-                    Clients
-                  </Link>
+							<div className="border-t border-slate-200 bg-slate-50 px-4 py-5">
+								<p className="text-[0.7rem] font-bold uppercase tracking-[0.24em] text-slate-500">Direct Contact</p>
+								<div className="mt-3 space-y-2">
+									{settings.phones.slice(0, 2).map((phone) => (
+										<a
+											key={phone}
+											href={buildPhoneHref(phone)}
+											className="flex min-h-11 items-center text-base font-semibold text-slate-950"
+										>
+											{phone}
+										</a>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				</>
+			) : null}
 
-                  <Link
-                    href="/careers"
-                    onClick={closeMobile}
-                    className="block border-b border-slate-200 py-3 text-base font-medium text-slate-900"
-                  >
-                    Careers
-                  </Link>
-
-                  <Link
-                    href="/contact"
-                    onClick={closeMobile}
-                    className="block py-3 text-base font-medium text-slate-900"
-                  >
-                    Contact Us
-                  </Link>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : null}
-    </>
-  );
+			<div
+				className={`fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/98 px-3 py-3 shadow-[0_-18px_36px_rgba(15,23,42,0.12)] transition-all duration-200 supports-backdrop-filter:backdrop-blur-md lg:hidden ${
+					showMobileActionBar && !isDrawerOpen
+						? "pointer-events-auto translate-y-0 opacity-100"
+						: "pointer-events-none translate-y-full opacity-0"
+				}`}
+			>
+				<div className="grid grid-cols-3 gap-2">
+					<a
+						href={phoneHref}
+						className="inline-flex min-h-12 items-center justify-center gap-2 border border-slate-300 bg-white px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-slate-900"
+					>
+						<Phone className="h-4 w-4" aria-hidden="true" />
+						Call
+					</a>
+					<Link
+						href={headerNavConfig.ctaActions.quote.href}
+						className="inline-flex min-h-12 items-center justify-center rounded-xl bg-rose-700 px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-rose-600"
+					>
+						Request Quote
+					</Link>
+					<Link
+						href="/products"
+						className="inline-flex min-h-12 items-center justify-center border border-slate-300 bg-slate-950 px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white"
+					>
+						Products
+					</Link>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export { Header };

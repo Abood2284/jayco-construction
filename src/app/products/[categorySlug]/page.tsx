@@ -61,7 +61,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 		gallery.images.some((image) => image.productSlug && productSlugs.has(image.productSlug)),
 	);
 	return (
-		<main className="flex min-h-screen flex-col bg-slate-50">
+		<>
 			<JsonLd
 				data={buildBreadcrumbSchema([
 					{ name: "Home", path: "/" },
@@ -69,9 +69,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 					{ name: category.name, path: `/products/${category.slug}` },
 				])}
 			/>
-			
-			{/* Category Hero */}
-			<section className="relative overflow-hidden border-b border-slate-800 bg-slate-950 px-4 pb-20 pt-32 lg:px-6 lg:pb-28 lg:pt-40">
+
+			<main className="flex min-h-screen flex-col bg-slate-50">
+				{/* Category Hero */}
+				<section className="relative overflow-hidden border-b border-slate-800 bg-slate-950 px-4 pb-20 pt-32 lg:px-6 lg:pb-28 lg:pt-40">
 				<div 
 					className="pointer-events-none absolute inset-0 opacity-[0.05]"
 					style={{
@@ -243,7 +244,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 						
 					</div>
 				</div>
-			</section>
-		</main>
+				</section>
+			</main>
+		</>
 	);
 }

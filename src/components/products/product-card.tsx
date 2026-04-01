@@ -9,13 +9,13 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
 	return (
 		<article className="group relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-			<div className="relative aspect-3/2 overflow-hidden border-b border-slate-200 bg-slate-100 sm:aspect-4/3">
+			<div className="relative aspect-square overflow-hidden border-b border-slate-200 bg-slate-100">
 				<Image
 					src={product.heroImages[0].src}
 					alt={product.heroImages[0].alt}
 					fill
-					className="object-cover transition-transform duration-700 group-hover:scale-105"
-					sizes="(max-width: 640px) 50vw, (max-width: 768px) 100vw, 33vw"
+					className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
+					sizes="(max-width: 640px) 100vw, 50vw"
 				/>
 				<span className="absolute left-3 top-3 hidden rounded-md border border-slate-200/80 bg-slate-950/85 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white backdrop-blur-sm sm:inline-block lg:hidden">
 					{product.categorySlug.replace(/-/g, " ")}

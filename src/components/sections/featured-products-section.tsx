@@ -1,7 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
-import type { Product } from "@/lib/cms/types"
 import { ArrowRight } from "lucide-react"
+import type { Product } from "@/lib/cms/types"
+import {
+	buildHomepageFlagshipContent,
+	type HomepageFlagshipProduct,
+} from "@/lib/content/homepage"
+import { SectionCtaRow } from "@/components/sections/section-cta-row"
 
 interface FeaturedProductsSectionProps {
 	products: Product[]
@@ -10,113 +15,83 @@ interface FeaturedProductsSectionProps {
 export function FeaturedProductsSection({ products }: FeaturedProductsSectionProps) {
 	if (!products.length) return null
 
-	// We only take the top 3, but for the mobile infinite scroll to look seamless
-	// we duplicate them into a track.
-	const displayProducts = products.slice(0, 3)
-	const carouselTrack = [...displayProducts, ...displayProducts]
+	const content = buildHomepageFlagshipContent(products)
+
+	if (!content.featuredProducts.length) return null
 
 	return (
-		<section className="bg-[var(--bg)] py-20 lg:py-28 overflow-hidden">
-			<div className="mx-auto max-w-7xl px-4 lg:px-8">
-				{/* Section header */}
-				<div className="mb-14 flex flex-col items-start gap-4 border-l-2 border-amber-600/80 pl-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:border-l-0 sm:border-b sm:border-slate-200 sm:pl-0 sm:pb-6">
-					<div className="max-w-2xl">
-						<p className="mb-3 flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-amber-700">
-							<span className="hidden sm:block h-px w-6 bg-amber-700" />
-							Engineered For Reliability
+		<section className="bg-(--bg) py-18 sm:py-20 lg:py-24">
+			<div className="mx-auto max-w-7xl px-4 lg:px-6">
+				<div className="grid gap-8 border-b border-slate-200 pb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+					<div className="max-w-3xl">
+						<p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-rose-700">
+							{content.eyebrow}
 						</p>
-						<h2 className="mb-4 text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold text-slate-900 leading-tight">
-							Flagship Industrial Equipment
+						<h2 className="max-w-[18ch] text-[clamp(1.85rem,3vw,2.9rem)] font-semibold leading-tight tracking-[-0.03em] text-slate-950">
+							{content.title}
 						</h2>
-						<p className="text-sm sm:text-base font-medium text-slate-600 leading-relaxed">
-							Our most trusted systems, from robust electric hoists to heavy-duty hydraulic lifts, are designed and rigorously tested to withstand the harshest industrial environments and deliver continuous performance.
+						<p className="mt-4 max-w-[62ch] text-sm leading-7 text-slate-600 sm:text-base">
+							{content.description}
 						</p>
 					</div>
-					<Link
-						href="/products"
-						className="hidden shrink-0 sm:inline-flex h-11 items-center justify-center gap-2 rounded-md bg-slate-900 px-6 text-xs font-semibold uppercase tracking-wide !text-white shadow-sm transition-colors hover:bg-slate-800"
-					>
-						Explore full range
-						<ArrowRight className="h-4 w-4" />
-					</Link>
+
+					<div className="hidden lg:block">
+						<SectionCtaRow primary={content.primaryCta} secondary={content.secondaryCta} />
+					</div>
 				</div>
 
-				{/* Desktop view: Standard 3-col Grid */}
-				<div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-					{displayProducts.map((product) => (
-						<ProductCard key={product.slug} product={product} />
+				<div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+					{content.featuredProducts.map((product) => (
+						<FlagshipProductCard key={product.href} product={product} />
 					))}
 				</div>
 
-				{/* Mobile view: Auto-scrolling infinite carousel */}
-				<div className="sm:hidden -mx-4 overflow-hidden relative">
-					{/* Gradient Masks for smooth fade on edges */}
-					<div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[var(--bg)] to-transparent z-10 pointer-events-none" />
-					<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--bg)] to-transparent z-10 pointer-events-none" />
-					
-					<div className="flex w-max" style={{ animation: "scrollCarousel 30s linear infinite" }}>
-						{carouselTrack.map((product, idx) => (
-							<div key={`${product.slug}-${idx}`} className="w-[85vw] shrink-0 pl-4 pb-2">
-								<ProductCard product={product} />
-							</div>
-						))}
-					</div>
-				</div>
-                
-				<div className="mt-10 flex border-t border-slate-200 pt-6 sm:hidden">
-					<Link
-						href="/products"
-						className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-slate-900 px-6 text-[0.7rem] font-semibold uppercase tracking-wide !text-white shadow-sm transition-colors hover:bg-slate-800"
-					>
-						View full catalog
-						<ArrowRight className="h-4 w-4" aria-hidden />
-					</Link>
-				</div>
+				<SectionCtaRow
+					primary={content.primaryCta}
+					secondary={content.secondaryCta}
+					className="mt-8 border-t border-slate-200 pt-6 lg:hidden"
+				/>
 			</div>
-
-			<style>{`
-				@keyframes scrollCarousel {
-					0% { transform: translateX(0); }
-					100% { transform: translateX(-50%); }
-				}
-			`}</style>
 		</section>
 	)
 }
 
-function ProductCard({ product }: { product: Product }) {
+function FlagshipProductCard({ product }: { product: HomepageFlagshipProduct }) {
 	return (
-		<article
-			className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md"
-		>
-			<div className="relative flex aspect-[4/3] flex-col justify-end overflow-hidden border-b border-slate-200 bg-slate-100 p-5 lg:p-6">
+		<article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_20px_45px_rgba(15,23,42,0.06)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(15,23,42,0.1)]">
+			<div className="relative aspect-square overflow-hidden bg-slate-100">
 				<Image
-					src={product.heroImages[0].src}
-					alt={product.heroImages[0].alt}
+					src={product.image.src}
+					alt={product.image.alt}
 					fill
 					className="object-cover transition-transform duration-700 group-hover:scale-105"
-					sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 33vw"
+					sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
 				/>
-				<div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-slate-950/0 mix-blend-overlay transition-opacity duration-300 group-hover:opacity-80" />
+				<div className="absolute inset-0 bg-linear-to-t from-slate-950/54 via-slate-950/8 to-transparent" />
 			</div>
-			
-			<div className="flex flex-1 flex-col p-5 bg-white lg:p-6">
-				<h3 className="mb-2 text-base font-semibold text-slate-900 transition-colors group-hover:text-amber-700 lg:mb-3 lg:text-lg">
-					<Link href={`/products/${product.categorySlug}/${product.slug}`} className="before:absolute before:inset-0">
-						{product.name}
+
+			<div className="flex flex-1 flex-col p-5 sm:p-6">
+				<h3 className="text-lg font-semibold leading-tight text-slate-950">
+					<Link href={product.href} className="transition-colors hover:text-rose-700">
+						{product.title}
 					</Link>
 				</h3>
-				<p className="mb-6 line-clamp-3 flex-1 text-[0.7rem] sm:text-xs font-medium text-slate-600 leading-relaxed">
-					{product.description}
-				</p>
-				
-				<div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4">
-					<span className="text-[0.65rem] font-semibold uppercase tracking-wide text-slate-500 transition-colors group-hover:text-amber-700">
-						View details
-					</span>
-					<div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 text-slate-600 transition-colors group-hover:bg-amber-600 group-hover:text-white">
-						<ArrowRight className="h-4 w-4" />
-					</div>
+				<p className="mt-3 flex-1 text-sm leading-6 text-slate-600">{product.shortDescription}</p>
+
+				<div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-200 pt-5">
+					<Link
+						href={product.href}
+						className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-rose-700 px-3 py-3 text-center text-[0.72rem] font-semibold whitespace-nowrap text-white transition-colors hover:bg-rose-600"
+					>
+						View Product
+						<ArrowRight className="h-4 w-4" aria-hidden />
+					</Link>
+					<Link
+						href={product.quoteHref}
+						className="inline-flex min-h-11 items-center justify-center rounded-full border border-rose-200 px-3 py-3 text-center text-[0.72rem] font-semibold whitespace-nowrap text-rose-800 transition-colors hover:border-rose-300 hover:bg-rose-50"
+					>
+						Get Quote
+					</Link>
 				</div>
 			</div>
 		</article>

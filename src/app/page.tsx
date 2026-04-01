@@ -1,12 +1,12 @@
 import { JsonLd } from "@/components/ui/json-ld"
 import { HeroSection } from "@/components/sections/hero-section"
 import { EquipmentGridSection } from "@/components/sections/equipment-grid-section"
-import { CapabilityBand } from "@/components/sections/capability-band"
 import { CategoriesSection } from "@/components/sections/categories-section"
 import { FeaturedProductsSection } from "@/components/sections/featured-products-section"
 import { ClientsSection } from "@/components/sections/clients-section"
 import { GalleryTeaserSection } from "@/components/sections/gallery-teaser-section"
 import { CareersDisciplinedSection } from "@/components/sections/careers-disciplined-section"
+import { SupportSection } from "@/components/sections/support-section"
 import {
 	getClients,
 	getFeaturedProducts,
@@ -40,12 +40,12 @@ export default async function Home() {
 	return (
 		<main>
 			<JsonLd data={buildOrganizationSchema(settings)} />
-			<HeroSection settings={settings} />
+			<HeroSection settings={settings} products={products} />
 			<EquipmentGridSection products={products} />
-			{/* <CapabilityBand settings={settings} /> */}
-			<ClientsSection clients={clientList} />
-			<CategoriesSection categories={categories} />
 			<FeaturedProductsSection products={featuredProducts} />
+			<ClientsSection clients={clientList} settings={settings} />
+			<CategoriesSection categories={categories} />
+			<SupportSection />
 			<CareersDisciplinedSection />
 			<GalleryTeaserSection galleryCategories={galleryCategories} />
 		</main>
