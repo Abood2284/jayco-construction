@@ -1,40 +1,73 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import type { Product } from "@/lib/cms/types"
 
 interface ProductCardProps {
 	product: Product
 }
 
+function shortProductBlurb(product: Product) {
+	const excerpt = product.excerpt?.trim()
+	if (excerpt) return excerpt
+
+	const trimmed = product.description.trim()
+	if (!trimmed) return ""
+
+	const firstSentence = trimmed.match(/^.+?[.!?](?=\s|$)/)?.[0]
+	return (firstSentence ?? trimmed).trim()
+}
+
 export function ProductCard({ product }: ProductCardProps) {
+	const href = `/products/${product.categorySlug}/${product.slug}`
+	const image = product.heroImages[0]
+	const blurb = shortProductBlurb(product)
+
 	return (
-		<article className="group relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-			<div className="relative aspect-square overflow-hidden border-b border-slate-200 bg-slate-100">
-				<Image
-					src={product.heroImages[0].src}
-					alt={product.heroImages[0].alt}
-					fill
-					className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
-					sizes="(max-width: 640px) 100vw, 50vw"
-				/>
-				<span className="absolute left-3 top-3 hidden rounded-md border border-slate-200/80 bg-slate-950/85 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white backdrop-blur-sm sm:inline-block lg:hidden">
-					{product.categorySlug.replace(/-/g, " ")}
-				</span>
+		<article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_20px_45px_rgba(15,23,42,0.06)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(15,23,42,0.1)]">
+			<div className="relative aspect-square overflow-hidden bg-slate-100">
+				{image ? (
+					<Image
+						src={image.src}
+						alt={image.alt}
+						fill
+						className="object-cover transition-transform duration-700 group-hover:scale-105"
+						sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, (max-width: 1535px) 33vw, 25vw"
+					/>
+				) : (
+					<div className="flex h-full items-center justify-center bg-slate-200 text-sm font-medium text-slate-500">
+						No image
+					</div>
+				)}
+				<div className="absolute inset-0 bg-linear-to-t from-slate-950/54 via-slate-950/8 to-transparent" />
 			</div>
-			<div className="p-3 sm:p-5">
-				<h3 className="mb-1 text-sm font-semibold text-slate-900 transition-colors group-hover:text-amber-800 sm:mb-2 sm:text-base">
-					<Link href={`/products/${product.categorySlug}/${product.slug}`} className="before:absolute before:inset-0 block">
+
+			<div className="flex flex-1 flex-col p-5 sm:p-6">
+				<h3 className="text-lg font-semibold leading-tight text-slate-950">
+					<Link href={href} className="transition-colors hover:text-rose-700">
 						{product.name}
 					</Link>
 				</h3>
-				<p className="mb-4 line-clamp-2 text-sm font-medium text-slate-600 hidden sm:block">{product.description}</p>
-				<div
-					className="hidden items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-slate-600 transition-colors group-hover:text-amber-800 sm:inline-flex"
-				>
-					View details
-					<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-						<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
-					</svg>
+				{blurb ? (
+					<p className="mt-3 flex-1 text-sm leading-6 text-slate-600 line-clamp-3">{blurb}</p>
+				) : (
+					<div className="mt-3 flex-1" />
+				)}
+
+				<div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-200 pt-5">
+					<Link
+						href={href}
+						className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-rose-700 px-3 py-3 text-center text-[0.72rem] font-semibold whitespace-nowrap text-white transition-colors hover:bg-rose-600"
+					>
+						View Product
+						<ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
+					</Link>
+					<Link
+						href="/contact"
+						className="inline-flex min-h-11 items-center justify-center rounded-full border border-rose-200 px-3 py-3 text-center text-[0.72rem] font-semibold whitespace-nowrap text-rose-800 transition-colors hover:border-rose-300 hover:bg-rose-50"
+					>
+						Get Quote
+					</Link>
 				</div>
 			</div>
 		</article>

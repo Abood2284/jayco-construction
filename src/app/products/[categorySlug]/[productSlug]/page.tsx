@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { ProductDetailTemplate } from "@/components/products/product-detail-template";
 import { JsonLd } from "@/components/ui/json-ld";
 import {
-  getSiteSettings,
   getProductByCategoryAndSlug,
   getProductCategoryBySlug,
   getProducts,
@@ -58,11 +57,10 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { categorySlug, productSlug } = await params;
-  const [product, category, article, siteSettings] = await Promise.all([
+  const [product, category, article] = await Promise.all([
     getProductByCategoryAndSlug(categorySlug, productSlug),
     getProductCategoryBySlug(categorySlug),
     getProductArticle({ categorySlug, productSlug }),
-    getSiteSettings(),
   ]);
 
   if (!product || !category) {
@@ -91,8 +89,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         article={article}
         relatedProducts={relatedProducts}
         breadcrumbItems={breadcrumbItems}
-        yearsInBusiness={siteSettings.yearsInBusiness}
-        serviceSupport={siteSettings.serviceSupport}
       />
     </>
   );

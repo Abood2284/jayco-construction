@@ -31,7 +31,7 @@ export function Breadcrumbs({ items, variant = "dark" }: BreadcrumbsProps) {
 								<Link
 									href={item.path}
 									className={`font-medium transition ${
-										isLight ? "hover:text-amber-700" : "hover:text-amber-400"
+										isLight ? "hover:text-rose-700" : "hover:text-rose-300"
 									}`}
 								>
 									{item.name}

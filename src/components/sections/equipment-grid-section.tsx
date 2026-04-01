@@ -1,10 +1,22 @@
+"use client"
+
 import type { ReactNode } from "react"
 import Link from "next/link"
-import type { Product } from "@/lib/cms/types"
+import { useEffect, useMemo, useState } from "react"
+import type { Product, ProductCategory } from "@/lib/cms/types"
+import {
+	buildEquipmentCategorySummaryRows,
+	buildEquipmentGroupPills,
+	productMatchesEquipmentGroup,
+} from "@/lib/content/equipment-category-groups"
 
 interface EquipmentGridSectionProps {
 	products: Product[]
+	categories: ProductCategory[]
 }
+
+const SUMMARY_ICON_CLASS =
+	"h-8 w-8 shrink-0 text-rose-400 sm:h-9 sm:w-9"
 
 interface CategoryIconDefinition {
 	icon: ReactNode
@@ -12,14 +24,15 @@ interface CategoryIconDefinition {
 
 interface EquipmentIconProps {
 	children: ReactNode
+	className?: string
 }
 
-function EquipmentIcon({ children }: EquipmentIconProps) {
+function EquipmentIcon({ children, className }: EquipmentIconProps) {
 	return (
 		<svg
 			viewBox="0 0 48 48"
 			aria-hidden="true"
-			className="h-9 w-9 text-red-600 sm:h-10 sm:w-10"
+			className={className ?? "h-9 w-9 text-red-600 sm:h-10 sm:w-10"}
 			fill="none"
 			stroke="currentColor"
 			strokeWidth="2"
@@ -31,9 +44,9 @@ function EquipmentIcon({ children }: EquipmentIconProps) {
 	)
 }
 
-function HoistIcon() {
+function HoistIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M12 10h24" />
 			<path d="M24 10v8" />
 			<path d="M18 18h12v8H18z" />
@@ -44,9 +57,9 @@ function HoistIcon() {
 	)
 }
 
-function CraneIcon() {
+function CraneIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M10 40h28" />
 			<path d="M14 40V12" />
 			<path d="M14 12h22" />
@@ -58,9 +71,9 @@ function CraneIcon() {
 	)
 }
 
-function GantryIcon() {
+function GantryIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M10 14h28" />
 			<path d="M14 14v20" />
 			<path d="M34 14v20" />
@@ -74,9 +87,9 @@ function GantryIcon() {
 	)
 }
 
-function LiftIcon() {
+function LiftIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M12 36h24" />
 			<path d="M16 12v20" />
 			<path d="M32 12v20" />
@@ -86,9 +99,9 @@ function LiftIcon() {
 	)
 }
 
-function StackerIcon() {
+function StackerIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M14 38V14" />
 			<path d="M14 16h8" />
 			<path d="M22 22h8v10H22z" />
@@ -100,9 +113,9 @@ function StackerIcon() {
 	)
 }
 
-function PlatformIcon() {
+function PlatformIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M10 34h28" />
 			<path d="M16 34l8-14 8 14" />
 			<path d="M20 18l4-6 4 6" />
@@ -110,9 +123,9 @@ function PlatformIcon() {
 	)
 }
 
-function TransportIcon() {
+function TransportIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M10 32h20l4-8h4" />
 			<path d="M14 24h10" />
 			<path d="M30 24h4" />
@@ -122,9 +135,9 @@ function TransportIcon() {
 	)
 }
 
-function DrumHandlingIcon() {
+function DrumHandlingIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M18 14h12" />
 			<path d="M16 18h16" />
 			<path d="M18 14v20" />
@@ -136,9 +149,9 @@ function DrumHandlingIcon() {
 	)
 }
 
-function SlingIcon() {
+function SlingIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M16 14c0 10 4 18 8 20" />
 			<path d="M32 14c0 10-4 18-8 20" />
 			<path d="M16 14c0-3 2-5 4-5h8c2 0 4 2 4 5" />
@@ -147,9 +160,9 @@ function SlingIcon() {
 	)
 }
 
-function BulldozerIcon() {
+function BulldozerIcon({ className }: { className?: string }) {
 	return (
-		<EquipmentIcon>
+		<EquipmentIcon className={className}>
 			<path d="M10 32h24" />
 			<path d="M14 32v-8h10l4 4h6" />
 			<path d="M34 32l4-4" />
@@ -208,10 +221,55 @@ function chunkProducts(products: Product[], chunkSize: number) {
 	return productGroups
 }
 
-export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
+const ALL_FILTER = "all"
+
+function EquipmentGroupSummaryIcon({ groupId }: { groupId: string }) {
+	switch (groupId) {
+		case "cranes":
+			return <CraneIcon className={SUMMARY_ICON_CLASS} />
+		case "hoists":
+			return <HoistIcon className={SUMMARY_ICON_CLASS} />
+		case "lifts-platforms":
+			return <LiftIcon className={SUMMARY_ICON_CLASS} />
+		case "stackers-pallet":
+			return <StackerIcon className={SUMMARY_ICON_CLASS} />
+		case "transport-docking":
+			return <TransportIcon className={SUMMARY_ICON_CLASS} />
+		case "slings":
+			return <SlingIcon className={SUMMARY_ICON_CLASS} />
+		default:
+			return <BulldozerIcon className={SUMMARY_ICON_CLASS} />
+	}
+}
+
+export function EquipmentGridSection({ products, categories }: EquipmentGridSectionProps) {
+	const [activeGroupId, setActiveGroupId] = useState<string>(ALL_FILTER)
+
+	const groupOptions = useMemo(() => buildEquipmentGroupPills(products), [products])
+
+	const summaryRows = useMemo(
+		() => buildEquipmentCategorySummaryRows(products, categories),
+		[products, categories],
+	)
+
+	const filteredProducts = useMemo(() => {
+		if (activeGroupId === ALL_FILTER) return products
+		return products.filter((p) => productMatchesEquipmentGroup(p, activeGroupId))
+	}, [products, activeGroupId])
+
+	useEffect(() => {
+		if (activeGroupId === ALL_FILTER) return
+		if (!groupOptions.some((g) => g.id === activeGroupId)) setActiveGroupId(ALL_FILTER)
+	}, [activeGroupId, groupOptions])
+
+	const tabPanelLabelledBy =
+		activeGroupId === ALL_FILTER || !groupOptions.some((g) => g.id === activeGroupId)
+			? "equipment-filter-all"
+			: `equipment-filter-${activeGroupId}`
+
 	if (!products.length) return null
 
-	const mobileProductGroups = chunkProducts(products, 4)
+	const mobileProductGroups = chunkProducts(filteredProducts, 4)
 
 	return (
 		<section className="border-b border-slate-200 bg-white py-14 sm:py-16 lg:py-20">
@@ -225,51 +283,137 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 					</h2>
 				</div>
 
-				<div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pr-10 sm:hidden">
-					{mobileProductGroups.map((productGroup, index) => (
-						<div
-							key={`mobile-group-${index}`}
-							className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-3"
-						>
-							{productGroup.map((product) => (
-								<Link
-									key={product.slug}
-									href={`/products/${product.categorySlug}/${product.slug}`}
-									className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-slate-300 hover:shadow-md"
-								>
-									<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800">
-										{product.name}
-									</h3>
-
-									<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
-										{categoryIcons[product.categorySlug]?.icon ?? (
-											<BulldozerIcon />
-										)}
-									</div>
-								</Link>
+				{summaryRows.length > 0 ? (
+					<div className="font-body mb-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 sm:mb-10">
+						<ul className="m-0 list-none divide-y divide-white/10 p-0">
+							{summaryRows.map((row) => (
+								<li key={row.groupId}>
+									<button
+										type="button"
+										className="flex w-full flex-col gap-3 px-4 py-4 text-left transition-colors hover:bg-white/4 sm:flex-row sm:items-start sm:gap-8 sm:px-6 sm:py-5"
+										aria-label={`Show equipment in ${row.label}`}
+										onClick={() => {
+											if (!groupOptions.some((g) => g.id === row.groupId)) return
+											setActiveGroupId(row.groupId)
+										}}
+									>
+										<div className="flex min-w-0 items-center gap-3 sm:min-w-48 sm:max-w-56 sm:shrink-0">
+											<EquipmentGroupSummaryIcon groupId={row.groupId} />
+											<span className="text-base font-semibold tracking-tight text-white sm:text-lg">
+												{row.label}
+											</span>
+										</div>
+										<p className="min-w-0 pl-11 text-sm leading-relaxed font-normal text-white/80 sm:pl-0 sm:pt-0.5 sm:text-base">
+											{row.subCategoryNames.join(", ")}
+										</p>
+									</button>
+								</li>
 							))}
-						</div>
-					))}
-				</div>
+						</ul>
+					</div>
+				) : null}
 
-				<div className="hidden grid-cols-2 gap-3 sm:grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-					{products.map((product) => (
-						<Link
-							key={product.slug}
-							href={`/products/${product.categorySlug}/${product.slug}`}
-							className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:min-h-[124px]"
+				{groupOptions.length > 0 ? (
+					<div
+						className="mb-8 flex flex-wrap gap-2 sm:mb-10"
+						role="tablist"
+						aria-label="Filter equipment by category"
+					>
+						<button
+							type="button"
+							role="tab"
+							aria-selected={activeGroupId === ALL_FILTER}
+							id="equipment-filter-all"
+							className={`font-heading rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 ${
+								activeGroupId === ALL_FILTER
+									? "border-slate-950 bg-slate-950 text-white"
+									: "border-slate-950 bg-white text-slate-950 hover:bg-slate-50"
+							}`}
+							onClick={() => setActiveGroupId(ALL_FILTER)}
 						>
-							<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800 sm:text-[0.95rem]">
-								{product.name}
-							</h3>
+							All
+						</button>
+						{groupOptions.map((group) => {
+							const isActive = activeGroupId === group.id
 
-							<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
-								{categoryIcons[product.categorySlug]?.icon ?? (
-									<BulldozerIcon />
-								)}
+							return (
+								<button
+									key={group.id}
+									type="button"
+									role="tab"
+									aria-selected={isActive}
+									id={`equipment-filter-${group.id}`}
+									className={`font-heading rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 ${
+										isActive
+											? "border-slate-950 bg-slate-950 text-white"
+											: "border-slate-950 bg-white text-slate-950 hover:bg-slate-50"
+									}`}
+									onClick={() => setActiveGroupId(group.id)}
+								>
+									{group.label}
+								</button>
+							)
+						})}
+					</div>
+				) : null}
+
+				<div
+					id="equipment-grid-panel"
+					role={groupOptions.length > 0 ? "tabpanel" : undefined}
+					aria-labelledby={groupOptions.length > 0 ? tabPanelLabelledBy : undefined}
+				>
+					{filteredProducts.length === 0 ? (
+						<p className="py-10 text-center text-sm text-slate-600">No equipment in this category.</p>
+					) : (
+						<>
+							<div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pr-10 sm:hidden">
+								{mobileProductGroups.map((productGroup, index) => (
+									<div
+										key={`mobile-group-${index}`}
+										className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-3"
+									>
+										{productGroup.map((product) => (
+											<Link
+												key={product.slug}
+												href={`/products/${product.categorySlug}/${product.slug}`}
+												className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-slate-300 hover:shadow-md"
+											>
+												<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800">
+													{product.name}
+												</h3>
+
+												<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
+													{categoryIcons[product.categorySlug]?.icon ?? (
+														<BulldozerIcon />
+													)}
+												</div>
+											</Link>
+										))}
+									</div>
+								))}
 							</div>
-						</Link>
-					))}
+
+							<div className="hidden grid-cols-2 gap-3 sm:grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+								{filteredProducts.map((product) => (
+									<Link
+										key={product.slug}
+										href={`/products/${product.categorySlug}/${product.slug}`}
+										className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:min-h-[124px]"
+									>
+										<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800 sm:text-[0.95rem]">
+											{product.name}
+										</h3>
+
+										<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
+											{categoryIcons[product.categorySlug]?.icon ?? (
+												<BulldozerIcon />
+											)}
+										</div>
+									</Link>
+								))}
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 		</section>

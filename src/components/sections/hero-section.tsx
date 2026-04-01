@@ -25,16 +25,16 @@ function HeroActions({ primary, secondary }: HeroActionsProps) {
 		<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
 			<Link
 				href={primary.href}
-				className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-rose-700 px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_18px_40px_rgba(190,24,93,0.24)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:w-auto"
+				className="font-heading inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-rose-700 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-white shadow-[0_18px_40px_rgba(190,24,93,0.24)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:tracking-[0.14em] sm:w-auto"
 			>
-				{primary.label}
-				<ArrowRight className="h-4 w-4" aria-hidden />
+				<span className="whitespace-nowrap">{primary.label}</span>
+				<ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
 			</Link>
 			<Link
 				href={secondary.href}
-				className="inline-flex min-h-13 w-full items-center justify-center rounded-xl border border-white/18 bg-white/5 px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white/10 sm:min-h-12 sm:w-auto"
+				className="font-heading inline-flex min-h-13 w-full items-center justify-center rounded-xl border border-white/18 bg-white/5 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-white transition-colors hover:bg-white/10 sm:min-h-12 sm:tracking-[0.14em] sm:w-auto"
 			>
-				{secondary.label}
+				<span className="text-balance sm:whitespace-nowrap">{secondary.label}</span>
 			</Link>
 		</div>
 	)
@@ -59,19 +59,19 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 
 			<div className="relative mx-auto max-w-7xl px-4 lg:px-6">
 				<div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-center lg:gap-10">
-					<div className="max-w-3xl">
-						<p className="mb-4 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-rose-300">
+					<div className="min-w-0 w-full lg:max-w-3xl">
+						<p className="font-heading mb-4 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-rose-300 sm:tracking-[0.22em]">
 							<span className="block h-px w-8 bg-rose-400/80" aria-hidden />
 							{content.eyebrow}
 						</p>
-						<h1 className="max-w-[14ch] text-[clamp(2rem,4.2vw,4rem)] font-bold leading-none tracking-[-0.03em] text-white">
+						<h1 className="w-full max-w-none text-[clamp(2rem,5.5vw,4rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white text-balance sm:leading-[1.05] lg:text-[clamp(2rem,4.2vw,4rem)] lg:leading-[1.02]">
 							{content.title}
 						</h1>
-						<p className="mt-4 max-w-[60ch] text-base leading-relaxed text-slate-300 sm:text-lg">
+						<p className="font-body mt-4 max-w-[60ch] text-base leading-relaxed text-slate-300 sm:text-lg">
 							{content.description}
 						</p>
 
-						<div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-3 py-1 text-xs font-medium text-slate-200">
+						<div className="font-body mt-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-3 py-1 text-xs font-medium text-slate-200">
 							<span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rose-400/15 text-rose-300">
 								<CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
 							</span>
@@ -83,10 +83,10 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 						</div>
 
 						<div className="mt-5 rounded-2xl border border-white/10 bg-slate-900/65 px-5 py-4 text-sm text-slate-300 backdrop-blur-sm">
-							<p className="mb-1 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-slate-400">
+							<p className="font-heading mb-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-400 sm:tracking-[0.2em]">
 								Who Jayco serves
 							</p>
-							<p className="m-0 leading-relaxed text-slate-200">
+							<p className="font-body m-0 text-pretty leading-relaxed text-slate-200">
 								Industrial buyers planning plant upgrades, workshop handling systems, and site-specific lifting requirements
 								need a clear path to quote, product fit, and support.
 							</p>
@@ -112,12 +112,12 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 
 							<div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
 								<div className="rounded-[1.75rem] border border-white/12 bg-slate-950/82 p-5 backdrop-blur-md">
-									<p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
+									<p className="font-heading mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-slate-400 sm:tracking-[0.18em]">
 										Core product coverage
 									</p>
 									<ul className="m-0 grid list-none gap-3 p-0">
 										{content.visualHighlights.map((item) => (
-											<li key={item} className="flex items-start gap-3 text-sm font-medium text-slate-100">
+											<li key={item} className="font-heading flex items-start gap-3 text-sm font-medium text-slate-100">
 												<span className="mt-0.5 h-2.5 w-2.5 shrink-0 rounded-full bg-rose-400" aria-hidden />
 												<span>{item}</span>
 											</li>

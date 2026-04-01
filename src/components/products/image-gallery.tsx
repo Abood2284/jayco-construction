@@ -6,9 +6,11 @@ import type { ImageAsset } from "@/lib/cms/types"
 
 interface ImageGalleryProps {
 	images: ImageAsset[]
+	/** Larger lead layout for product detail (gallery-first CRO). */
+	leadLayout?: boolean
 }
 
-export function ImageGallery({ images }: ImageGalleryProps) {
+export function ImageGallery({ images, leadLayout = false }: ImageGalleryProps) {
 	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
 	const close = useCallback(() => setLightboxIndex(null), [])
@@ -48,13 +50,17 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 				<button
 					type="button"
 					onClick={() => setLightboxIndex(0)}
-					className="relative aspect-video w-full cursor-zoom-in overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-sm lg:flex-1"
+					className={`relative w-full cursor-zoom-in overflow-hidden border border-slate-200 bg-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 lg:flex-1 ${
+						leadLayout
+							? "aspect-[4/3] rounded-2xl sm:aspect-[5/4] sm:rounded-3xl"
+							: "aspect-video rounded-lg"
+					}`}
 				>
 					<Image
 						src={images[0].src}
 						alt={images[0].alt}
 						fill
-						className="object-contain"
+						className={leadLayout ? "object-cover" : "object-contain"}
 						priority
 						sizes="(max-width: 1024px) 100vw, 62vw"
 					/>
@@ -62,19 +68,27 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 
 				{/* Thumbnail grid */}
 				{images.length > 1 && (
-					<div className="grid grid-cols-4 gap-3 lg:w-[36%] lg:grid-cols-2 lg:gap-6">
+					<div
+						className={`grid grid-cols-4 gap-3 lg:grid-cols-2 ${
+							leadLayout ? "lg:w-[34%] lg:gap-4" : "lg:w-[36%] lg:gap-6"
+						}`}
+					>
 						{images.slice(1).map((image, i) => (
 							<button
 								key={image.src}
 								type="button"
 								onClick={() => setLightboxIndex(i + 1)}
-								className="relative aspect-square cursor-zoom-in overflow-hidden rounded-md border border-slate-200 bg-slate-100 shadow-sm"
+								className={`relative aspect-square cursor-zoom-in overflow-hidden border border-slate-200 bg-slate-100 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 ${
+									leadLayout ? "rounded-xl" : "rounded-md"
+								}`}
 							>
 								<Image
 									src={image.src}
 									alt={image.alt}
 									fill
-									className="object-contain transition-transform duration-500 hover:scale-[1.04]"
+									className={`transition-transform duration-500 hover:scale-[1.04] ${
+										leadLayout ? "object-cover" : "object-contain"
+									}`}
 									sizes="(max-width: 640px) 25vw, (max-width: 1024px) 25vw, 18vw"
 								/>
 							</button>

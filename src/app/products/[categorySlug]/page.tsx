@@ -80,7 +80,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 							"repeating-linear-gradient(0deg,transparent,transparent 40px,#fff 40px,#fff 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,#fff 40px,#fff 41px)",
 					}}
 				/>
-				<div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] bg-amber-500 opacity-10 blur-[100px]" />
+				<div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] bg-rose-600 opacity-[0.12] blur-[100px]" />
 				
 				<div className="relative mx-auto max-w-6xl">
 					<div className="mb-6">
@@ -94,7 +94,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 					</div>
 					
 					<div className="max-w-3xl">
-						<p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-amber-400/95">
+						<p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-rose-300">
 							Product family
 						</p>
 						<h1 className="mb-5 text-[clamp(2rem,4.2vw,3.25rem)] font-bold leading-[1.1] tracking-tight text-white">
@@ -120,13 +120,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 								Overview
 							</h3>
 							<nav className="flex flex-col gap-3 text-sm font-medium uppercase tracking-wide">
-								<a href="#products" className="text-slate-600 transition-colors hover:text-amber-800">
+								<a href="#products" className="text-slate-600 transition-colors hover:text-rose-800">
 									Available Products
 								</a>
-								<a href="#related" className="text-slate-600 transition-colors hover:text-amber-800">
+								<a href="#related" className="text-slate-600 transition-colors hover:text-rose-800">
 									Related Categories
 								</a>
-								<a href="#gallery" className="text-slate-600 transition-colors hover:text-amber-800">
+								<a href="#gallery" className="text-slate-600 transition-colors hover:text-rose-800">
 									Gallery Proof
 								</a>
 							</nav>
@@ -134,13 +134,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
 						{/* Quick Contact CTA */}
 						<div className="rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-md">
-							<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-amber-400">Engineering support</p>
+							<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-300">Engineering support</p>
 							<p className="mb-6 text-sm font-medium text-slate-300">
 								Need detailed specifications for our {category.name.toLowerCase()}?
 							</p>
 							<Link 
 								href="/contact"
-								className="inline-flex w-full items-center justify-center rounded-md bg-amber-500 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-950 transition-colors hover:bg-amber-400"
+								className="inline-flex w-full items-center justify-center rounded-xl bg-rose-700 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_12px_28px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600"
 							>
 								Request specifications
 							</Link>
@@ -157,7 +157,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 								<p className="text-base font-medium text-slate-600 mt-2">Browse current configurations for this category.</p>
 							</div>
 							
-							<div className="grid gap-6 sm:grid-cols-2">
+							<div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 								{products.map((product) => (
 									<ProductCard key={product.slug} product={product} />
 								))}
@@ -171,7 +171,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 							{relatedCategories.length > 0 && (
 								<div id="related" className="scroll-mt-32">
 									<h3 className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-900">
-										<span className="block h-px w-6 bg-amber-600" />
+										<span className="block h-px w-6 bg-rose-600" />
 										Related categories
 									</h3>
 									<ul className="flex flex-col gap-4">
@@ -179,10 +179,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 											<li key={entry.slug}>
 												<Link 
 													href={`/products/${entry.slug}`}
-													className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:border-amber-300 hover:shadow-md"
+													className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:border-rose-200 hover:shadow-md"
 												>
-													<span className="font-semibold text-slate-900 transition-colors group-hover:text-amber-800">{entry.name}</span>
-													<svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-400 transition group-hover:text-amber-500" aria-hidden>
+													<span className="font-semibold text-slate-900 transition-colors group-hover:text-rose-800">{entry.name}</span>
+													<svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-400 transition group-hover:text-rose-600" aria-hidden>
 														<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
 													</svg>
 												</Link>
@@ -196,7 +196,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 							{popularProducts.length > 0 && (
 								<div>
 									<h3 className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-900">
-										<span className="block h-px w-6 bg-amber-600" />
+										<span className="block h-px w-6 bg-rose-600" />
 										Popular in category
 									</h3>
 									<ul className="flex flex-col gap-4">
@@ -204,10 +204,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 											<li key={product.slug}>
 												<Link 
 													href={`/products/${product.categorySlug}/${product.slug}`}
-													className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:border-amber-300 hover:shadow-md"
+													className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:border-rose-200 hover:shadow-md"
 												>
-													<span className="line-clamp-1 font-semibold text-slate-900 transition-colors group-hover:text-amber-800">{product.name}</span>
-													<svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-400 transition group-hover:text-amber-500" aria-hidden>
+													<span className="line-clamp-1 font-semibold text-slate-900 transition-colors group-hover:text-rose-800">{product.name}</span>
+													<svg viewBox="0 0 24 24" className="h-5 w-5 text-slate-400 transition group-hover:text-rose-600" aria-hidden>
 														<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter" />
 													</svg>
 												</Link>
@@ -231,9 +231,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 										<Link
 											key={gallery.slug}
 											href={`/gallery/${gallery.slug}`}
-											className="group block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:border-amber-300 hover:shadow-md"
+											className="group block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:border-rose-200 hover:shadow-md"
 										>
-											<div className="line-clamp-1 p-5 font-semibold text-slate-900 transition-colors group-hover:text-amber-800">
+											<div className="line-clamp-1 p-5 font-semibold text-slate-900 transition-colors group-hover:text-rose-800">
 												{gallery.name}
 											</div>
 										</Link>

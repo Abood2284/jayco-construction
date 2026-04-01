@@ -133,15 +133,15 @@ function Header({ settings, categories }: HeaderProps) {
 					</div>
 				</div>
 
-				<div className="mx-auto flex h-[76px] max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:h-[84px] lg:px-8">
-					<Link href="/" aria-label={settings.companyName} className="shrink-0">
+				<div className="mx-auto flex h-[76px] max-w-[1440px] items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:h-[84px] lg:px-8">
+					<Link href="/" aria-label={settings.companyName} className="min-w-0 shrink">
 						<Image
 							src="/images/jayco-logo.png"
 							alt={settings.companyName}
 							width={280}
 							height={58}
 							priority
-							className="h-9 w-auto object-contain sm:h-10 lg:h-11"
+							className="h-8 w-auto max-w-[min(52vw,200px)] object-contain sm:h-10 sm:max-w-none lg:h-11"
 						/>
 					</Link>
 
@@ -276,12 +276,12 @@ function Header({ settings, categories }: HeaderProps) {
 						</Link>
 					</div>
 
-					<div className="ml-auto flex items-center gap-2 lg:hidden">
+					<div className="ml-auto flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
 						<a
 							href={phoneHref}
-							className="inline-flex min-h-11 items-center gap-2 border border-slate-300 px-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-slate-800"
+							className="font-heading inline-flex min-h-11 max-w-full items-center gap-1.5 whitespace-nowrap border border-slate-300 px-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.06em] text-slate-800 sm:gap-2 sm:px-3 sm:text-[0.72rem] sm:tracking-widest"
 						>
-							<Phone className="h-4 w-4" aria-hidden="true" />
+							<Phone className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" aria-hidden="true" />
 							<span>Call Now</span>
 						</a>
 						<button

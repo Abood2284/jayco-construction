@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs"
 import { ImageGallery } from "@/components/products/image-gallery"
 import { EnquiryForm } from "@/components/sections/enquiry-form"
 import type { Product, ProductCategory, ProductSpec } from "@/lib/cms/types"
+import { partitionSpecsForPrimaryDisplay } from "@/lib/content/product-spec-display"
 import type { ProductArticle } from "@/lib/content/product-articles"
 
 type BreadcrumbItem = {
@@ -18,8 +19,6 @@ interface ProductDetailTemplateProps {
 	article: ProductArticle | null
 	relatedProducts: Product[]
 	breadcrumbItems: BreadcrumbItem[]
-	yearsInBusiness: number
-	serviceSupport: string
 }
 
 type SectionLink = {
@@ -27,42 +26,7 @@ type SectionLink = {
 	label: string
 }
 
-type QuickSpecItem = {
-	label: string
-	value: string
-}
-
 const PRIMARY_CTA_LABEL = "Request Quote"
-
-function dedupeQuickSpecs(items: QuickSpecItem[]) {
-	const seen = new Set<string>()
-	return items.filter((item) => {
-		const key = `${item.label.toLowerCase()}::${item.value.toLowerCase()}`
-		if (seen.has(key)) return false
-		seen.add(key)
-		return true
-	})
-}
-
-function getQuickSpecs(product: Product, category: ProductCategory) {
-	const conciseSpecs = [...product.specs, ...(product.additionalInfo ?? [])]
-		.filter((spec) => spec.value.length <= 90)
-		.slice(0, 4)
-
-	const items: QuickSpecItem[] = [
-		{ label: "Product family", value: category.name },
-		...(product.applications.length > 0
-			? [{ label: "Use case", value: product.applications.slice(0, 2).join(" · ") }]
-			: []),
-		...conciseSpecs,
-	]
-
-	return dedupeQuickSpecs(items).slice(0, 6)
-}
-
-function getProductSummary(product: Product, article: ProductArticle | null) {
-	return article?.frontmatter.excerpt?.trim() || product.excerpt?.trim() || product.description
-}
 
 function SectionHeading({
 	eyebrow,
@@ -75,8 +39,8 @@ function SectionHeading({
 }) {
 	return (
 		<div className="max-w-3xl">
-			<p className="inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-amber-700">
-				<span className="h-px w-8 bg-amber-600" aria-hidden="true" />
+			<p className="inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-rose-700">
+				<span className="h-px w-8 bg-rose-600" aria-hidden="true" />
 				{eyebrow}
 			</p>
 			<h2 className="mt-4 text-[clamp(1.8rem,3vw,2.6rem)] font-semibold leading-tight tracking-tight text-slate-950">
@@ -89,202 +53,68 @@ function SectionHeading({
 	)
 }
 
-function ProductHeroActions({ category }: { category: ProductCategory }) {
+function ProductTitleStrip({ product, category }: { product: Product; category: ProductCategory }) {
 	return (
-		<div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-			<Link
-				href="#enquiry"
-				className="inline-flex min-h-12 items-center justify-center rounded-full bg-slate-950 px-6 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-slate-800"
-			>
-				{PRIMARY_CTA_LABEL}
-			</Link>
-			<Link
-				href={`/products/${category.slug}`}
-				className="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 bg-white px-6 text-sm font-semibold uppercase tracking-[0.14em] text-slate-900 transition hover:border-slate-400 hover:bg-slate-50"
-			>
-				View Category
-			</Link>
-		</div>
-	)
-}
-
-function ProductSummaryPanel({
-	product,
-	category,
-	summary,
-	yearsInBusiness,
-	serviceSupport,
-}: {
-	product: Product
-	category: ProductCategory
-	summary: string
-	yearsInBusiness: number
-	serviceSupport: string
-}) {
-	const supportPoints =
-		product.complianceNotes.length > 0
-			? product.complianceNotes.slice(0, 2)
-			: [
-					`${yearsInBusiness}+ years supporting industrial lifting requirements`,
-					serviceSupport,
-				]
-
-	return (
-		<div className="rounded-[1.75rem] border border-slate-200 bg-white/92 p-6 shadow-[0_18px_45px_-34px_rgba(15,23,42,0.4)] backdrop-blur-sm sm:p-7">
-			<h1 className="text-[clamp(2.1rem,4.4vw,4.2rem)] font-semibold leading-[1.02] tracking-tight text-slate-950">
+		<div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_20px_50px_-40px_rgba(15,23,42,0.25)] sm:rounded-3xl sm:p-8">
+			<h1 className="text-3xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-4xl lg:text-[clamp(2rem,4vw,3.25rem)]">
 				{product.name}
 			</h1>
-			<p className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-amber-800">
-				<span className="h-2 w-2 rounded-full bg-amber-600" aria-hidden="true" />
+			<p className="mt-4 inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-rose-800">
+				<span className="h-2 w-2 rounded-full bg-rose-600" aria-hidden="true" />
 				{category.name}
 			</p>
-			<p className="mt-5 max-w-[56ch] text-base leading-relaxed text-slate-600 sm:text-lg">
-				{summary}
-			</p>
-
-			<div className="mt-7">
-				<ProductHeroActions category={category} />
-			</div>
-
-			<ul className="mt-6 grid gap-3 border-t border-slate-200 pt-5 sm:grid-cols-2">
-				{supportPoints.map((point) => (
-					<li key={point} className="flex gap-3 text-sm leading-relaxed text-slate-700">
-						<span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-600" aria-hidden="true" />
-						<span>{point}</span>
-					</li>
-				))}
-			</ul>
-		</div>
-	)
-}
-
-function ProductQuickSpecs({ items }: { items: QuickSpecItem[] }) {
-	if (items.length === 0) return null
-
-	return (
-		<div
-			id="quick-specs"
-			className="rounded-[2rem] border border-slate-200 bg-white/94 p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.45)] backdrop-blur-sm sm:p-6 lg:p-7"
-		>
-			<div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-				<div className="max-w-2xl">
-					<p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
-						Quick specification summary
-					</p>
-					<p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-						High-value scan points pulled from available Jayco product data.
-					</p>
-				</div>
+			<div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
 				<Link
-					href="#technical-details"
-					className="inline-flex items-center gap-2 self-start text-sm font-semibold text-slate-800 transition hover:text-amber-800"
+					href="#enquiry"
+					className="inline-flex min-h-12 items-center justify-center rounded-full bg-rose-700 px-8 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600"
 				>
-					View technical details
-					<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-						<path
-							d="M5 12h14M13 6l6 6-6 6"
-							fill="none"
-							stroke="currentColor"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth="2"
-						/>
-					</svg>
+					{PRIMARY_CTA_LABEL}
+				</Link>
+				<Link
+					href={`/products/${category.slug}`}
+					className="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 bg-white px-8 text-sm font-semibold uppercase tracking-wide text-slate-900 transition-colors hover:border-slate-400 hover:bg-slate-50"
+				>
+					View category
 				</Link>
 			</div>
-
-			<div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-				{items.map((item) => (
-					<div
-						key={`${item.label}-${item.value}`}
-						className="rounded-[1.4rem] border border-slate-200 bg-slate-50 px-4 py-4 sm:px-5"
-					>
-						<p className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-slate-500">
-							{item.label}
-						</p>
-						<p className="mt-2 font-sans text-sm font-medium leading-6 text-slate-900 sm:text-[0.96rem]">
-							{item.value}
-						</p>
-					</div>
-				))}
-			</div>
 		</div>
 	)
 }
 
-function ProductHeroBlock({
+function ProductLeadSection({
 	product,
 	category,
 	breadcrumbItems,
-	summary,
-	quickSpecs,
-	yearsInBusiness,
-	serviceSupport,
 }: {
 	product: Product
 	category: ProductCategory
 	breadcrumbItems: BreadcrumbItem[]
-	summary: string
-	quickSpecs: QuickSpecItem[]
-	yearsInBusiness: number
-	serviceSupport: string
 }) {
 	return (
-		<section className="relative overflow-hidden border-b border-slate-200 bg-[radial-gradient(circle_at_top_right,_rgba(245,158,11,0.16),_transparent_34%),linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] px-4 pb-14 pt-28 sm:px-6 lg:px-8 lg:pb-16 lg:pt-36">
+		<section className="relative overflow-hidden border-b border-slate-200 bg-[linear-gradient(180deg,#fafafa_0%,#f1f5f9_100%)] px-4 pb-12 pt-28 sm:px-6 lg:px-8 lg:pb-16 lg:pt-36">
 			<div
-				className="pointer-events-none absolute inset-0 opacity-[0.08]"
+				className="pointer-events-none absolute inset-0 opacity-[0.06]"
 				style={{
 					backgroundImage:
 						"repeating-linear-gradient(0deg,transparent,transparent 38px,#0f172a 38px,#0f172a 39px),repeating-linear-gradient(90deg,transparent,transparent 38px,#0f172a 38px,#0f172a 39px)",
 				}}
 			/>
-			<div className="pointer-events-none absolute -left-24 top-12 h-56 w-56 rounded-full bg-white/60 blur-3xl" />
-			<div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-amber-200/45 blur-3xl" />
+			<div className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full bg-rose-400/20 blur-3xl" />
+			<div className="pointer-events-none absolute -left-24 top-24 h-56 w-56 rounded-full bg-white/70 blur-3xl" />
 
 			<div className="relative mx-auto max-w-7xl">
 				<div className="mb-8">
 					<Breadcrumbs items={breadcrumbItems} variant="light" />
 				</div>
 
-				<div className="grid gap-6 xl:grid-cols-[minmax(0,1.08fr)_minmax(20rem,0.92fr)] xl:items-start">
-					<div className="grid gap-5">
-						<ProductSummaryPanel
-							product={product}
-							category={category}
-							summary={summary}
-							yearsInBusiness={yearsInBusiness}
-							serviceSupport={serviceSupport}
-						/>
-						<ProductQuickSpecs items={quickSpecs} />
+				{product.heroImages.length > 0 ? (
+					<div id="product-gallery" className="scroll-mt-28">
+						<ImageGallery images={product.heroImages} leadLayout />
 					</div>
+				) : null}
 
-					<div className="grid gap-4 xl:pt-1">
-						{product.heroImages[0] ? (
-							<div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_24px_60px_-36px_rgba(15,23,42,0.45)]">
-								<div className="absolute inset-x-0 top-0 h-px bg-white/80" aria-hidden="true" />
-								<div className="relative aspect-[5/4] w-full bg-[linear-gradient(180deg,#f8fafc_0%,#e2e8f0_100%)] sm:aspect-[4/3]">
-									<Image
-										src={product.heroImages[0].src}
-										alt={product.heroImages[0].alt}
-										fill
-										className="object-contain p-6 sm:p-8"
-										priority
-										sizes="(max-width: 1279px) 100vw, 42vw"
-									/>
-								</div>
-							</div>
-						) : null}
-
-						<div className="rounded-[1.75rem] border border-slate-200 bg-white/90 p-6 shadow-[0_18px_45px_-34px_rgba(15,23,42,0.4)] backdrop-blur-sm">
-							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
-								Product summary
-							</p>
-							<p className="mt-3 text-sm leading-relaxed text-slate-700">
-								Use the summary and quick spec panel to qualify relevance early, then move into technical
-								details or request a quote if the fit looks right.
-							</p>
-						</div>
-					</div>
+				<div className="mt-8 lg:mt-10">
+					<ProductTitleStrip product={product} category={category} />
 				</div>
 			</div>
 		</section>
@@ -303,7 +133,7 @@ function ProductSectionNav({ links }: { links: SectionLink[] }) {
 							<li key={link.href}>
 								<Link
 									href={link.href}
-									className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-900"
+									className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-900"
 								>
 									{link.label}
 								</Link>
@@ -356,7 +186,7 @@ function ProductFeaturesSection({ features }: { features: string[] }) {
 						key={feature}
 						className="grid gap-4 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.45)] sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start"
 					>
-						<div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 text-sm font-semibold text-amber-800">
+						<div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-rose-50 text-sm font-semibold text-rose-800">
 							{String(index + 1).padStart(2, "0")}
 						</div>
 						<p className="text-sm leading-relaxed text-slate-700 sm:text-base">{feature}</p>
@@ -367,28 +197,29 @@ function ProductFeaturesSection({ features }: { features: string[] }) {
 	)
 }
 
-function SpecTable({ rows }: { rows: ProductSpec[] }) {
+function SpecTable({ rows, title }: { rows: ProductSpec[]; title?: string }) {
 	if (rows.length === 0) return null
 
 	return (
-		<div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)]">
-			<table className="w-full border-collapse text-left">
-				<tbody>
-					{rows.map((spec, index) => (
-						<tr key={`${spec.label}-${index}`} className="border-b border-slate-200 last:border-b-0">
-							<th
-								scope="row"
-								className="w-[32%] bg-slate-50 px-4 py-4 align-top font-sans text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-slate-700 sm:px-6 sm:py-5"
-							>
-								{spec.label}
-							</th>
-							<td className="px-4 py-4 font-sans text-[0.97rem] leading-7 text-slate-900 sm:px-6 sm:py-5">
-								{spec.value}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
+		<div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+			{title ? (
+				<p className="border-b border-slate-200 bg-slate-100/80 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 sm:px-6">
+					{title}
+				</p>
+			) : null}
+			<dl className="divide-y divide-slate-200">
+				{rows.map((spec, index) => (
+					<div
+						key={`${spec.label}-${index}`}
+						className={`grid gap-1 px-4 py-4 sm:grid-cols-[minmax(0,42%)_1fr] sm:items-start sm:gap-8 sm:px-6 sm:py-4 ${
+							index % 2 === 0 ? "bg-slate-50/95" : "bg-white"
+						}`}
+					>
+						<dt className="text-sm font-medium text-slate-600">{spec.label}</dt>
+						<dd className="text-base font-semibold leading-snug text-slate-900">{spec.value}</dd>
+					</div>
+				))}
+			</dl>
 		</div>
 	)
 }
@@ -400,51 +231,30 @@ function ProductTechnicalDetails({
 	specs: ProductSpec[]
 	additionalInfo: ProductSpec[]
 }) {
-	if (specs.length === 0 && additionalInfo.length === 0) return null
+	const { primaryRows, secondaryRows, usedFallback } = partitionSpecsForPrimaryDisplay(specs, additionalInfo)
+
+	if (primaryRows.length === 0 && secondaryRows.length === 0) return null
+
+	const primaryTitle = usedFallback ? "Technical specifications" : "Key specifications"
+	const secondaryTitle = "Industry context, references & notes"
 
 	return (
 		<section id="technical-details" className="scroll-mt-28">
-			<SectionHeading
-				eyebrow="Technical Details"
-				title="Structured technical information"
-				description="Tables keep the specification layer easy to scan without turning the page into a dense article."
-			/>
-
-			<div className="mt-8 grid gap-6 xl:grid-cols-2">
-				{specs.length > 0 ? (
-					<div>
-						<p className="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
-							Primary specifications
-						</p>
-						<SpecTable rows={specs} />
-					</div>
-				) : null}
-
-				{additionalInfo.length > 0 ? (
-					<div>
-						<p className="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
-							Additional details
-						</p>
-						<SpecTable rows={additionalInfo} />
-					</div>
-				) : null}
+			<div className="rounded-2xl border border-rose-100 bg-gradient-to-br from-rose-50/50 via-white to-white p-6 sm:rounded-3xl sm:p-8">
+				<p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-rose-700">Specifications</p>
+				<h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+					Technical data
+				</h2>
+				<p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-slate-600 sm:text-base">
+					Key figures first; catalogue-wide &ldquo;typical band&rdquo; copy sits below for buyers who want
+					context.
+				</p>
 			</div>
-		</section>
-	)
-}
-
-function ProductVisualReference({ images }: { images: Product["heroImages"] }) {
-	if (images.length <= 1) return null
-
-	return (
-		<section id="product-views" className="scroll-mt-28">
-			<SectionHeading
-				eyebrow="Product Views"
-				title="Additional product visuals"
-				description="Supporting imagery stays accessible without pushing the quote path further down the page."
-			/>
-			<div className="mt-8">
-				<ImageGallery images={images} />
+			<div className="mt-6 space-y-8">
+				{primaryRows.length > 0 ? <SpecTable rows={primaryRows} title={primaryTitle} /> : null}
+				{secondaryRows.length > 0 ? (
+					<SpecTable rows={secondaryRows} title={usedFallback ? "Additional notes" : secondaryTitle} />
+				) : null}
 			</div>
 		</section>
 	)
@@ -456,17 +266,17 @@ function ProductSupportingContent({ article }: { article: ProductArticle }) {
 	return (
 		<section id="engineering-guide" className="scroll-mt-28">
 			<SectionHeading
-				eyebrow="Supporting Content"
-				title="Engineering guide and deeper reading"
-				description="Long-form product guidance is still available, but it now sits behind a cleaner supporting-content layer."
+				eyebrow="Extended information"
+				title="Product guide & reference"
+				description="Long-form detail for SEO and buyers who want depth. Most users can rely on the gallery and specifications above."
 			/>
 
 			<details className="group mt-8 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)]">
 				<summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-5 py-5 sm:px-6">
 					<div>
-						<p className="text-sm font-semibold text-slate-950 sm:text-base">Open the detailed product guide</p>
+						<p className="text-sm font-semibold text-slate-950 sm:text-base">Open full product article</p>
 						<p className="mt-1 text-sm text-slate-600">
-							Review the full engineering explanation, selection guidance, and supporting notes.
+							Engineering notes, selection guidance, and supporting copy in one place.
 						</p>
 					</div>
 					<span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-600 transition group-open:rotate-180 group-open:border-slate-300 group-open:bg-slate-100">
@@ -490,7 +300,7 @@ function ProductSupportingContent({ article }: { article: ProductArticle }) {
 								<Link
 									key={heading.id}
 									href={`#${heading.id}`}
-									className="inline-flex min-h-10 items-center rounded-full border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-900"
+									className="inline-flex min-h-10 items-center rounded-full border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-900"
 								>
 									{heading.text}
 								</Link>
@@ -565,7 +375,7 @@ function ProductQuoteCta({
 			<div className="overflow-hidden rounded-[2rem] border border-slate-900 bg-slate-950 text-white shadow-[0_28px_70px_-40px_rgba(15,23,42,0.7)]">
 				<div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
 					<div className="border-b border-white/10 px-5 py-8 sm:px-8 lg:border-b-0 lg:border-r">
-						<p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-amber-400">
+						<p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-rose-300">
 							Request quote
 						</p>
 						<h2 className="mt-4 text-[clamp(1.9rem,3vw,2.7rem)] font-semibold leading-tight tracking-tight text-white">
@@ -593,7 +403,7 @@ function ProductQuoteCta({
 							{relatedProducts.length > 0 ? (
 								<Link
 									href="#related-products"
-									className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/10 px-6 text-sm font-semibold text-slate-200 transition hover:border-amber-400/50 hover:text-white"
+									className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/10 px-6 text-sm font-semibold text-slate-200 transition hover:border-rose-400/50 hover:text-white"
 								>
 									Explore Related Products
 								</Link>
@@ -633,7 +443,7 @@ function RelatedProductsSection({
 				/>
 				<Link
 					href={`/products/${category.slug}`}
-					className="inline-flex items-center gap-2 self-start text-sm font-semibold text-slate-800 transition hover:text-amber-800"
+					className="inline-flex items-center gap-2 self-start text-sm font-semibold text-slate-800 transition hover:text-rose-800"
 				>
 					View all in {category.name}
 					<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
@@ -654,7 +464,7 @@ function RelatedProductsSection({
 					<Link
 						key={entry.slug}
 						href={`/products/${entry.categorySlug}/${entry.slug}`}
-						className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_18px_45px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.55)]"
+						className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_18px_45px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.55)]"
 					>
 						<div className="relative aspect-[4/3] overflow-hidden border-b border-slate-200 bg-slate-100">
 							{entry.heroImages[0] ? (
@@ -671,13 +481,13 @@ function RelatedProductsSection({
 							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
 								{entry.categorySlug.replace(/-/g, " ")}
 							</p>
-							<h3 className="mt-3 text-lg font-semibold tracking-tight text-slate-950 transition group-hover:text-amber-900">
+							<h3 className="mt-3 text-lg font-semibold tracking-tight text-slate-950 transition group-hover:text-rose-800">
 								{entry.name}
 							</h3>
 							<p className="mt-3 text-sm leading-relaxed text-slate-600">
 								{entry.excerpt ?? entry.description}
 							</p>
-							<span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-800 transition group-hover:text-amber-800">
+							<span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-800 transition group-hover:text-rose-800">
 								View product
 								<svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
 									<path
@@ -704,21 +514,16 @@ export function ProductDetailTemplate({
 	article,
 	relatedProducts,
 	breadcrumbItems,
-	yearsInBusiness,
-	serviceSupport,
 }: ProductDetailTemplateProps) {
-	const quickSpecs = getQuickSpecs(product, category)
-	const summary = getProductSummary(product, article)
 	const additionalInfo = product.additionalInfo ?? []
 	const sectionLinks: SectionLink[] = [
-		...(quickSpecs.length > 0 ? [{ href: "#quick-specs", label: "Quick Specs" }] : []),
+		...(product.heroImages.length > 0 ? [{ href: "#product-gallery", label: "Gallery" }] : []),
+		...(product.specs.length > 0 || additionalInfo.length > 0
+			? [{ href: "#technical-details", label: "Specifications" }]
+			: []),
 		...(product.applications.length > 0 ? [{ href: "#applications", label: "Applications" }] : []),
 		...(product.features.length > 0 ? [{ href: "#features", label: "Features" }] : []),
-		...(product.specs.length > 0 || additionalInfo.length > 0
-			? [{ href: "#technical-details", label: "Technical Details" }]
-			: []),
-		...(product.heroImages.length > 1 ? [{ href: "#product-views", label: "Product Views" }] : []),
-		...(article ? [{ href: "#engineering-guide", label: "Engineering Guide" }] : []),
+		...(article ? [{ href: "#engineering-guide", label: "Full article" }] : []),
 		...(product.faq.length > 0 ? [{ href: "#faqs", label: "FAQ" }] : []),
 		{ href: "#enquiry", label: "Request Quote" },
 		...(relatedProducts.length > 0 ? [{ href: "#related-products", label: "Related Products" }] : []),
@@ -726,23 +531,14 @@ export function ProductDetailTemplate({
 
 	return (
 		<main className="flex min-h-screen flex-col bg-slate-50 pb-28">
-			<ProductHeroBlock
-				product={product}
-				category={category}
-				breadcrumbItems={breadcrumbItems}
-				summary={summary}
-				quickSpecs={quickSpecs}
-				yearsInBusiness={yearsInBusiness}
-				serviceSupport={serviceSupport}
-			/>
+			<ProductLeadSection product={product} category={category} breadcrumbItems={breadcrumbItems} />
 
 			<ProductSectionNav links={sectionLinks} />
 
 			<div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-10 sm:px-6 lg:gap-20 lg:px-8 lg:py-14">
-				<ProductVisualReference images={product.heroImages} />
+				<ProductTechnicalDetails specs={product.specs} additionalInfo={additionalInfo} />
 				<ProductApplicationsSection applications={product.applications} />
 				<ProductFeaturesSection features={product.features} />
-				<ProductTechnicalDetails specs={product.specs} additionalInfo={additionalInfo} />
 				{article ? <ProductSupportingContent article={article} /> : null}
 				<ProductFaqSection faqs={product.faq} />
 				<ProductQuoteCta product={product} category={category} relatedProducts={relatedProducts} />
