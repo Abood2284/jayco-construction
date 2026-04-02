@@ -39,7 +39,7 @@ export function ProductsCatalog({ categories, products, query }: ProductsCatalog
 			: products.filter((product) => product.categorySlug === activeCategorySlug)
 
 	return (
-		<div className="space-y-8 lg:space-y-10">
+		<div className="space-y-6 lg:space-y-8">
 			<ProductsFilterBar
 				options={categoryOptions}
 				activeCategorySlug={activeCategorySlug}

@@ -73,51 +73,47 @@ export function ProductsGrid({
 
 	return (
 		<section className="space-y-6" aria-labelledby="products-results-heading">
-			<div className="rounded-[1.75rem] border border-slate-200 bg-slate-50 px-5 py-5 shadow-[0_18px_45px_-34px_rgba(15,23,42,0.35)] sm:px-6">
-				<div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-					<div>
-						<p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-amber-700">
-							Catalog results
-						</p>
-						<h2
-							id="products-results-heading"
-							className="mt-2 text-[clamp(1.8rem,3vw,2.6rem)] font-semibold tracking-tight text-slate-950"
-						>
-							{query ? `Results for "${query}"` : activeCategoryName}
-						</h2>
-						<p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-							{buildResultsCopy({
-								totalCount: products.length,
-								activeCategoryName,
-								query,
-							})}
-						</p>
-					</div>
+			<div className="flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+				<div>
+					<p className="text-xs font-semibold tracking-wide text-red-700">Results</p>
+					<h2
+						id="products-results-heading"
+						className="mt-1 text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl"
+					>
+						{query ? `“${query}”` : activeCategoryName}
+					</h2>
+					<p className="mt-1 text-sm text-slate-600">
+						{buildResultsCopy({
+							totalCount: products.length,
+							activeCategoryName,
+							query,
+						})}
+					</p>
+				</div>
 
-					<div className="flex flex-wrap gap-3">
-						{query && (
-							<Link
-								href="/products"
-								className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:border-amber-700 hover:bg-amber-50 hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
-							>
-								Clear search
-							</Link>
-						)}
-						{activeCategorySlug !== ALL_CATEGORIES_SLUG && (
-							<button
-								type="button"
-								onClick={onResetCategory}
-								className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
-							>
-								View all products
-							</button>
-						)}
-					</div>
+				<div className="flex flex-wrap gap-2">
+					{query ? (
+						<Link
+							href="/products"
+							className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-800 transition hover:border-red-300 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+						>
+							Clear search
+						</Link>
+					) : null}
+					{activeCategorySlug !== ALL_CATEGORIES_SLUG ? (
+						<button
+							type="button"
+							onClick={onResetCategory}
+							className="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+						>
+							View all products
+						</button>
+					) : null}
 				</div>
 			</div>
 
 			<div role="region" aria-labelledby="products-results-heading" aria-live="polite">
-				<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+				<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
 					{products.map((product) => (
 						<ProductCatalogCard key={`${product.categorySlug}-${product.slug}`} product={product} />
 					))}

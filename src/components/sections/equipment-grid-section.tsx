@@ -3,20 +3,12 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
-import type { Product, ProductCategory } from "@/lib/cms/types"
-import {
-	buildEquipmentCategorySummaryRows,
-	buildEquipmentGroupPills,
-	productMatchesEquipmentGroup,
-} from "@/lib/content/equipment-category-groups"
+import type { Product } from "@/lib/cms/types"
+import { buildEquipmentGroupPills, productMatchesEquipmentGroup } from "@/lib/content/equipment-category-groups"
 
 interface EquipmentGridSectionProps {
 	products: Product[]
-	categories: ProductCategory[]
 }
-
-const SUMMARY_ICON_CLASS =
-	"h-8 w-8 shrink-0 text-rose-400 sm:h-9 sm:w-9"
 
 interface CategoryIconDefinition {
 	icon: ReactNode
@@ -223,34 +215,10 @@ function chunkProducts(products: Product[], chunkSize: number) {
 
 const ALL_FILTER = "all"
 
-function EquipmentGroupSummaryIcon({ groupId }: { groupId: string }) {
-	switch (groupId) {
-		case "cranes":
-			return <CraneIcon className={SUMMARY_ICON_CLASS} />
-		case "hoists":
-			return <HoistIcon className={SUMMARY_ICON_CLASS} />
-		case "lifts-platforms":
-			return <LiftIcon className={SUMMARY_ICON_CLASS} />
-		case "stackers-pallet":
-			return <StackerIcon className={SUMMARY_ICON_CLASS} />
-		case "transport-docking":
-			return <TransportIcon className={SUMMARY_ICON_CLASS} />
-		case "slings":
-			return <SlingIcon className={SUMMARY_ICON_CLASS} />
-		default:
-			return <BulldozerIcon className={SUMMARY_ICON_CLASS} />
-	}
-}
-
-export function EquipmentGridSection({ products, categories }: EquipmentGridSectionProps) {
+export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 	const [activeGroupId, setActiveGroupId] = useState<string>(ALL_FILTER)
 
 	const groupOptions = useMemo(() => buildEquipmentGroupPills(products), [products])
-
-	const summaryRows = useMemo(
-		() => buildEquipmentCategorySummaryRows(products, categories),
-		[products, categories],
-	)
 
 	const filteredProducts = useMemo(() => {
 		if (activeGroupId === ALL_FILTER) return products
@@ -282,36 +250,6 @@ export function EquipmentGridSection({ products, categories }: EquipmentGridSect
 						Browse the largest fleet in the industry
 					</h2>
 				</div>
-
-				{summaryRows.length > 0 ? (
-					<div className="font-body mb-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 sm:mb-10">
-						<ul className="m-0 list-none divide-y divide-white/10 p-0">
-							{summaryRows.map((row) => (
-								<li key={row.groupId}>
-									<button
-										type="button"
-										className="flex w-full flex-col gap-3 px-4 py-4 text-left transition-colors hover:bg-white/4 sm:flex-row sm:items-start sm:gap-8 sm:px-6 sm:py-5"
-										aria-label={`Show equipment in ${row.label}`}
-										onClick={() => {
-											if (!groupOptions.some((g) => g.id === row.groupId)) return
-											setActiveGroupId(row.groupId)
-										}}
-									>
-										<div className="flex min-w-0 items-center gap-3 sm:min-w-48 sm:max-w-56 sm:shrink-0">
-											<EquipmentGroupSummaryIcon groupId={row.groupId} />
-											<span className="text-base font-semibold tracking-tight text-white sm:text-lg">
-												{row.label}
-											</span>
-										</div>
-										<p className="min-w-0 pl-11 text-sm leading-relaxed font-normal text-white/80 sm:pl-0 sm:pt-0.5 sm:text-base">
-											{row.subCategoryNames.join(", ")}
-										</p>
-									</button>
-								</li>
-							))}
-						</ul>
-					</div>
-				) : null}
 
 				{groupOptions.length > 0 ? (
 					<div

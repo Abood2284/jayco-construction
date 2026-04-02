@@ -95,7 +95,7 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 
 					<div className="relative">
 						<div className="relative overflow-hidden rounded-4xl border border-white/12 bg-slate-900 shadow-[0_32px_80px_rgba(2,6,23,0.45)]">
-							<div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950/72 px-5 py-4 backdrop-blur-md">
+							<div className="absolute inset-x-0 top-0 z-10 hidden items-center justify-between gap-3 border-b border-white/10 bg-slate-950/72 px-5 py-4 backdrop-blur-md lg:flex">
 							</div>
 
 							<div className="relative aspect-[4/4.4] sm:aspect-[5/4.4] lg:aspect-4/4">

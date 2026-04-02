@@ -41,7 +41,7 @@ export default async function Home() {
 		<main>
 			<JsonLd data={buildOrganizationSchema(settings)} />
 			<HeroSection settings={settings} products={products} />
-			<EquipmentGridSection products={products} categories={categories} />
+			<EquipmentGridSection products={products} />
 			<FeaturedProductsSection products={featuredProducts} />
 			<ClientsSection clients={clientList} settings={settings} />
 			<CategoriesSection categories={categories} />

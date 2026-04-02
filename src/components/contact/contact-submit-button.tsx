@@ -10,7 +10,7 @@ export function ContactSubmitButton({ label, status }: ContactSubmitButtonProps)
 		<button
 			type="submit"
 			disabled={status === "loading"}
-			className="inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-amber-600 px-6 py-4 text-sm font-semibold text-white shadow-[0_18px_36px_rgba(180,83,9,0.24)] transition-colors hover:bg-amber-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+			className="inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-6 py-4 text-sm font-semibold text-white shadow-[0_18px_36px_rgba(220,38,38,0.28)] transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
 		>
 			{status === "loading" ? (
 				<>

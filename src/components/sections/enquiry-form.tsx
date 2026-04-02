@@ -9,36 +9,50 @@ interface EnquiryFormProps {
 	title?: string;
 	variant?: "elevated" | "quiet";
 	hideTitle?: boolean;
+	/** Primary accent for focus rings and submit button */
+	accent?: "amber" | "red";
 }
 
 export function EnquiryForm({
 	defaultProduct,
 	sourcePath,
-	title = "Send Us a Message",
+	title = "Send us a message",
 	variant = "elevated",
 	hideTitle = false,
+	accent = "amber",
 }: EnquiryFormProps) {
 	const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 	const [message, setMessage] = useState("");
 	const product = useMemo(() => defaultProduct ?? "", [defaultProduct]);
 
 	const isQuiet = variant === "quiet";
+	const isRed = accent === "red";
+	const btnBg = isRed ? "bg-red-600 hover:bg-red-700" : "bg-amber-600 hover:bg-amber-700";
+	const btnRing = isRed
+		? "focus-visible:ring-red-500"
+		: "focus-visible:ring-amber-500";
+
+	const fieldClassQuiet = isRed
+		? "w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-500/20"
+		: "w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20";
+
+	const fieldClassElevated = isRed
+		? "w-full rounded-md border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-red-600 focus:bg-white focus:outline-none focus:ring-0"
+		: "w-full rounded-md border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-0";
 
 	const formClassName = isQuiet
 		? "relative overflow-hidden"
-		: "relative overflow-hidden rounded-xl border border-slate-200 bg-white p-8 shadow-sm lg:p-10";
+		: "relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8";
 
 	const labelClassName = isQuiet
 		? "text-sm font-medium text-slate-700"
-		: "text-xs font-bold text-slate-600 uppercase tracking-widest";
+		: "text-sm font-medium text-slate-600";
 
-	const fieldClassName = isQuiet
-		? "w-full rounded-md px-4 py-3 bg-white border border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-		: "w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 text-sm font-medium text-slate-900 transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-0";
+	const fieldClassName = isQuiet ? fieldClassQuiet : fieldClassElevated;
 
 	const titleClassName = isQuiet
 		? "mb-8 text-2xl font-semibold tracking-tight text-slate-900"
-		: "mb-8 text-2xl font-bold tracking-tight text-slate-900";
+		: "mb-6 text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl";
 
 	const successBoxClassName = isQuiet
 		? "flex items-start gap-3 rounded-lg p-4 bg-emerald-50 text-emerald-800 border border-emerald-200"
@@ -48,9 +62,12 @@ export function EnquiryForm({
 		? "flex items-start gap-3 rounded-lg p-4 bg-red-50 text-red-800 border border-red-200"
 		: "flex items-start gap-3 p-4 bg-red-50 text-red-800 border-2 border-red-200";
 
-	const buttonClassName = isQuiet
-		? "mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-amber-600 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-		: "mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-amber-600 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70";
+	const buttonClassName = [
+		"mt-6 flex w-full items-center justify-center gap-2 rounded-md px-8 text-sm font-semibold text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70",
+		isQuiet ? "py-3.5" : "py-4 shadow-sm",
+		btnBg,
+		btnRing,
+	].join(" ");
 
 	return (
 		<form
@@ -79,8 +96,8 @@ export function EnquiryForm({
 			<input type="hidden" name="sourcePath" value={sourcePath} />
 			<input type="text" name="companyWebsite" tabIndex={-1} autoComplete="off" className="hidden" />
 
-			<div className="space-y-6">
-				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+			<div className="space-y-5">
+				<div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 					<div className="space-y-2">
 						<label htmlFor="name" className={labelClassName}>
 							Full name
@@ -109,7 +126,7 @@ export function EnquiryForm({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+				<div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 					<div className="space-y-2">
 						<label htmlFor="company" className={labelClassName}>
 							Company / organization

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ContactFormFields } from "@/components/contact/contact-form-fields";
-import { ContactInfoActions } from "@/components/contact/contact-info-actions";
 import { ContactSubmissionState } from "@/components/contact/contact-submission-state";
 import { ContactSubmitButton } from "@/components/contact/contact-submit-button";
 import type { ContactIntent } from "@/lib/content/contact";
@@ -11,24 +10,24 @@ type FormStatus = "idle" | "loading" | "success" | "error";
 
 interface ContactFormPanelProps {
 	intent: ContactIntent;
-	phone?: string;
-	email?: string;
-	mapsUrl?: string;
 }
 
-export function ContactFormPanel({ intent, phone, email, mapsUrl }: ContactFormPanelProps) {
+export function ContactFormPanel({ intent }: ContactFormPanelProps) {
 	const [status, setStatus] = useState<FormStatus>("idle");
 	const [message, setMessage] = useState("");
 
 	return (
 		<section
 			id={`contact-intent-panel-${intent.key}`}
-			aria-labelledby={`contact-intent-tab-${intent.key}`}
+			aria-labelledby={`contact-form-title-${intent.key}`}
 			className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:p-8 lg:p-9"
 		>
 			<div className="border-b border-slate-100 pb-6 sm:pb-7">
-				<p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amber-700">{intent.panelEyebrow}</p>
-				<h2 className="mb-3 text-[clamp(1.75rem,3vw,2.4rem)] font-semibold tracking-[-0.03em] text-slate-950">
+				<p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-red-700">{intent.panelEyebrow}</p>
+				<h2
+					id={`contact-form-title-${intent.key}`}
+					className="mb-3 text-[clamp(1.75rem,3vw,2.4rem)] font-semibold tracking-[-0.03em] text-slate-950"
+				>
 					{intent.panelTitle}
 				</h2>
 				<p className="m-0 max-w-[60ch] text-sm leading-relaxed text-slate-600 sm:text-[0.95rem]">{intent.panelDescription}</p>
@@ -86,14 +85,6 @@ export function ContactFormPanel({ intent, phone, email, mapsUrl }: ContactFormP
 
 				<div className="mt-6">
 					<ContactSubmitButton label={status === "success" ? "Sent successfully" : intent.ctaLabel} status={status} />
-				</div>
-
-				<div className="mt-6 border-t border-slate-100 pt-6">
-					<p className="mb-4 text-sm font-semibold text-slate-900">Need a faster route?</p>
-					<p className="mb-4 text-sm leading-relaxed text-slate-600">
-						If the matter is urgent, call or email directly from here instead of leaving the form incomplete.
-					</p>
-					<ContactInfoActions phone={phone} email={email} mapsUrl={mapsUrl} />
 				</div>
 			</form>
 		</section>

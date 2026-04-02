@@ -33,24 +33,10 @@ export const contactPageContent = {
 	pageEyebrow: "Contact Jayco",
 	pageTitle: "Contact Jayco for Quotes, Support & Service",
 	pageDescription:
-		"Choose the right enquiry route below. The form adapts for new requirements, service requests, technical issues, and career enquiries so users can submit with better context and less friction.",
+		"Reach Jayco by phone, email, or the enquiry form. All numbers and addresses are listed below for quick access.",
 	intentHeading: "Why are you contacting Jayco?",
 	intentDescription:
 		"Start with the route that matches your requirement. Quote requests stay easiest to begin, while service, support, and careers each get their own relevant form so the page feels faster and clearer.",
-	routeBenefits: [
-		{
-			title: "Right team",
-			description: "Sales, service, support, or careers",
-		},
-		{
-			title: "Clearer requests",
-			description: "Share the details that matter first",
-		},
-		{
-			title: "Faster contact",
-			description: "Call, email, or map in one tap",
-		},
-	],
 } as const;
 
 export const contactIntents: ContactIntent[] = [

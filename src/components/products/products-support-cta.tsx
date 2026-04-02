@@ -19,9 +19,7 @@ export function ProductsSupportCta({
 		<section className="overflow-hidden rounded-[2rem] border border-slate-800 bg-slate-950 px-6 py-8 text-white shadow-[0_28px_70px_-40px_rgba(15,23,42,0.9)] sm:px-8 sm:py-10">
 			<div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
 				<div>
-					<p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-amber-400">
-						Need help choosing?
-					</p>
+					<p className="text-xs font-semibold tracking-wide text-red-300">Need help choosing?</p>
 					<h2 className="mt-3 text-[clamp(1.8rem,3vw,2.7rem)] font-semibold tracking-tight text-white">
 						Short-list the right system before you request a final quote.
 					</h2>
@@ -34,15 +32,15 @@ export function ProductsSupportCta({
 				<div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
 					<Link
 						href="/contact"
-						className="inline-flex min-h-11 items-center justify-center rounded-full bg-amber-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+						className="inline-flex min-h-11 items-center justify-center rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
 					>
-						Request Quote
+						Request quote
 					</Link>
 					<a
 						href={toTelHref(phone)}
-						className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-amber-400 hover:text-amber-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+						className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/60 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
 					>
-						Talk to Our Team
+						Call Jayco
 					</a>
 				</div>
 			</div>

@@ -239,23 +239,11 @@ function ProductTechnicalDetails({
 	const secondaryTitle = "Industry context, references & notes"
 
 	return (
-		<section id="technical-details" className="scroll-mt-28">
-			<div className="rounded-2xl border border-rose-100 bg-gradient-to-br from-rose-50/50 via-white to-white p-6 sm:rounded-3xl sm:p-8">
-				<p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-rose-700">Specifications</p>
-				<h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
-					Technical data
-				</h2>
-				<p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-slate-600 sm:text-base">
-					Key figures first; catalogue-wide &ldquo;typical band&rdquo; copy sits below for buyers who want
-					context.
-				</p>
-			</div>
-			<div className="mt-6 space-y-8">
-				{primaryRows.length > 0 ? <SpecTable rows={primaryRows} title={primaryTitle} /> : null}
-				{secondaryRows.length > 0 ? (
-					<SpecTable rows={secondaryRows} title={usedFallback ? "Additional notes" : secondaryTitle} />
-				) : null}
-			</div>
+		<section id="technical-details" className="scroll-mt-28 space-y-8">
+			{primaryRows.length > 0 ? <SpecTable rows={primaryRows} title={primaryTitle} /> : null}
+			{secondaryRows.length > 0 ? (
+				<SpecTable rows={secondaryRows} title={usedFallback ? "Additional notes" : secondaryTitle} />
+			) : null}
 		</section>
 	)
 }

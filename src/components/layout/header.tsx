@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronDown, FileText, LayoutGrid, Menu, Phone, X } from "lucide-react";
 import type { ProductCategory, SiteSettings } from "@/lib/cms/types";
 import { buildPhoneHref, headerNavConfig } from "@/lib/content/navigation";
 
@@ -421,33 +421,40 @@ function Header({ settings, categories }: HeaderProps) {
 			) : null}
 
 			<div
-				className={`fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/98 px-3 py-3 shadow-[0_-18px_36px_rgba(15,23,42,0.12)] transition-all duration-200 supports-backdrop-filter:backdrop-blur-md lg:hidden ${
+				className={`fixed inset-x-0 bottom-0 z-40 transition-all duration-200 ease-out lg:hidden ${
 					showMobileActionBar && !isDrawerOpen
 						? "pointer-events-auto translate-y-0 opacity-100"
 						: "pointer-events-none translate-y-full opacity-0"
 				}`}
 			>
-				<div className="grid grid-cols-3 gap-2">
-					<a
-						href={phoneHref}
-						className="inline-flex min-h-12 items-center justify-center gap-2 border border-slate-300 bg-white px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-slate-900"
-					>
-						<Phone className="h-4 w-4" aria-hidden="true" />
-						Call
-					</a>
-					<Link
-						href={headerNavConfig.ctaActions.quote.href}
-						className="inline-flex min-h-12 items-center justify-center rounded-xl bg-rose-700 px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-rose-600"
-					>
-						Request Quote
-					</Link>
-					<Link
-						href="/products"
-						className="inline-flex min-h-12 items-center justify-center border border-slate-300 bg-slate-950 px-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-white"
-					>
-						Products
-					</Link>
-				</div>
+				<nav
+					className="mx-auto max-w-md px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2"
+					aria-label="Quick actions"
+				>
+					<div className="flex gap-1.5 rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 shadow-[0_8px_32px_rgba(15,23,42,0.1)] supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:bg-white/88">
+						<a
+							href={phoneHref}
+							className="flex min-h-[3.25rem] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl border border-slate-200/80 bg-slate-50/90 px-2 py-2 text-center text-[0.65rem] font-normal leading-tight text-slate-600 transition-colors active:bg-slate-100"
+						>
+							<Phone className="h-3.5 w-3.5 text-slate-500" strokeWidth={1.75} aria-hidden="true" />
+							<span>Call</span>
+						</a>
+						<Link
+							href={headerNavConfig.ctaActions.quote.href}
+							className="flex min-h-[3.25rem] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl bg-red-600 px-2 py-2 text-center text-[0.65rem] font-normal leading-tight text-white transition-colors hover:bg-red-500 active:bg-red-700"
+						>
+							<FileText className="h-3.5 w-3.5 opacity-90" strokeWidth={1.75} aria-hidden="true" />
+							<span>Request quote</span>
+						</Link>
+						<Link
+							href="/products"
+							className="flex min-h-[3.25rem] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl border border-slate-200/80 bg-white px-2 py-2 text-center text-[0.65rem] font-normal leading-tight text-slate-600 transition-colors hover:bg-slate-50 active:bg-slate-100"
+						>
+							<LayoutGrid className="h-3.5 w-3.5 text-slate-500" strokeWidth={1.75} aria-hidden="true" />
+							<span>Products</span>
+						</Link>
+					</div>
+				</nav>
 			</div>
 		</>
 	);
