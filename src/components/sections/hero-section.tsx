@@ -93,7 +93,7 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 						</div>
 					</div>
 
-					<div className="relative">
+					<div className="relative hidden lg:block">
 						<div className="relative overflow-hidden rounded-4xl border border-white/12 bg-slate-900 shadow-[0_32px_80px_rgba(2,6,23,0.45)]">
 							<div className="absolute inset-x-0 top-0 z-10 hidden items-center justify-between gap-3 border-b border-white/10 bg-slate-950/72 px-5 py-4 backdrop-blur-md lg:flex">
 							</div>
@@ -107,7 +107,10 @@ export function HeroSection({ settings, products }: HeroSectionProps) {
 									sizes="(min-width: 1024px) 42vw, (min-width: 640px) 70vw, 100vw"
 									className="object-cover object-center"
 								/>
-								<div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/18 to-slate-950/14" />
+								<div
+									className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/18 to-slate-950/14"
+									aria-hidden
+								/>
 							</div>
 
 							<div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
