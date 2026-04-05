@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 				<Suspense fallback={null}>
 					<Header settings={settings} categories={categories} />
 				</Suspense>
-				<div className="lg:pt-[124px]">
+				<div className="lg:pt-[84px]">
 					{children}
 				</div>
 				<Footer settings={settings} products={products} />

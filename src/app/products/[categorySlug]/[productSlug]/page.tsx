@@ -88,7 +88,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         category={category}
         article={article}
         relatedProducts={relatedProducts}
-        breadcrumbItems={breadcrumbItems}
       />
     </>
   );

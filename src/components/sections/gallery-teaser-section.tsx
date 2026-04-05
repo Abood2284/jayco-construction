@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { GalleryCategory } from "@/lib/cms/types"
+import { HOMEPAGE_HERO_GALLERY_IMAGES } from "@/lib/content/homepage-gallery"
 
 interface GalleryTeaserSectionProps {
 	galleryCategories: GalleryCategory[]
@@ -9,26 +10,12 @@ interface GalleryTeaserSectionProps {
 export function GalleryTeaserSection({ galleryCategories }: GalleryTeaserSectionProps) {
 	void galleryCategories
 
-	const displayImages = [
-		{
-			src: "/images/gallery-section-1.jpg",
-			alt: "Jayco overhead crane installation across a production bay",
-			categoryName: "Installations & Projects",
-			categorySlug: "",
-		},
-		{
-			src: "/images/gallery-section-2.jpg",
-			alt: "Material handling equipment configured inside an active industrial facility",
-			categoryName: "Production Facilities",
-			categorySlug: "",
-		},
-		{
-			src: "/images/gallery-section-3.jpeg",
-			alt: "Heavy-duty equipment deployed for field-ready lifting operations",
-			categoryName: "Field Applications",
-			categorySlug: "",
-		},
-	]
+	const displayImages = HOMEPAGE_HERO_GALLERY_IMAGES.map((img) => ({
+		src: img.src,
+		alt: img.alt,
+		categoryName: img.caption,
+		categorySlug: "",
+	}))
 
 	return (
 		<section className="border-t border-slate-200 bg-(--bg) py-16 lg:py-24">

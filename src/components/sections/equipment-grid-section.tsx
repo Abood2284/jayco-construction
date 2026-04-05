@@ -1,204 +1,13 @@
 "use client"
 
-import type { ReactNode } from "react"
+import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { Product } from "@/lib/cms/types"
 import { buildEquipmentGroupPills, productMatchesEquipmentGroup } from "@/lib/content/equipment-category-groups"
 
 interface EquipmentGridSectionProps {
 	products: Product[]
-}
-
-interface CategoryIconDefinition {
-	icon: ReactNode
-}
-
-interface EquipmentIconProps {
-	children: ReactNode
-	className?: string
-}
-
-function EquipmentIcon({ children, className }: EquipmentIconProps) {
-	return (
-		<svg
-			viewBox="0 0 48 48"
-			aria-hidden="true"
-			className={className ?? "h-9 w-9 text-red-600 sm:h-10 sm:w-10"}
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-		>
-			{children}
-		</svg>
-	)
-}
-
-function HoistIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M12 10h24" />
-			<path d="M24 10v8" />
-			<path d="M18 18h12v8H18z" />
-			<path d="M24 26v8" />
-			<path d="M24 34c0 3 2 5 5 5" />
-			<path d="M29 39c0-2 1-3 3-3" />
-		</EquipmentIcon>
-	)
-}
-
-function CraneIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M10 40h28" />
-			<path d="M14 40V12" />
-			<path d="M14 12h22" />
-			<path d="M20 18h10" />
-			<path d="M24 12v16" />
-			<path d="M24 28c0 3 2 5 5 5" />
-			<path d="M29 33c0-2 1-3 3-3" />
-		</EquipmentIcon>
-	)
-}
-
-function GantryIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M10 14h28" />
-			<path d="M14 14v20" />
-			<path d="M34 14v20" />
-			<path d="M24 14v10" />
-			<path d="M24 24c0 3 2 5 5 5" />
-			<path d="M13 34h4" />
-			<path d="M31 34h4" />
-			<circle cx="15" cy="38" r="2" />
-			<circle cx="33" cy="38" r="2" />
-		</EquipmentIcon>
-	)
-}
-
-function LiftIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M12 36h24" />
-			<path d="M16 12v20" />
-			<path d="M32 12v20" />
-			<path d="M18 16h12v12H18z" />
-			<path d="M24 10v4" />
-		</EquipmentIcon>
-	)
-}
-
-function StackerIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M14 38V14" />
-			<path d="M14 16h8" />
-			<path d="M22 22h8v10H22z" />
-			<path d="M12 38h18" />
-			<path d="M30 34h6" />
-			<circle cx="18" cy="38" r="2" />
-			<circle cx="30" cy="38" r="2" />
-		</EquipmentIcon>
-	)
-}
-
-function PlatformIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M10 34h28" />
-			<path d="M16 34l8-14 8 14" />
-			<path d="M20 18l4-6 4 6" />
-		</EquipmentIcon>
-	)
-}
-
-function TransportIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M10 32h20l4-8h4" />
-			<path d="M14 24h10" />
-			<path d="M30 24h4" />
-			<circle cx="18" cy="36" r="2.5" />
-			<circle cx="32" cy="36" r="2.5" />
-		</EquipmentIcon>
-	)
-}
-
-function DrumHandlingIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M18 14h12" />
-			<path d="M16 18h16" />
-			<path d="M18 14v20" />
-			<path d="M30 14v20" />
-			<path d="M16 30h16" />
-			<path d="M12 24h4" />
-			<path d="M32 24h4" />
-		</EquipmentIcon>
-	)
-}
-
-function SlingIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M16 14c0 10 4 18 8 20" />
-			<path d="M32 14c0 10-4 18-8 20" />
-			<path d="M16 14c0-3 2-5 4-5h8c2 0 4 2 4 5" />
-			<path d="M22 34h4" />
-		</EquipmentIcon>
-	)
-}
-
-function BulldozerIcon({ className }: { className?: string }) {
-	return (
-		<EquipmentIcon className={className}>
-			<path d="M10 32h24" />
-			<path d="M14 32v-8h10l4 4h6" />
-			<path d="M34 32l4-4" />
-			<path d="M14 24l4-8h8" />
-			<circle cx="18" cy="36" r="2.5" />
-			<circle cx="30" cy="36" r="2.5" />
-		</EquipmentIcon>
-	)
-}
-
-const categoryIcons: Record<string, CategoryIconDefinition> = {
-	"chain-pulley-block": {
-		icon: <HoistIcon />,
-	},
-	"electric-hoist": {
-		icon: <HoistIcon />,
-	},
-	"eot-cranes": {
-		icon: <CraneIcon />,
-	},
-	"floor-gantry-cranes": {
-		icon: <GantryIcon />,
-	},
-	"goods-lift": {
-		icon: <LiftIcon />,
-	},
-	"hydraulic-stacker": {
-		icon: <StackerIcon />,
-	},
-	"jib-cranes": {
-		icon: <CraneIcon />,
-	},
-	"lifting-platforms": {
-		icon: <PlatformIcon />,
-	},
-	"material-transport-docking": {
-		icon: <TransportIcon />,
-	},
-	"pallet-drum-handling": {
-		icon: <DrumHandlingIcon />,
-	},
-	sling: {
-		icon: <SlingIcon />,
-	},
 }
 
 function chunkProducts(products: Product[], chunkSize: number) {
@@ -215,8 +24,44 @@ function chunkProducts(products: Product[], chunkSize: number) {
 
 const ALL_FILTER = "all"
 
+function EquipmentProductCard({ product }: { product: Product }) {
+	const image = product.heroImages[0]
+
+	return (
+		<Link
+			href={`/products/${product.categorySlug}/${product.slug}`}
+			className="group flex min-h-0 flex-col gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
+		>
+			<div className="overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-sm transition-[box-shadow,border-color,transform] duration-200 motion-reduce:transition-none group-hover:border-slate-300 group-hover:shadow-md group-hover:ring-1 group-hover:ring-slate-200/80 motion-safe:sm:group-hover:-translate-y-0.5 motion-reduce:sm:group-hover:translate-y-0">
+				<div className="relative aspect-[3/2] w-full overflow-hidden bg-slate-100">
+					{image ? (
+						<Image
+							src={image.src}
+							alt=""
+							fill
+							sizes="(max-width: 640px) 42vw, (max-width: 1024px) 20vw, 16vw"
+							className="object-cover transition-transform duration-300 motion-reduce:transition-none motion-safe:group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
+						/>
+					) : (
+						<div className="absolute inset-0 bg-slate-200/90" aria-hidden />
+					)}
+					<div
+						className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/15 via-transparent to-transparent opacity-0 transition-opacity duration-200 motion-reduce:transition-none group-hover:opacity-100 motion-reduce:group-hover:opacity-0"
+						aria-hidden
+					/>
+				</div>
+			</div>
+			<p className="m-0 line-clamp-2 text-left text-xs font-semibold leading-tight tracking-tight text-slate-700 underline decoration-transparent decoration-2 underline-offset-4 transition-colors motion-reduce:transition-none group-hover:text-slate-900 group-hover:decoration-slate-300 sm:text-sm">
+				{product.name}
+			</p>
+		</Link>
+	)
+}
+
 export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 	const [activeGroupId, setActiveGroupId] = useState<string>(ALL_FILTER)
+	const panelRef = useRef<HTMLDivElement>(null)
+	const skipScrollRef = useRef(true)
 
 	const groupOptions = useMemo(() => buildEquipmentGroupPills(products), [products])
 
@@ -230,6 +75,17 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 		if (!groupOptions.some((g) => g.id === activeGroupId)) setActiveGroupId(ALL_FILTER)
 	}, [activeGroupId, groupOptions])
 
+	useEffect(() => {
+		if (skipScrollRef.current) {
+			skipScrollRef.current = false
+			return
+		}
+		const el = panelRef.current
+		if (!el) return
+		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+		el.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" })
+	}, [activeGroupId])
+
 	const tabPanelLabelledBy =
 		activeGroupId === ALL_FILTER || !groupOptions.some((g) => g.id === activeGroupId)
 			? "equipment-filter-all"
@@ -239,21 +95,35 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 
 	const mobileProductGroups = chunkProducts(filteredProducts, 4)
 
+	const activeLabel =
+		activeGroupId === ALL_FILTER
+			? "All categories"
+			: (groupOptions.find((g) => g.id === activeGroupId)?.label ?? "Selected category")
+
+	const filterButtonClass = (isActive: boolean) =>
+		`font-heading rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm ${
+			isActive
+				? "border-transparent bg-slate-950 text-white shadow-sm"
+				: "border-transparent bg-transparent text-slate-700 hover:bg-white/90 hover:text-slate-950"
+		}`
+
+	const resultPhrase =
+		filteredProducts.length === 0
+			? "No products match this filter."
+			: `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? "product" : "products"}${activeGroupId === ALL_FILTER ? "" : ` in ${activeLabel}`}.`
+
 	return (
-		<section className="border-b border-slate-200 bg-white py-14 sm:py-16 lg:py-20">
+		<section className="border-b border-slate-200 border-t border-slate-100 bg-slate-50/70 py-14 sm:py-16 lg:py-20">
 			<div className="mx-auto max-w-7xl px-4 lg:px-6">
-				<div className="mb-8 sm:mb-10">
-					<p className="mb-3 text-[0.7rem] font-extrabold uppercase tracking-[0.18em] text-slate-600">
-						Equipment
-					</p>
-					<h2 className="max-w-4xl text-[clamp(2rem,4vw,3.3rem)] font-extrabold leading-tight tracking-tight text-slate-950">
+				<div className="mb-8 w-full sm:mb-10">
+					<h2 className="w-full text-xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-2xl md:text-3xl lg:max-w-none lg:text-[clamp(2rem,4vw,3.3rem)]">
 						Browse the largest fleet in the industry
 					</h2>
 				</div>
 
 				{groupOptions.length > 0 ? (
 					<div
-						className="mb-8 flex flex-wrap gap-2 sm:mb-10"
+						className="mb-6 flex flex-wrap gap-1 rounded-2xl bg-slate-100/90 p-1 sm:mb-8 sm:gap-1"
 						role="tablist"
 						aria-label="Filter equipment by category"
 					>
@@ -262,11 +132,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 							role="tab"
 							aria-selected={activeGroupId === ALL_FILTER}
 							id="equipment-filter-all"
-							className={`font-heading rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 ${
-								activeGroupId === ALL_FILTER
-									? "border-slate-950 bg-slate-950 text-white"
-									: "border-slate-950 bg-white text-slate-950 hover:bg-slate-50"
-							}`}
+							className={filterButtonClass(activeGroupId === ALL_FILTER)}
 							onClick={() => setActiveGroupId(ALL_FILTER)}
 						>
 							All
@@ -281,11 +147,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 									role="tab"
 									aria-selected={isActive}
 									id={`equipment-filter-${group.id}`}
-									className={`font-heading rounded-md border px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 ${
-										isActive
-											? "border-slate-950 bg-slate-950 text-white"
-											: "border-slate-950 bg-white text-slate-950 hover:bg-slate-50"
-									}`}
+									className={filterButtonClass(isActive)}
 									onClick={() => setActiveGroupId(group.id)}
 								>
 									{group.label}
@@ -296,58 +158,46 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 				) : null}
 
 				<div
+					ref={panelRef}
 					id="equipment-grid-panel"
 					role={groupOptions.length > 0 ? "tabpanel" : undefined}
 					aria-labelledby={groupOptions.length > 0 ? tabPanelLabelledBy : undefined}
 				>
+					<p
+						className="sr-only mb-0 text-sm text-slate-600 sm:not-sr-only sm:mb-4"
+						aria-live="polite"
+						aria-atomic="true"
+					>
+						{resultPhrase}
+					</p>
+
 					{filteredProducts.length === 0 ? (
-						<p className="py-10 text-center text-sm text-slate-600">No equipment in this category.</p>
+						<div className="py-8 text-center">
+							<Link
+								href="/products"
+								className="inline-flex text-sm font-semibold text-slate-950 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-rose-800 hover:decoration-rose-400"
+							>
+								Browse full catalog
+							</Link>
+						</div>
 					) : (
 						<>
-							<div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pr-10 sm:hidden">
+							<div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 pr-6 sm:hidden">
 								{mobileProductGroups.map((productGroup, index) => (
 									<div
 										key={`mobile-group-${index}`}
-										className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-3"
+										className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-2"
 									>
 										{productGroup.map((product) => (
-											<Link
-												key={product.slug}
-												href={`/products/${product.categorySlug}/${product.slug}`}
-												className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-slate-300 hover:shadow-md"
-											>
-												<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800">
-													{product.name}
-												</h3>
-
-												<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
-													{categoryIcons[product.categorySlug]?.icon ?? (
-														<BulldozerIcon />
-													)}
-												</div>
-											</Link>
+											<EquipmentProductCard key={product.slug} product={product} />
 										))}
 									</div>
 								))}
 							</div>
 
-							<div className="hidden grid-cols-2 gap-3 sm:grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+							<div className="hidden grid-cols-2 gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 sm:gap-2.5 lg:gap-3">
 								{filteredProducts.map((product) => (
-									<Link
-										key={product.slug}
-										href={`/products/${product.categorySlug}/${product.slug}`}
-										className="group flex min-h-[112px] flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:min-h-[124px]"
-									>
-										<h3 className="max-w-[16ch] text-sm font-semibold leading-snug text-slate-800 sm:text-[0.95rem]">
-											{product.name}
-										</h3>
-
-										<div className="mt-4 flex justify-end transition-transform duration-200 group-hover:scale-105">
-											{categoryIcons[product.categorySlug]?.icon ?? (
-												<BulldozerIcon />
-											)}
-										</div>
-									</Link>
+									<EquipmentProductCard key={product.slug} product={product} />
 								))}
 							</div>
 						</>

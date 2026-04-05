@@ -14,11 +14,6 @@ export interface HomepageTrustStat {
 export interface HomepageHeroContent {
 	eyebrow: string
 	title: string
-	description: string
-	primaryCta: HomepageCta
-	secondaryCta: HomepageCta
-	proofChips: string[]
-	visualHighlights: string[]
 	trustStats: HomepageTrustStat[]
 }
 
@@ -125,30 +120,8 @@ export function buildHomepageHeroContent(settings: SiteSettings, products: Produ
 	const sectorsServed = settings.industriesServed.join(", ")
 
 	return {
-		eyebrow: "Heavy-Duty Material Handling Systems",
-		title: "Industrial Cranes, Hoists, Lifts & Material Handling Systems for Demanding Operations",
-		description:
-			"Jayco supplies EOT cranes, jib cranes, electric hoists, goods lifts, stackers, platforms, and application-specific handling equipment for industrial plants, workshops, and site operations that need dependable lifting performance.",
-		primaryCta: {
-			label: "Request Quote",
-			href: "/contact",
-		},
-		secondaryCta: {
-			label: "Explore Products",
-			href: "/products",
-		},
-		proofChips: [
-			`${settings.yearsInBusiness} years in business`,
-			`${pluralize(productFamilyCount, "product family")}`,
-			`${pluralize(settings.industriesServed.length, "core sector")} served`,
-			"Commissioning + maintenance support",
-		],
-		visualHighlights: [
-			"EOT and jib crane systems",
-			"Electric hoists and chain pulley blocks",
-			"Goods lifts, stackers, and lifting platforms",
-			"Pallet, drum, and transfer equipment",
-		],
+		eyebrow: "Heavy-duty material handling",
+		title: "Cranes, hoists, lifts & industrial handling equipment",
 		trustStats: [
 			{
 				icon: "history",

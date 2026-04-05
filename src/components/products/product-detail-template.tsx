@@ -1,29 +1,19 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import { Breadcrumbs } from "@/components/layout/breadcrumbs"
 import { ImageGallery } from "@/components/products/image-gallery"
 import { EnquiryForm } from "@/components/sections/enquiry-form"
 import type { Product, ProductCategory, ProductSpec } from "@/lib/cms/types"
 import { partitionSpecsForPrimaryDisplay } from "@/lib/content/product-spec-display"
 import type { ProductArticle } from "@/lib/content/product-articles"
 
-type BreadcrumbItem = {
-	name: string
-	path: string
-}
+type ProductSpecPartition = ReturnType<typeof partitionSpecsForPrimaryDisplay>
 
 interface ProductDetailTemplateProps {
 	product: Product
 	category: ProductCategory
 	article: ProductArticle | null
 	relatedProducts: Product[]
-	breadcrumbItems: BreadcrumbItem[]
-}
-
-type SectionLink = {
-	href: string
-	label: string
 }
 
 const PRIMARY_CTA_LABEL = "Request Quote"
@@ -53,45 +43,71 @@ function SectionHeading({
 	)
 }
 
-function ProductTitleStrip({ product, category }: { product: Product; category: ProductCategory }) {
+function ProductHeroSummary({ product }: { product: Product }) {
+	const lead = (product.excerpt ?? product.description).trim()
+
 	return (
-		<div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_20px_50px_-40px_rgba(15,23,42,0.25)] sm:rounded-3xl sm:p-8">
-			<h1 className="text-3xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-4xl lg:text-[clamp(2rem,4vw,3.25rem)]">
+		<div className="max-w-3xl">
+			<h1 className="text-2xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,3.2vw,2.75rem)]">
 				{product.name}
 			</h1>
-			<p className="mt-4 inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-rose-800">
-				<span className="h-2 w-2 rounded-full bg-rose-600" aria-hidden="true" />
-				{category.name}
-			</p>
-			<div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+			{lead ? (
+				<p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-600 sm:mt-4 sm:text-base lg:text-lg">
+					{lead}
+				</p>
+			) : null}
+			<div className="mt-4 flex flex-row flex-nowrap items-center gap-2 sm:mt-6 sm:gap-3">
 				<Link
 					href="#enquiry"
-					className="inline-flex min-h-12 items-center justify-center rounded-full bg-rose-700 px-8 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600"
+					className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-rose-700 px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:px-8 sm:text-sm"
 				>
 					{PRIMARY_CTA_LABEL}
 				</Link>
 				<Link
-					href={`/products/${category.slug}`}
-					className="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 bg-white px-8 text-sm font-semibold uppercase tracking-wide text-slate-900 transition-colors hover:border-slate-400 hover:bg-slate-50"
+					href="/contact"
+					className="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap text-xs font-semibold text-slate-700 underline-offset-4 transition-colors hover:text-rose-800 hover:underline sm:min-h-12 sm:text-sm md:min-h-0 md:px-1"
 				>
-					View category
+					Contact our team
 				</Link>
 			</div>
 		</div>
 	)
 }
 
+function ProductKeySpecsCompact({ rows, title }: { rows: ProductSpec[]; title: string }) {
+	if (rows.length === 0) return null
+
+	return (
+		<div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
+			<h2 className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-slate-500">{title}</h2>
+			<dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				{rows.map((spec, index) => (
+					<div
+						key={`${spec.label}-${index}`}
+						className="rounded-xl border border-slate-100 bg-slate-50/90 px-3 py-2.5"
+					>
+						<dt className="text-xs font-medium text-slate-500">{spec.label}</dt>
+						<dd className="mt-0.5 text-sm font-semibold leading-snug text-slate-900">{spec.value}</dd>
+					</div>
+				))}
+			</dl>
+		</div>
+	)
+}
+
 function ProductLeadSection({
 	product,
-	category,
-	breadcrumbItems,
+	partition,
 }: {
 	product: Product
-	category: ProductCategory
-	breadcrumbItems: BreadcrumbItem[]
+	partition: ProductSpecPartition
 }) {
+	const primarySpecTitle = partition.usedFallback ? "Technical specifications" : "Key specifications"
+	const hasGallery = product.heroImages.length > 0
+	const showSpecsBesideGallery = partition.primaryRows.length > 0
+
 	return (
-		<section className="relative overflow-hidden border-b border-slate-200 bg-[linear-gradient(180deg,#fafafa_0%,#f1f5f9_100%)] px-4 pb-12 pt-28 sm:px-6 lg:px-8 lg:pb-16 lg:pt-36">
+		<section className="relative overflow-hidden border-b border-slate-200 bg-[linear-gradient(180deg,#fafafa_0%,#f1f5f9_100%)] px-4 pb-10 pt-24 sm:px-6 sm:pb-12 sm:pt-28 lg:px-8 lg:pb-14 lg:pt-24">
 			<div
 				className="pointer-events-none absolute inset-0 opacity-[0.06]"
 				style={{
@@ -103,44 +119,30 @@ function ProductLeadSection({
 			<div className="pointer-events-none absolute -left-24 top-24 h-56 w-56 rounded-full bg-white/70 blur-3xl" />
 
 			<div className="relative mx-auto max-w-7xl">
-				<div className="mb-8">
-					<Breadcrumbs items={breadcrumbItems} variant="light" />
-				</div>
+				<ProductHeroSummary product={product} />
 
-				{product.heroImages.length > 0 ? (
-					<div id="product-gallery" className="scroll-mt-28">
-						<ImageGallery images={product.heroImages} leadLayout />
+				{hasGallery ? (
+					<div className="mt-6 scroll-mt-28 sm:mt-7 lg:mt-8">
+						{showSpecsBesideGallery ? (
+							<div className="flex flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8 xl:gap-10">
+								<div id="product-gallery" className="min-w-0 lg:max-w-xl xl:max-w-2xl">
+									<ImageGallery images={product.heroImages} leadLayout variant="carousel" />
+								</div>
+								<div className="min-w-0 lg:pt-0">
+									<ProductKeySpecsCompact rows={partition.primaryRows} title={primarySpecTitle} />
+								</div>
+							</div>
+						) : (
+							<div id="product-gallery">
+								<ImageGallery images={product.heroImages} leadLayout variant="carousel" />
+							</div>
+						)}
 					</div>
-				) : null}
-
-				<div className="mt-8 lg:mt-10">
-					<ProductTitleStrip product={product} category={category} />
-				</div>
-			</div>
-		</section>
-	)
-}
-
-function ProductSectionNav({ links }: { links: SectionLink[] }) {
-	if (links.length === 0) return null
-
-	return (
-		<section className="border-b border-slate-200 bg-white/92 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
-			<div className="mx-auto max-w-7xl">
-				<nav aria-label="Product sections" className="overflow-x-auto scrollbar-none">
-					<ul className="flex min-w-max items-center gap-2">
-						{links.map((link) => (
-							<li key={link.href}>
-								<Link
-									href={link.href}
-									className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-900"
-								>
-									{link.label}
-								</Link>
-							</li>
-						))}
-					</ul>
-				</nav>
+				) : (
+					<div className="mt-8 lg:mt-10">
+						<ProductKeySpecsCompact rows={partition.primaryRows} title={primarySpecTitle} />
+					</div>
+				)}
 			</div>
 		</section>
 	)
@@ -225,13 +227,25 @@ function SpecTable({ rows, title }: { rows: ProductSpec[]; title?: string }) {
 }
 
 function ProductTechnicalDetails({
-	specs,
-	additionalInfo,
+	partition,
+	primaryDisplayedInHero,
 }: {
-	specs: ProductSpec[]
-	additionalInfo: ProductSpec[]
+	partition: ProductSpecPartition
+	primaryDisplayedInHero: boolean
 }) {
-	const { primaryRows, secondaryRows, usedFallback } = partitionSpecsForPrimaryDisplay(specs, additionalInfo)
+	const { primaryRows, secondaryRows, usedFallback } = partition
+
+	const heroHeldPrimary = primaryDisplayedInHero && primaryRows.length > 0
+
+	if (heroHeldPrimary) {
+		if (secondaryRows.length === 0) return null
+		const secondaryTitle = usedFallback ? "Additional notes" : "Industry context, references & notes"
+		return (
+			<section id="technical-details" className="scroll-mt-28 space-y-8">
+				<SpecTable rows={secondaryRows} title={secondaryTitle} />
+			</section>
+		)
+	}
 
 	if (primaryRows.length === 0 && secondaryRows.length === 0) return null
 
@@ -501,30 +515,17 @@ export function ProductDetailTemplate({
 	category,
 	article,
 	relatedProducts,
-	breadcrumbItems,
 }: ProductDetailTemplateProps) {
 	const additionalInfo = product.additionalInfo ?? []
-	const sectionLinks: SectionLink[] = [
-		...(product.heroImages.length > 0 ? [{ href: "#product-gallery", label: "Gallery" }] : []),
-		...(product.specs.length > 0 || additionalInfo.length > 0
-			? [{ href: "#technical-details", label: "Specifications" }]
-			: []),
-		...(product.applications.length > 0 ? [{ href: "#applications", label: "Applications" }] : []),
-		...(product.features.length > 0 ? [{ href: "#features", label: "Features" }] : []),
-		...(article ? [{ href: "#engineering-guide", label: "Full article" }] : []),
-		...(product.faq.length > 0 ? [{ href: "#faqs", label: "FAQ" }] : []),
-		{ href: "#enquiry", label: "Request Quote" },
-		...(relatedProducts.length > 0 ? [{ href: "#related-products", label: "Related Products" }] : []),
-	]
+	const partition = partitionSpecsForPrimaryDisplay(product.specs, additionalInfo)
+	const primarySpecsInHero = partition.primaryRows.length > 0
 
 	return (
 		<main className="flex min-h-screen flex-col bg-slate-50 pb-28">
-			<ProductLeadSection product={product} category={category} breadcrumbItems={breadcrumbItems} />
-
-			<ProductSectionNav links={sectionLinks} />
+			<ProductLeadSection product={product} partition={partition} />
 
 			<div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-10 sm:px-6 lg:gap-20 lg:px-8 lg:py-14">
-				<ProductTechnicalDetails specs={product.specs} additionalInfo={additionalInfo} />
+				<ProductTechnicalDetails partition={partition} primaryDisplayedInHero={primarySpecsInHero} />
 				<ProductApplicationsSection applications={product.applications} />
 				<ProductFeaturesSection features={product.features} />
 				{article ? <ProductSupportingContent article={article} /> : null}

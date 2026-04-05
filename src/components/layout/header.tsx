@@ -100,39 +100,6 @@ function Header({ settings, categories }: HeaderProps) {
 					isScrolled ? "shadow-[0_18px_40px_rgba(15,23,42,0.08)]" : ""
 				}`}
 			>
-				<div className="hidden border-b border-slate-800 bg-slate-950 text-slate-200 lg:block">
-					<div className="mx-auto flex h-10 max-w-[1440px] items-center justify-between gap-6 px-8">
-						<p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-slate-300">
-							Industrial lifting, handling, and fabrication systems
-						</p>
-						<div className="flex items-center gap-5 text-[0.8rem]">
-							{headerNavConfig.utilityLinks.map((item) => {
-								const active = isActivePath(pathname, item.href, item.match);
-
-								return (
-									<Link
-										key={item.href}
-										href={item.href}
-										aria-current={active ? "page" : undefined}
-										className={`font-medium transition-colors hover:text-white focus-visible:text-white ${
-											active ? "text-white" : "text-slate-300"
-										}`}
-									>
-										{item.label}
-									</Link>
-								);
-							})}
-							<a
-								href={phoneHref}
-								className="inline-flex h-10 items-center gap-2 font-semibold text-white transition-colors hover:text-rose-300 focus-visible:text-rose-300"
-							>
-								<Phone className="h-4 w-4" aria-hidden="true" />
-								<span>{firstPhone || "Call Now"}</span>
-							</a>
-						</div>
-					</div>
-				</div>
-
 				<div className="mx-auto flex h-[76px] max-w-[1440px] items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:h-[84px] lg:px-8">
 					<Link href="/" aria-label={settings.companyName} className="min-w-0 shrink">
 						<Image

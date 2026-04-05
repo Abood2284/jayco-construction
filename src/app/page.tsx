@@ -40,7 +40,7 @@ export default async function Home() {
 	return (
 		<main>
 			<JsonLd data={buildOrganizationSchema(settings)} />
-			<HeroSection settings={settings} products={products} />
+			<HeroSection settings={settings} products={products} categories={categories} />
 			<EquipmentGridSection products={products} />
 			<FeaturedProductsSection products={featuredProducts} />
 			<ClientsSection clients={clientList} settings={settings} />
