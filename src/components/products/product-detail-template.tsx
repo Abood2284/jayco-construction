@@ -44,28 +44,21 @@ function SectionHeading({
 }
 
 function ProductHeroSummary({ product }: { product: Product }) {
-	const lead = (product.excerpt ?? product.description).trim()
-
 	return (
 		<div className="max-w-3xl">
 			<h1 className="text-2xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,3.2vw,2.75rem)]">
 				{product.name}
 			</h1>
-			{lead ? (
-				<p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-600 sm:mt-4 sm:text-base lg:text-lg">
-					{lead}
-				</p>
-			) : null}
-			<div className="mt-4 flex flex-row flex-nowrap items-center gap-2 sm:mt-6 sm:gap-3">
+			<div className="mt-5 flex flex-row flex-nowrap items-center gap-2 sm:mt-6 sm:gap-3">
 				<Link
 					href="#enquiry"
-					className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-rose-700 px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:px-8 sm:text-sm"
+					className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-rose-700 px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:px-8 sm:text-sm"
 				>
 					{PRIMARY_CTA_LABEL}
 				</Link>
 				<Link
 					href="/contact"
-					className="inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap text-xs font-semibold text-slate-700 underline-offset-4 transition-colors hover:text-rose-800 hover:underline sm:min-h-12 sm:text-sm md:min-h-0 md:px-1"
+					className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-slate-300/90 bg-white px-4 text-xs font-semibold uppercase tracking-wide text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-800 sm:min-h-12 sm:px-8 sm:text-sm"
 				>
 					Contact our team
 				</Link>
@@ -78,16 +71,18 @@ function ProductKeySpecsCompact({ rows, title }: { rows: ProductSpec[]; title: s
 	if (rows.length === 0) return null
 
 	return (
-		<div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
-			<h2 className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-slate-500">{title}</h2>
-			<dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+		<div className="rounded-xl border border-slate-200/90 bg-white p-5 sm:rounded-2xl sm:p-6">
+			<h2 className="font-heading mb-0 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-slate-400">
+				{title}
+			</h2>
+			<dl className="mt-5 border-t border-slate-100">
 				{rows.map((spec, index) => (
 					<div
 						key={`${spec.label}-${index}`}
-						className="rounded-xl border border-slate-100 bg-slate-50/90 px-3 py-2.5"
+						className="grid gap-1 border-b border-slate-100 py-3.5 last:border-b-0 sm:grid-cols-[minmax(0,42%)_minmax(0,1fr)] sm:items-baseline sm:gap-x-6 sm:gap-y-0"
 					>
-						<dt className="text-xs font-medium text-slate-500">{spec.label}</dt>
-						<dd className="mt-0.5 text-sm font-semibold leading-snug text-slate-900">{spec.value}</dd>
+						<dt className="font-body text-[0.8125rem] font-medium leading-snug text-slate-500">{spec.label}</dt>
+						<dd className="font-body m-0 text-sm font-normal leading-relaxed text-slate-900">{spec.value}</dd>
 					</div>
 				))}
 			</dl>
