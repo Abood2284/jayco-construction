@@ -18,7 +18,7 @@ export function HeroSection({ settings, products, categories }: HeroSectionProps
 	const spotlights = buildHeroSpotlights(products, categories)
 
 	return (
-		<section className="relative bg-slate-950 pt-24 pb-6 sm:pb-8 lg:pt-2">
+		<section className="relative w-full max-w-full min-w-0 touch-pan-y overflow-x-clip bg-slate-950 pb-3 sm:pb-5">
 			<div
 				className="pointer-events-none absolute inset-0 opacity-[0.08]"
 				style={{
@@ -33,8 +33,8 @@ export function HeroSection({ settings, products, categories }: HeroSectionProps
 
 			<HeroGalleryCarousel slides={HOMEPAGE_HERO_GALLERY_SLIDES} />
 
-			<div className="relative mx-auto max-w-7xl px-4 lg:px-6">
-				<div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+			<div className="relative mx-auto min-w-0 max-w-7xl px-4 lg:px-6">
+				<div className="mb-5 flex flex-col gap-5 sm:mb-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
 					<div className="min-w-0 max-w-3xl">
 						<p className="font-heading mb-3 inline-flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-rose-300 sm:tracking-[0.22em]">
 							<span className="block h-px w-8 bg-rose-400/80" aria-hidden />

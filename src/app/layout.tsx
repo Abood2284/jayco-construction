@@ -31,7 +31,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 				<Suspense fallback={null}>
 					<Header settings={settings} categories={categories} />
 				</Suspense>
-				<div className="lg:pt-[84px]">
+				<div
+					className="min-w-0"
+					style={{ paddingTop: "var(--site-header-offset, calc(env(safe-area-inset-top, 0px) + 80px))" }}
+				>
 					{children}
 				</div>
 				<Footer settings={settings} products={products} />

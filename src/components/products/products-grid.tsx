@@ -1,8 +1,8 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { EmptyResultsState } from "@/components/products/empty-results-state"
-import { ProductCatalogCard } from "@/components/products/product-catalog-card"
 import { ALL_CATEGORIES_SLUG } from "@/components/products/catalog-utils"
 import type { Product, ProductCategory } from "@/lib/cms/types"
 
@@ -14,24 +14,38 @@ interface ProductsGridProps {
 	onResetCategory: () => void
 }
 
-function buildResultsCopy({
-	totalCount,
-	activeCategoryName,
-	query,
-}: {
-	totalCount: number
-	activeCategoryName: string
-	query?: string
-}) {
-	if (query) {
-		return `${totalCount} matching product${totalCount === 1 ? "" : "s"} across ${activeCategoryName.toLowerCase()}.`
-	}
+function CatalogSquareProductCard({ product }: { product: Product }) {
+	const image = product.heroImages[0]
 
-	if (activeCategoryName === "All products") {
-		return `${totalCount} catalog entries across Jayco's current lifting and handling range.`
-	}
-
-	return `${totalCount} product${totalCount === 1 ? "" : "s"} in this family.`
+	return (
+		<Link
+			href={`/products/${product.categorySlug}/${product.slug}`}
+			className="group flex min-h-0 flex-col gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
+		>
+			<div className="overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-sm transition-[box-shadow,border-color,transform] duration-200 motion-reduce:transition-none group-hover:border-slate-300 group-hover:shadow-md group-hover:ring-1 group-hover:ring-slate-200/80 motion-safe:sm:group-hover:-translate-y-0.5 motion-reduce:sm:group-hover:translate-y-0">
+				<div className="relative aspect-square w-full overflow-hidden bg-slate-100">
+					{image ? (
+						<Image
+							src={image.src}
+							alt=""
+							fill
+							sizes="(max-width: 640px) 45vw, (max-width: 1024px) 22vw, 18vw"
+							className="object-cover transition-transform duration-300 motion-reduce:transition-none motion-safe:group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
+						/>
+					) : (
+						<div className="absolute inset-0 bg-slate-200/90" aria-hidden />
+					)}
+					<div
+						className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/15 via-transparent to-transparent opacity-0 transition-opacity duration-200 motion-reduce:transition-none group-hover:opacity-100 motion-reduce:group-hover:opacity-0"
+						aria-hidden
+					/>
+				</div>
+			</div>
+			<p className="m-0 line-clamp-2 text-left text-xs font-semibold leading-tight tracking-tight text-slate-700 underline decoration-transparent decoration-2 underline-offset-4 transition-colors motion-reduce:transition-none group-hover:text-slate-900 group-hover:decoration-slate-300 sm:text-sm">
+				{product.name}
+			</p>
+		</Link>
+	)
 }
 
 export function ProductsGrid({
@@ -45,8 +59,6 @@ export function ProductsGrid({
 		activeCategorySlug === ALL_CATEGORIES_SLUG
 			? null
 			: categories.find((category) => category.slug === activeCategorySlug) ?? null
-
-	const activeCategoryName = activeCategory?.name ?? "All products"
 
 	if (products.length === 0) {
 		return (
@@ -71,31 +83,27 @@ export function ProductsGrid({
 		)
 	}
 
-	return (
-		<section className="space-y-6" aria-labelledby="products-results-heading">
-			<div className="flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
-				<div>
-					<p className="text-xs font-semibold tracking-wide text-red-700">Results</p>
-					<h2
-						id="products-results-heading"
-						className="mt-1 text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl"
-					>
-						{query ? `“${query}”` : activeCategoryName}
-					</h2>
-					<p className="mt-1 text-sm text-slate-600">
-						{buildResultsCopy({
-							totalCount: products.length,
-							activeCategoryName,
-							query,
-						})}
-					</p>
-				</div>
+	const srHeading =
+		query != null && query.length > 0
+			? `Search “${query}”, ${products.length} product${products.length === 1 ? "" : "s"}`
+			: activeCategory
+				? `${activeCategory.name}, ${products.length} product${products.length === 1 ? "" : "s"}`
+				: `${products.length} product${products.length === 1 ? "" : "s"}`
 
-				<div className="flex flex-wrap gap-2">
+	const showToolbar = Boolean(query) || activeCategorySlug !== ALL_CATEGORIES_SLUG
+
+	return (
+		<section className="space-y-5 sm:space-y-6">
+			<h2 id="products-catalog-heading" className="sr-only">
+				{srHeading}
+			</h2>
+
+			{showToolbar ? (
+				<div className="flex flex-wrap items-center justify-end gap-2 border-b border-slate-200 pb-4 sm:pb-5">
 					{query ? (
 						<Link
 							href="/products"
-							className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-800 transition hover:border-red-300 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+							className="inline-flex min-h-10 items-center justify-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
 						>
 							Clear search
 						</Link>
@@ -104,18 +112,23 @@ export function ProductsGrid({
 						<button
 							type="button"
 							onClick={onResetCategory}
-							className="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+							className="inline-flex min-h-10 items-center justify-center rounded-full bg-slate-950 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
 						>
-							View all products
+							Show all categories
 						</button>
 					) : null}
 				</div>
-			</div>
+			) : null}
 
-			<div role="region" aria-labelledby="products-results-heading" aria-live="polite">
-				<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+			<div
+				role="region"
+				aria-labelledby="products-catalog-heading"
+				aria-live="polite"
+				aria-atomic="true"
+			>
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6 xl:grid-cols-5 xl:gap-6">
 					{products.map((product) => (
-						<ProductCatalogCard key={`${product.categorySlug}-${product.slug}`} product={product} />
+						<CatalogSquareProductCard key={`${product.categorySlug}-${product.slug}`} product={product} />
 					))}
 				</div>
 			</div>

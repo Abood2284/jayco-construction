@@ -20,7 +20,7 @@ export default async function ClientsPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Page Hero */}
-      <section className="relative overflow-hidden border-b-4 border-slate-900 bg-slate-50 px-4 pb-12 pt-24 lg:px-6 lg:pb-16 lg:pt-28">
+      <section className="relative overflow-hidden border-b-4 border-slate-900 bg-slate-50 px-4 pb-12 pt-8 lg:px-6 lg:pb-16 lg:pt-12">
         {/* Industrial Background Grid */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.06]"

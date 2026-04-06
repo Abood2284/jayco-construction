@@ -10,6 +10,18 @@
 	--accent-strong: #b45309;
 	--line: #d1d5db;
 	--container: 1180px;
+	/* Fixed header: safe area + inner bar (76px) + border (~1px) + small buffer for subpixel. lg: 84px + border + buffer. */
+	--site-header-offset: calc(env(safe-area-inset-top, 0px) + 80px);
+}
+
+@media (min-width: 1024px) {
+	:root {
+		--site-header-offset: calc(env(safe-area-inset-top, 0px) + 88px);
+	}
+}
+
+html {
+	scroll-padding-top: var(--site-header-offset);
 }
 
 * {

@@ -107,7 +107,7 @@ function ProductLeadSection({
 	const showSpecsBesideGallery = partition.primaryRows.length > 0
 
 	return (
-		<section className="relative overflow-hidden border-b border-slate-200 bg-[linear-gradient(180deg,#fafafa_0%,#f1f5f9_100%)] px-4 pb-10 pt-24 sm:px-6 sm:pb-12 sm:pt-28 lg:px-8 lg:pb-14 lg:pt-24">
+		<section className="relative overflow-hidden border-b border-slate-200 bg-[linear-gradient(180deg,#fafafa_0%,#f1f5f9_100%)] px-4 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8 lg:pb-14 lg:pt-10">
 			<div
 				className="pointer-events-none absolute inset-0 opacity-[0.06]"
 				style={{

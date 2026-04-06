@@ -29,7 +29,7 @@ function NavMegaMenu({ open, onClose, categories, featuredProducts }: NavMegaMen
 	if (!open || !categoryEntries.length || !activeEntry) return null
 
 	return (
-		<div className="absolute left-[50vw] top-full z-40 w-[min(960px,calc(100vw-2rem))] -translate-x-1/2 pt-4">
+		<div className="absolute left-1/2 top-full z-40 w-[min(960px,calc(100dvw-2rem))] max-w-[calc(100dvw-2rem)] -translate-x-1/2 pt-4">
 			<div className="overflow-hidden rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-md shadow-2xl shadow-slate-900/10">
 				<div className="flex min-h-[440px] max-h-[min(540px,80vh)]">
 					{/* Left Sidebar - Categories */}

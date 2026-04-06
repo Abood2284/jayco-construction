@@ -27,7 +27,7 @@ export default async function ContactPage() {
 		<main className="min-h-screen bg-slate-50">
 			<JsonLd data={buildLocalBusinessSchema(settings)} />
 
-			<section className="relative overflow-hidden bg-slate-950 pb-16 pt-28 lg:pb-20 lg:pt-36">
+			<section className="relative overflow-hidden bg-slate-950 pb-16 pt-8 lg:pb-20 lg:pt-16">
 				<div
 					className="pointer-events-none absolute inset-0 opacity-[0.12]"
 					style={{

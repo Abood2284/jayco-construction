@@ -16,6 +16,15 @@ export function ProductsFilterBar({
 	onSelectCategory,
 	query,
 }: ProductsFilterBarProps) {
+	const pillClass = (isActive: boolean, isDisabled: boolean) =>
+		`font-heading rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 ${
+			isDisabled
+				? "border-transparent text-slate-400"
+				: isActive
+					? "border-transparent bg-slate-950 text-white shadow-sm"
+					: "border-transparent bg-transparent text-slate-700 hover:bg-white/90 hover:text-slate-950"
+		}`
+
 	return (
 		<div className="border-b border-slate-200 pb-6">
 			{query ? (
@@ -25,7 +34,7 @@ export function ProductsFilterBar({
 			) : null}
 
 			<div
-				className="flex flex-wrap gap-2"
+				className="flex flex-wrap gap-1 rounded-2xl bg-slate-100/90 p-1 sm:gap-1"
 				role="tablist"
 				aria-label="Filter catalog by product family"
 			>
@@ -42,13 +51,7 @@ export function ProductsFilterBar({
 							aria-selected={isActive}
 							disabled={isDisabled}
 							onClick={() => onSelectCategory(option.slug)}
-							className={`font-heading rounded-md border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-45 ${
-								isActive
-									? "border-red-600 bg-red-600 text-white"
-									: isDisabled
-										? "border-slate-200 bg-slate-100 text-slate-400"
-										: "border-slate-300 bg-white text-slate-800 hover:border-red-300 hover:bg-red-50/60"
-							}`}
+							className={pillClass(isActive, isDisabled)}
 						>
 							<span>{label}</span>
 							<span className={`ml-1.5 tabular-nums ${isActive ? "text-white/90" : "text-slate-500"}`}>

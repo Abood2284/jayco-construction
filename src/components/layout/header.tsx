@@ -33,18 +33,36 @@ function Header({ settings, categories }: HeaderProps) {
 	const [showMobileActionBar, setShowMobileActionBar] = useState(false);
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [isProductsOpen, setIsProductsOpen] = useState(false);
+	const scrollRafRef = useRef<number | null>(null);
+	const lastScrolledRef = useRef<boolean | null>(null);
+	const lastShowBarRef = useRef<boolean | null>(null);
 
 	useEffect(() => {
-		const onScroll = () => {
-			const scrolled = window.scrollY > 12;
-			setIsScrolled(scrolled);
-			setShowMobileActionBar(window.scrollY > 220);
-		};
+		function onScroll() {
+			if (scrollRafRef.current !== null) return;
+			scrollRafRef.current = window.requestAnimationFrame(() => {
+				scrollRafRef.current = null;
+				const y = window.scrollY;
+				const scrolled = y > 12;
+				const showBar = y > 220;
+				if (lastScrolledRef.current !== scrolled) {
+					lastScrolledRef.current = scrolled;
+					setIsScrolled(scrolled);
+				}
+				if (lastShowBarRef.current !== showBar) {
+					lastShowBarRef.current = showBar;
+					setShowMobileActionBar(showBar);
+				}
+			});
+		}
 
 		onScroll();
 		window.addEventListener("scroll", onScroll, { passive: true });
 
-		return () => window.removeEventListener("scroll", onScroll);
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			if (scrollRafRef.current !== null) window.cancelAnimationFrame(scrollRafRef.current);
+		};
 	}, []);
 
 	useEffect(() => {
@@ -96,7 +114,7 @@ function Header({ settings, categories }: HeaderProps) {
 	return (
 		<>
 			<header
-				className={`fixed inset-x-0 top-0 z-50 border-b border-slate-900/10 bg-white/96 transition-all duration-200 supports-backdrop-filter:backdrop-blur-md ${
+				className={`fixed inset-x-0 top-0 z-50 border-b border-slate-900/10 bg-white/96 pt-[env(safe-area-inset-top,0px)] transition-all duration-200 supports-backdrop-filter:backdrop-blur-md max-lg:supports-[backdrop-filter]:backdrop-blur-sm ${
 					isScrolled ? "shadow-[0_18px_40px_rgba(15,23,42,0.08)]" : ""
 				}`}
 			>

@@ -65,7 +65,7 @@ function FeatureCard({ item, icon: Icon }: FeatureCardProps) {
 export function AboutPage({ content }: AboutPageProps) {
 	return (
 		<main className="min-h-screen bg-slate-50">
-			<section className="relative overflow-hidden border-b-4 border-red-700 bg-slate-950 pb-12 pt-24 sm:pb-14 lg:pb-16 lg:pt-32">
+			<section className="relative overflow-hidden border-b-4 border-red-700 bg-slate-950 pb-12 pt-8 sm:pb-14 lg:pb-16 lg:pt-16">
 				<div
 					className="pointer-events-none absolute inset-0 opacity-[0.08]"
 					style={{

@@ -62,7 +62,7 @@ export function HeroProductSpotlights({ spotlights }: HeroProductSpotlightsProps
 
 	return (
 		<div
-			className="relative"
+			className="relative min-w-0 max-w-full"
 			onMouseEnter={() => setIsPaused(true)}
 			onMouseLeave={() => setIsPaused(false)}
 			onFocusCapture={() => setIsPaused(true)}
@@ -74,10 +74,10 @@ export function HeroProductSpotlights({ spotlights }: HeroProductSpotlightsProps
 				Product range
 			</p>
 
-			<div className="overflow-hidden">
+			<div className="min-w-0 overflow-hidden">
 				<div
 					ref={trackRef}
-					className={`flex gap-4 transition-transform ${transitionClass}`}
+					className={`flex min-w-0 gap-4 transition-transform ${transitionClass}`}
 					style={{
 						transform: `translateX(-${translateX}px)`,
 						transitionProperty: reducedMotion ? "none" : "transform",

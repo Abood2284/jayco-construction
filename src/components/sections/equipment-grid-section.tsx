@@ -113,7 +113,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 			: `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? "product" : "products"}${activeGroupId === ALL_FILTER ? "" : ` in ${activeLabel}`}.`
 
 	return (
-		<section className="border-b border-slate-200 border-t border-slate-100 bg-slate-50/70 py-14 sm:py-16 lg:py-20">
+		<section className="border-b border-slate-200 border-t border-slate-100 bg-slate-50/70 pt-8 pb-12 sm:pt-10 sm:pb-14 lg:py-20">
 			<div className="mx-auto max-w-7xl px-4 lg:px-6">
 				<div className="mb-8 w-full sm:mb-10">
 					<h2 className="w-full text-xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-2xl md:text-3xl lg:max-w-none lg:text-[clamp(2rem,4vw,3.3rem)]">

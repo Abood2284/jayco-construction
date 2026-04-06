@@ -53,7 +53,7 @@ export function HeroGalleryCarousel({ slides }: HeroGalleryCarouselProps) {
 
 	return (
 		<div
-			className="relative mb-5 w-full md:mb-6"
+			className="relative mb-3 w-full min-w-0 max-w-full touch-pan-y overflow-x-clip md:mb-5"
 			onMouseEnter={() => setIsPaused(true)}
 			onMouseLeave={() => setIsPaused(false)}
 			onFocusCapture={() => setIsPaused(true)}
@@ -63,7 +63,7 @@ export function HeroGalleryCarousel({ slides }: HeroGalleryCarouselProps) {
 		>
 			<div className="relative w-full overflow-hidden">
 				<div
-					className={`flex transition-transform will-change-transform ${transitionClass}`}
+					className={`flex transition-transform lg:will-change-transform ${transitionClass}`}
 					style={{
 						transform: `translateX(-${index * 100}%)`,
 						transitionProperty: reducedMotion ? "none" : "transform",
@@ -71,7 +71,7 @@ export function HeroGalleryCarousel({ slides }: HeroGalleryCarouselProps) {
 				>
 					{slides.map((slide, i) => (
 						<div key={slide.src} className="w-full shrink-0 flex-[0_0_100%]">
-							<div className="relative aspect-[16/5] sm:aspect-[16/6] w-full bg-slate-900 lg:aspect-auto lg:h-[min(280px,32vh)] lg:max-h-[300px] lg:min-h-[200px]">
+							<div className="relative aspect-[16/9] w-full min-h-[200px] bg-slate-900 sm:aspect-[16/10] sm:min-h-[220px] lg:aspect-auto lg:h-[min(280px,32vh)] lg:max-h-[300px] lg:min-h-[200px]">
 								<Image
 									src={slide.src}
 									alt={slide.alt}
@@ -84,17 +84,17 @@ export function HeroGalleryCarousel({ slides }: HeroGalleryCarouselProps) {
 									className="pointer-events-none absolute inset-0 bg-linear-to-r from-slate-950/92 via-slate-950/55 to-slate-950/25"
 									aria-hidden
 								/>
-								<div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8 lg:p-10 lg:pb-8">
-									<div className="max-w-xl">
-										<p className="font-heading mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-rose-300 sm:text-[0.68rem] sm:tracking-[0.22em]">
+								<div className="absolute inset-0 flex flex-col justify-end px-4 pb-3 pt-12 sm:px-5 sm:pb-4 sm:pt-14 md:p-8 lg:p-10 lg:pb-8">
+									<div className="max-w-xl pr-2 sm:pr-0">
+										<p className="font-heading mb-1 text-[0.58rem] font-semibold uppercase tracking-[0.14em] text-rose-300 sm:mb-2 sm:text-[0.65rem] sm:tracking-[0.2em] lg:text-[0.68rem] lg:tracking-[0.22em]">
 											{slide.eyebrow}
 										</p>
-										<h2 className="font-heading text-balance text-xl font-bold leading-tight tracking-tight text-white sm:text-2xl lg:text-[clamp(1.35rem,2.5vw,1.85rem)]">
+										<h2 className="font-heading text-balance text-base font-bold leading-snug tracking-tight text-white sm:text-xl md:text-2xl lg:text-[clamp(1.35rem,2.5vw,1.85rem)]">
 											{slide.title}
 										</h2>
 										<Link
 											href={slide.ctaHref}
-											className="font-heading mt-4 inline-flex min-h-11 items-center justify-center rounded-lg bg-rose-600 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-white shadow-[0_12px_32px_rgba(190,24,93,0.35)] transition-colors hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300"
+											className="font-heading mt-2 inline-flex min-h-9 max-w-full items-center justify-center rounded-lg bg-rose-600 px-3 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(190,24,93,0.3)] transition-colors hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-300 sm:mt-3 sm:min-h-10 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.14em] lg:mt-4 lg:min-h-11 lg:px-5 lg:py-2.5"
 										>
 											{slide.ctaLabel}
 										</Link>
@@ -106,22 +106,22 @@ export function HeroGalleryCarousel({ slides }: HeroGalleryCarouselProps) {
 				</div>
 
 				{slides.length > 1 ? (
-					<div className="pointer-events-none absolute inset-y-0 left-2 right-2 flex items-center justify-between sm:left-4 sm:right-4">
+					<div className="pointer-events-none absolute inset-y-0 left-1 right-1 flex items-center justify-between sm:left-3 sm:right-3 md:left-4 md:right-4">
 						<button
 							type="button"
 							aria-label="Previous slide"
 							onClick={goPrev}
-							className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-slate-950/55 text-white backdrop-blur-sm transition-colors hover:bg-slate-950/75"
+							className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-slate-950/60 text-white backdrop-blur-sm transition-colors hover:bg-slate-950/80 sm:h-10 sm:w-10"
 						>
-							<ChevronLeft className="h-5 w-5" aria-hidden />
+							<ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
 						</button>
 						<button
 							type="button"
 							aria-label="Next slide"
 							onClick={goNext}
-							className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-slate-950/55 text-white backdrop-blur-sm transition-colors hover:bg-slate-950/75"
+							className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-slate-950/60 text-white backdrop-blur-sm transition-colors hover:bg-slate-950/80 sm:h-10 sm:w-10"
 						>
-							<ChevronRight className="h-5 w-5" aria-hidden />
+							<ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
 						</button>
 					</div>
 				) : null}

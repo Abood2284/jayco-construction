@@ -25,7 +25,7 @@ export function ProductsCatalog({ categories, products, query }: ProductsCatalog
 		return [
 			{
 				slug: ALL_CATEGORIES_SLUG,
-				name: "All products",
+				name: "All",
 				count: products.length,
 				sampleProducts: products.slice(0, 2).map((product) => product.name),
 			},
