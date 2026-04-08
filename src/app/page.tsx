@@ -1,5 +1,6 @@
 import { JsonLd } from "@/components/ui/json-ld"
 import { HeroSection } from "@/components/sections/hero-section"
+import { AboutSpecialFeaturesSection } from "@/components/sections/about-special-features-section"
 import { EquipmentGridSection } from "@/components/sections/equipment-grid-section"
 import { CategoriesSection } from "@/components/sections/categories-section"
 import { FeaturedProductsSection } from "@/components/sections/featured-products-section"
@@ -42,6 +43,7 @@ export default async function Home() {
 			<JsonLd data={buildOrganizationSchema(settings)} />
 			<HeroSection settings={settings} products={products} categories={categories} />
 			<EquipmentGridSection products={products} />
+			<AboutSpecialFeaturesSection settings={settings} />
 			<FeaturedProductsSection products={featuredProducts} />
 			<ClientsSection clients={clientList} settings={settings} />
 			<CategoriesSection categories={categories} />

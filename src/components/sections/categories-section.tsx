@@ -30,14 +30,16 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 
 				<CategoriesCarousel>
 					{categories.map((category) => (
-							<article
-								key={category.slug}
-								data-carousel-card
-								className="group flex shrink-0 snap-start flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_20px_45px_rgba(15,23,42,0.06)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_rgba(15,23,42,0.1)] flex-[0_0_min(18rem,calc(100vw-2.5rem))] sm:flex-[0_0_calc((100%-1.25rem)/2)] lg:flex-[0_0_calc((100%-2.5rem)/3)] xl:flex-[0_0_calc((100%-3.75rem)/4)]"
-							>
+						<article
+							key={category.slug}
+							data-carousel-card
+							className="group flex shrink-0 snap-start flex-col transition-transform duration-300 hover:-translate-y-1 flex-[0_0_min(18rem,calc(100vw-2.5rem))] sm:flex-[0_0_calc((100%-1.25rem)/2)] lg:flex-[0_0_calc((100%-2.5rem)/3)] xl:flex-[0_0_calc((100%-3.75rem)/4)]"
+						>
+							{/* Same bg as section: invisible frame that holds image + CTA with consistent spacing */}
+							<div className="flex w-full min-w-0 flex-col gap-4 rounded-[1.75rem] bg-(--bg) p-2 sm:p-2.5">
 								<Link
 									href={`/products/${category.slug}`}
-									className="relative block aspect-square shrink-0 overflow-hidden bg-slate-100"
+									className="relative block aspect-square w-full shrink-0 overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-[0_20px_45px_rgba(15,23,42,0.06)] transition-[box-shadow,transform] duration-300 group-hover:shadow-[0_24px_50px_rgba(15,23,42,0.1)]"
 								>
 									<Image
 										src={category.heroImage.src}
@@ -46,31 +48,21 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 										className="object-cover transition-transform duration-700 group-hover:scale-105"
 										sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
 									/>
-									<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/54 via-slate-950/8 to-transparent" aria-hidden />
+									<div
+										className="pointer-events-none absolute inset-0 rounded-3xl bg-linear-to-t from-slate-950/54 via-slate-950/8 to-transparent"
+										aria-hidden
+									/>
 								</Link>
 
-								<div className="flex flex-col p-5 sm:p-6">
-									<h3 className="text-lg font-semibold leading-tight text-slate-950">
-										<Link
-											href={`/products/${category.slug}`}
-											className="transition-colors hover:text-rose-700"
-										>
-											{category.name}
-										</Link>
-									</h3>
-									<p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-600">{category.intro}</p>
-
-									<div className="mt-4 border-t border-slate-200 pt-4">
-										<Link
-											href={`/products/${category.slug}`}
-											className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-rose-700 px-3 py-3 text-center text-[0.72rem] font-semibold whitespace-nowrap text-white transition-colors hover:bg-rose-600"
-										>
-											View category
-											<ArrowRight className="h-4 w-4" aria-hidden />
-										</Link>
-									</div>
-								</div>
-							</article>
+								<Link
+									href={`/products/${category.slug}`}
+									className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-rose-700 px-3 py-2.5 text-center text-[0.72rem] font-semibold leading-tight text-white shadow-md transition-colors hover:bg-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg)"
+								>
+									<span className="line-clamp-2 min-w-0 flex-1 text-balance">{category.name}</span>
+									<ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
+								</Link>
+							</div>
+						</article>
 					))}
 				</CategoriesCarousel>
 

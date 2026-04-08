@@ -1,12 +1,8 @@
-import { readFile } from "node:fs/promises"
-import { access } from "node:fs/promises"
-import { constants } from "node:fs"
-import { join } from "node:path"
-
 import type { ReactElement } from "react"
 import { compileMDX } from "next-mdx-remote/rsc"
 
 import type { ProductArticleFrontmatter } from "@/lib/cms/types"
+import { getProductMdxSource } from "@/lib/content/get-product-mdx-source"
 import { extractMarkdownHeadings, type ProductArticleHeading } from "@/lib/content/headings"
 import { productArticleMdxComponents } from "@/components/products/product-article-mdx"
 
@@ -21,33 +17,16 @@ export type ProductArticle = {
 	headings: ProductArticleHeading[]
 }
 
-const PRODUCT_CONTENT_ROOT = join(process.cwd(), "content", "products")
 const PRODUCT_IMAGE_PUBLIC_ROOT = "/images/products"
-
-const getProductArticleFilePath = ({ categorySlug, productSlug }: GetProductArticleArgs) =>
-	join(PRODUCT_CONTENT_ROOT, categorySlug, productSlug, "index.mdx")
-
-const fileExists = async (filePath: string) => {
-	try {
-		await access(filePath, constants.F_OK)
-		return true
-	} catch {
-		return false
-	}
-}
 
 export const getProductArticle = async ({
 	categorySlug,
 	productSlug,
 }: GetProductArticleArgs): Promise<ProductArticle | null> => {
-	const filePath = getProductArticleFilePath({ categorySlug, productSlug })
-	const exists = await fileExists(filePath)
+	const resolved = await getProductMdxSource(categorySlug, productSlug)
+	if (!resolved) return null
 
-	if (!exists) {
-		return null
-	}
-
-	const source = await readFile(filePath, "utf8")
+	const { source } = resolved
 	const headings = extractMarkdownHeadings(source)
 
 	const { content, frontmatter } = await compileMDX<ProductArticleFrontmatter>({

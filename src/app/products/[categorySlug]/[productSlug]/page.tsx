@@ -1,13 +1,18 @@
+import matter from "gray-matter";
 import { notFound } from "next/navigation";
 import { ProductDetailTemplate } from "@/components/products/product-detail-template";
+import { ProductEditorShell } from "@/components/products/product-editor-shell";
 import { JsonLd } from "@/components/ui/json-ld";
 import {
   getProductByCategoryAndSlug,
   getProductCategoryBySlug,
   getProducts,
   getRelatedProducts,
+  getSiteSettings,
 } from "@/lib/cms";
+import { getProductMdxSource } from "@/lib/content/get-product-mdx-source";
 import { getProductArticle } from "@/lib/content/product-articles";
+import { isProductEditorUiEnabled } from "@/lib/content/product-editor-config";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { buildBreadcrumbSchema, buildProductSchema } from "@/lib/seo/schema";
 
@@ -57,17 +62,36 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { categorySlug, productSlug } = await params;
-  const [product, category, article] = await Promise.all([
+  const [product, category, article, siteSettings, resolvedSource] = await Promise.all([
     getProductByCategoryAndSlug(categorySlug, productSlug),
     getProductCategoryBySlug(categorySlug),
     getProductArticle({ categorySlug, productSlug }),
+    getSiteSettings(),
+    getProductMdxSource(categorySlug, productSlug),
   ]);
 
-  if (!product || !category) {
+  if (!product || !category || !resolvedSource) {
     notFound();
   }
 
+  const parsedMdx = matter(resolvedSource.source);
+  const editorConfig = isProductEditorUiEnabled()
+    ? {
+        categorySlug,
+        productSlug,
+        initialFrontmatter: parsedMdx.data as Record<string, unknown>,
+        initialBody: parsedMdx.content,
+        sourceOrigin: resolvedSource.origin,
+        requireEditorPassphrase: Boolean(process.env.PRODUCT_EDITOR_SECRET?.trim()),
+      }
+    : null;
+
   const relatedProducts = await getRelatedProducts(product, 4);
+  const whatsAppPhone = siteSettings.phones[0]?.replace(/[^+\d]/g, "") ?? "";
+  const whatsAppMessage = `Hi Jayco, I need details for ${product.name}.`;
+  const whatsAppHref = whatsAppPhone
+    ? `https://wa.me/${whatsAppPhone.replace(/^\+/, "")}?text=${encodeURIComponent(whatsAppMessage)}`
+    : "/contact";
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },
@@ -83,12 +107,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <JsonLd data={buildBreadcrumbSchema(breadcrumbItems)} />
       <JsonLd data={buildProductSchema(product, category.name)} />
-      <ProductDetailTemplate
-        product={product}
-        category={category}
-        article={article}
-        relatedProducts={relatedProducts}
-      />
+      <ProductEditorShell editorConfig={editorConfig}>
+        <ProductDetailTemplate
+          product={product}
+          category={category}
+          article={article}
+          relatedProducts={relatedProducts}
+          whatsAppHref={whatsAppHref}
+        />
+      </ProductEditorShell>
     </>
   );
 }

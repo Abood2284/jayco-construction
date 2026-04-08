@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ProductCard } from "@/components/products/product-card";
 import { JsonLd } from "@/components/ui/json-ld";
 import {
@@ -72,7 +71,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
 			<main className="flex min-h-screen flex-col bg-slate-50">
 				{/* Category Hero */}
-				<section className="relative overflow-hidden border-b border-slate-800 bg-slate-950 px-4 pb-20 pt-32 lg:px-6 lg:pb-28 lg:pt-40">
+				<section className="relative overflow-hidden border-b border-slate-800 bg-slate-950 px-4 pb-10 pt-20 lg:px-6 lg:pb-12 lg:pt-24">
 				<div 
 					className="pointer-events-none absolute inset-0 opacity-[0.05]"
 					style={{
@@ -83,37 +82,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 				<div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] bg-rose-600 opacity-[0.12] blur-[100px]" />
 				
 				<div className="relative mx-auto max-w-6xl">
-					<div className="mb-6">
-						<Breadcrumbs
-							items={[
-								{ name: "Home", path: "/" },
-								{ name: "Products", path: "/products" },
-								{ name: category.name, path: `/products/${category.slug}` },
-							]}
-						/>
-					</div>
-					
-					<div className="max-w-3xl">
-						<p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-rose-300">
-							Product family
-						</p>
-						<h1 className="mb-5 text-[clamp(2rem,4.2vw,3.25rem)] font-bold leading-[1.1] tracking-tight text-white">
-							{category.name}
-						</h1>
-						<p className="max-w-[54ch] text-base font-medium leading-relaxed text-slate-400 lg:text-lg">
-							{category.intro}
-						</p>
-					</div>
+					<h1 className="text-[clamp(2rem,4.2vw,3.25rem)] font-bold leading-[1.1] tracking-tight text-white">
+						{category.name}
+					</h1>
 				</div>
 				
 				<div className="absolute bottom-0 left-0 right-0 h-px bg-slate-700/80" aria-hidden />
 			</section>
 
 			<section className="mx-auto w-full max-w-6xl px-4 py-16 lg:px-6 lg:py-24">
-				<div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+				<div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-12">
 					
-					{/* Sidebar */}
-					<div className="flex w-full shrink-0 flex-col gap-8 lg:sticky lg:top-32 lg:w-72">
+					{/* Sidebar — desktop only */}
+					<div className="hidden w-full shrink-0 gap-8 lg:flex lg:flex-col lg:sticky lg:top-32 lg:max-w-68 lg:w-64">
 						{/* Context menu block */}
 						<div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
 							<h3 className="mb-4 border-b border-slate-200 pb-3 text-xs font-semibold uppercase tracking-wide text-slate-900">
@@ -148,7 +129,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 					</div>
 
 					{/* Main Content Area */}
-					<div className="flex-1 space-y-24">
+					<div className="min-w-0 flex-1 space-y-24">
 						
 						{/* Products Array */}
 						<div id="products" className="scroll-mt-32">
@@ -157,7 +138,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 								<p className="text-base font-medium text-slate-600 mt-2">Browse current configurations for this category.</p>
 							</div>
 							
-							<div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+							<div className="grid gap-6 md:grid-cols-2 xl:grid-cols-2">
 								{products.map((product) => (
 									<ProductCard key={product.slug} product={product} />
 								))}

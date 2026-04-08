@@ -4,6 +4,7 @@ import { join } from "node:path"
 import { compileMDX } from "next-mdx-remote/rsc"
 
 import type { Product, ProductCategory, ProductSpec } from "@/lib/cms/types"
+import { getProductMdxSource } from "@/lib/content/get-product-mdx-source"
 
 const PRODUCTS_ROOT = join(process.cwd(), "content", "products")
 const PRODUCT_IMAGE_PUBLIC_ROOT = "/images/products"
@@ -147,8 +148,11 @@ async function discoverProductImages(categorySlug: string, productSlug: string):
 }
 
 async function loadProductFromMdx(categorySlug: string, productSlug: string): Promise<Product> {
-	const mdxPath = join(PRODUCTS_ROOT, categorySlug, productSlug, "index.mdx")
-	const source = await readFile(mdxPath, "utf8")
+	const resolved = await getProductMdxSource(categorySlug, productSlug)
+	if (!resolved) {
+		throw new Error(`Product MDX not found for ${categorySlug}/${productSlug}`)
+	}
+	const { source } = resolved
 
 	const { frontmatter } = await compileMDX<ProductFrontmatter>({
 		source,
@@ -309,6 +313,10 @@ async function buildFilesystemCatalog(): Promise<Catalog> {
 	})
 
 	return { categories, products: fsProducts }
+}
+
+export function resetCatalogCache() {
+	catalogPromise = null
 }
 
 export async function loadCatalog(): Promise<Catalog> {

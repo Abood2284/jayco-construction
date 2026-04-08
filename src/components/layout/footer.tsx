@@ -24,19 +24,23 @@ const companyLinks = [
 	{ href: "/contact", label: "Contact" },
 ]
 
+const MAX_PRODUCTS_IN_FOOTER = 10
+
 export function Footer({ settings, products }: FooterProps) {
 	const year = new Date().getFullYear()
-	const productLinks = sortProductsForFooter(products).map((product) => ({
-		href: `/products/${product.categorySlug}/${product.slug}`,
-		label: product.name,
-	}))
+	const productLinks = sortProductsForFooter(products)
+		.slice(0, MAX_PRODUCTS_IN_FOOTER)
+		.map((product) => ({
+			href: `/products/${product.categorySlug}/${product.slug}`,
+			label: product.name,
+		}))
 
 	return (
 		<footer className="border-t border-slate-200 bg-slate-50 text-slate-600">
-			<div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-				<div className="grid gap-12 lg:grid-cols-4 lg:gap-8">
+			<div className="mx-auto max-w-7xl px-4 py-14 lg:px-8 lg:py-16">
+				<div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
 					{/* Brand */}
-					<div className="lg:col-span-1 border-b border-slate-200 pb-8 lg:border-none lg:pb-0">
+					<div className="flex h-full flex-col border-b border-slate-200 pb-8 lg:col-span-4 lg:border-none lg:pb-0">
 						<Link href="/" className="group mb-5 flex items-center" aria-label={settings.companyName}>
 							<Image
 								src="/images/jayco-logo.png"
@@ -53,7 +57,7 @@ export function Footer({ settings, products }: FooterProps) {
 					</div>
 
 					{/* Products nav */}
-					<div>
+					<div className="flex h-full flex-col lg:col-span-4">
 						<h3 className="mb-5 flex items-center gap-2 text-[0.65rem] font-black uppercase tracking-[0.22em] text-slate-900">
                             <span className="block h-px w-3 bg-amber-500" />
 							Products
@@ -70,10 +74,10 @@ export function Footer({ settings, products }: FooterProps) {
 									</Link>
 								</li>
 							))}
-							<li className="col-span-full sm:col-span-2">
+							<li className="col-span-full sm:col-span-2 pt-1">
 								<Link
 									href="/products"
-									className="group inline-flex items-center gap-2 pt-2 text-[0.75rem] font-bold uppercase tracking-wide text-amber-600 transition hover:text-amber-500"
+									className="group inline-flex items-center gap-2 text-[0.75rem] font-bold uppercase tracking-wide text-amber-600 transition hover:text-amber-500"
 								>
 									<ArrowRight className="h-3 w-3 opacity-0 -ml-5 shrink-0 transition-all group-hover:opacity-100 group-hover:ml-0" />
 									View all products
@@ -83,7 +87,7 @@ export function Footer({ settings, products }: FooterProps) {
 					</div>
 
 					{/* Company nav */}
-					<div>
+					<div className="flex h-full flex-col lg:col-span-2">
 						<h3 className="mb-5 flex items-center gap-2 text-[0.65rem] font-black uppercase tracking-[0.22em] text-slate-900">
                             <span className="block h-px w-3 bg-amber-500" />
 							Company
@@ -104,7 +108,7 @@ export function Footer({ settings, products }: FooterProps) {
 					</div>
 
 					{/* Contact */}
-					<div>
+					<div className="flex h-full flex-col lg:col-span-2">
 						<h3 className="mb-5 flex items-center gap-2 text-[0.65rem] font-black uppercase tracking-[0.22em] text-slate-900">
                             <span className="block h-px w-3 bg-amber-500" />
 							Contact
@@ -142,13 +146,6 @@ export function Footer({ settings, products }: FooterProps) {
 							</li>
 						</ul>
 
-						<Link
-							href="/contact"
-							className="mt-8 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md bg-slate-900 px-6 text-[0.7rem] font-semibold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-slate-800"
-						>
-							Request quote
-							<ArrowRight className="h-4 w-4" aria-hidden />
-						</Link>
 					</div>
 				</div>
 

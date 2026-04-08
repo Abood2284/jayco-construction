@@ -13,16 +13,16 @@ export type HeaderAction = {
 export const headerNavConfig = {
 	primaryLinks: [
 		{
+			label: "Home",
+			href: "/",
+			match: "exact",
+			description: "Return to Jayco's main landing page.",
+		},
+		{
 			label: "Products",
 			href: "/products",
 			match: "prefix",
 			description: "Browse hoists, cranes, lifts, and material handling systems.",
-		},
-		{
-			label: "Installations",
-			href: "/gallery",
-			match: "prefix",
-			description: "See commissioned equipment and project proof.",
 		},
 		{
 			label: "About",

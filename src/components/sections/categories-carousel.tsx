@@ -32,7 +32,7 @@ export function CategoriesCarousel({
 				ref={scrollerRef}
 				role="region"
 				aria-label={ariaLabel}
-				className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+				className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
 			>
 				{children}
 			</div>

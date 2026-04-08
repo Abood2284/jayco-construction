@@ -14,9 +14,43 @@ interface ProductDetailTemplateProps {
 	category: ProductCategory
 	article: ProductArticle | null
 	relatedProducts: Product[]
+	whatsAppHref: string
 }
 
 const PRIMARY_CTA_LABEL = "Request Quote"
+
+function ProductHeroCtas({
+	whatsAppHref,
+	className,
+}: {
+	whatsAppHref: string
+	className?: string
+}) {
+	return (
+		<div className={className}>
+			<Link
+				href="#enquiry"
+				className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-rose-700 px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:px-8 sm:text-sm"
+			>
+				{PRIMARY_CTA_LABEL}
+			</Link>
+			<Link
+				href={whatsAppHref}
+				target="_blank"
+				rel="noopener noreferrer"
+				className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-emerald-300/90 bg-emerald-50 px-4 text-xs font-semibold uppercase tracking-wide text-emerald-700 transition-colors hover:border-emerald-400 hover:bg-emerald-100 hover:text-emerald-800 sm:min-h-12 sm:px-8 sm:text-sm"
+			>
+				WhatsApp
+			</Link>
+			<Link
+				href="/contact"
+				className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-slate-300/90 bg-white px-4 text-xs font-semibold uppercase tracking-wide text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-800 sm:min-h-12 sm:px-8 sm:text-sm"
+			>
+				Contact our team
+			</Link>
+		</div>
+	)
+}
 
 function SectionHeading({
 	eyebrow,
@@ -43,26 +77,22 @@ function SectionHeading({
 	)
 }
 
-function ProductHeroSummary({ product }: { product: Product }) {
+function ProductHeroSummary({
+	product,
+	whatsAppHref,
+}: {
+	product: Product
+	whatsAppHref: string
+}) {
 	return (
 		<div className="max-w-3xl">
 			<h1 className="text-2xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,3.2vw,2.75rem)]">
 				{product.name}
 			</h1>
-			<div className="mt-5 flex flex-row flex-nowrap items-center gap-2 sm:mt-6 sm:gap-3">
-				<Link
-					href="#enquiry"
-					className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-rose-700 px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-[0_14px_32px_rgba(190,24,93,0.22)] transition-colors hover:bg-rose-600 sm:min-h-12 sm:px-8 sm:text-sm"
-				>
-					{PRIMARY_CTA_LABEL}
-				</Link>
-				<Link
-					href="/contact"
-					className="font-heading inline-flex min-h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-slate-300/90 bg-white px-4 text-xs font-semibold uppercase tracking-wide text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 hover:text-slate-800 sm:min-h-12 sm:px-8 sm:text-sm"
-				>
-					Contact our team
-				</Link>
-			</div>
+			<ProductHeroCtas
+				whatsAppHref={whatsAppHref}
+				className="mt-5 flex flex-row flex-nowrap items-center gap-2 sm:mt-6 sm:gap-3 lg:hidden"
+			/>
 		</div>
 	)
 }
@@ -93,9 +123,11 @@ function ProductKeySpecsCompact({ rows, title }: { rows: ProductSpec[]; title: s
 function ProductLeadSection({
 	product,
 	partition,
+	whatsAppHref,
 }: {
 	product: Product
 	partition: ProductSpecPartition
+	whatsAppHref: string
 }) {
 	const primarySpecTitle = partition.usedFallback ? "Technical specifications" : "Key specifications"
 	const hasGallery = product.heroImages.length > 0
@@ -114,16 +146,22 @@ function ProductLeadSection({
 			<div className="pointer-events-none absolute -left-24 top-24 h-56 w-56 rounded-full bg-white/70 blur-3xl" />
 
 			<div className="relative mx-auto max-w-7xl">
-				<ProductHeroSummary product={product} />
+				<ProductHeroSummary product={product} whatsAppHref={whatsAppHref} />
 
 				{hasGallery ? (
 					<div className="mt-6 scroll-mt-28 sm:mt-7 lg:mt-8">
 						{showSpecsBesideGallery ? (
 							<div className="flex flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8 xl:gap-10">
-								<div id="product-gallery" className="min-w-0 lg:max-w-xl xl:max-w-2xl">
-									<ImageGallery images={product.heroImages} leadLayout variant="carousel" />
+								<div className="min-w-0 lg:sticky lg:top-24 lg:max-w-xl lg:self-start xl:max-w-2xl">
+									<div id="product-gallery">
+										<ImageGallery images={product.heroImages} leadLayout variant="carousel" />
+									</div>
+									<ProductHeroCtas
+										whatsAppHref={whatsAppHref}
+										className="mt-4 hidden flex-row flex-nowrap items-center gap-3 lg:flex"
+									/>
 								</div>
-								<div className="min-w-0 lg:pt-0">
+								<div className="min-w-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-1">
 									<ProductKeySpecsCompact rows={partition.primaryRows} title={primarySpecTitle} />
 								</div>
 							</div>
@@ -258,58 +296,18 @@ function ProductTechnicalDetails({
 }
 
 function ProductSupportingContent({ article }: { article: ProductArticle }) {
-	const sections = article.headings.filter((heading) => heading.depth === 2)
-
 	return (
 		<section id="engineering-guide" className="scroll-mt-28">
 			<SectionHeading
 				eyebrow="Extended information"
 				title="Product guide & reference"
-				description="Long-form detail for SEO and buyers who want depth. Most users can rely on the gallery and specifications above."
 			/>
 
-			<details className="group mt-8 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_42px_-34px_rgba(15,23,42,0.45)]">
-				<summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-5 py-5 sm:px-6">
-					<div>
-						<p className="text-sm font-semibold text-slate-950 sm:text-base">Open full product article</p>
-						<p className="mt-1 text-sm text-slate-600">
-							Engineering notes, selection guidance, and supporting copy in one place.
-						</p>
-					</div>
-					<span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-600 transition group-open:rotate-180 group-open:border-slate-300 group-open:bg-slate-100">
-						<svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-							<path
-								d="M19 9l-7 7-7-7"
-								fill="none"
-								stroke="currentColor"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2.5"
-							/>
-						</svg>
-					</span>
-				</summary>
-
-				<div className="border-t border-slate-200 px-5 py-6 sm:px-6 sm:py-8">
-					{sections.length > 0 ? (
-						<div className="mb-6 flex flex-wrap gap-2">
-							{sections.map((heading) => (
-								<Link
-									key={heading.id}
-									href={`#${heading.id}`}
-									className="inline-flex min-h-10 items-center rounded-full border border-slate-200 px-4 text-sm font-medium text-slate-700 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-900"
-								>
-									{heading.text}
-								</Link>
-							))}
-						</div>
-					) : null}
-
-					<div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-5 py-6 sm:px-8 sm:py-8">
-						<div className="markdown-content">{article.content}</div>
-					</div>
+			<div className="mt-8">
+				<div className="max-w-none text-slate-800">
+					<div className="markdown-content leading-relaxed">{article.content}</div>
 				</div>
-			</details>
+			</div>
 		</section>
 	)
 }
@@ -369,9 +367,9 @@ function ProductQuoteCta({
 }) {
 	return (
 		<section id="enquiry" className="scroll-mt-28">
-			<div className="overflow-hidden rounded-[2rem] border border-slate-900 bg-slate-950 text-white shadow-[0_28px_70px_-40px_rgba(15,23,42,0.7)]">
-				<div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-					<div className="border-b border-white/10 px-5 py-8 sm:px-8 lg:border-b-0 lg:border-r">
+			<div className="lg:overflow-hidden lg:rounded-[2rem] lg:border lg:border-slate-900 lg:bg-slate-950 lg:text-white lg:shadow-[0_28px_70px_-40px_rgba(15,23,42,0.7)]">
+				<div className="lg:grid lg:gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+					<div className="hidden border-b border-white/10 px-5 py-8 sm:px-8 lg:block lg:border-b-0 lg:border-r">
 						<p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-rose-300">
 							Request quote
 						</p>
@@ -408,7 +406,7 @@ function ProductQuoteCta({
 						</div>
 					</div>
 
-					<div className="bg-white px-5 py-8 sm:px-8">
+					<div className="px-0 py-0 sm:px-0 lg:bg-white lg:px-8 lg:py-8">
 						<EnquiryForm
 							title={PRIMARY_CTA_LABEL}
 							sourcePath={`/products/${category.slug}/${product.slug}`}
@@ -510,6 +508,7 @@ export function ProductDetailTemplate({
 	category,
 	article,
 	relatedProducts,
+	whatsAppHref,
 }: ProductDetailTemplateProps) {
 	const additionalInfo = product.additionalInfo ?? []
 	const partition = partitionSpecsForPrimaryDisplay(product.specs, additionalInfo)
@@ -517,7 +516,7 @@ export function ProductDetailTemplate({
 
 	return (
 		<main className="flex min-h-screen flex-col bg-slate-50 pb-28">
-			<ProductLeadSection product={product} partition={partition} />
+			<ProductLeadSection product={product} partition={partition} whatsAppHref={whatsAppHref} />
 
 			<div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-10 sm:px-6 lg:gap-20 lg:px-8 lg:py-14">
 				<ProductTechnicalDetails partition={partition} primaryDisplayedInHero={primarySpecsInHero} />

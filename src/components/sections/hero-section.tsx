@@ -16,6 +16,7 @@ interface HeroSectionProps {
 export function HeroSection({ settings, products, categories }: HeroSectionProps) {
 	const content = buildHomepageHeroContent(settings, products)
 	const spotlights = buildHeroSpotlights(products, categories)
+	const heroSlides = HOMEPAGE_HERO_GALLERY_SLIDES.slice(0, 2)
 
 	return (
 		<section className="relative w-full max-w-full min-w-0 touch-pan-y overflow-x-clip bg-slate-950 pb-3 sm:pb-5">
@@ -31,7 +32,7 @@ export function HeroSection({ settings, products, categories }: HeroSectionProps
 			<div className="pointer-events-none absolute left-0 top-0 h-80 w-80 rounded-full bg-rose-600/14 blur-3xl" />
 			<div className="pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
 
-			<HeroGalleryCarousel slides={HOMEPAGE_HERO_GALLERY_SLIDES} />
+			<HeroGalleryCarousel slides={heroSlides} />
 
 			<div className="relative mx-auto min-w-0 max-w-7xl px-4 lg:px-6">
 				<div className="mb-5 flex flex-col gap-5 sm:mb-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
