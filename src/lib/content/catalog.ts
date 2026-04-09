@@ -1,3 +1,4 @@
+import type { Dirent } from "node:fs"
 import { readdir, readFile, stat } from "node:fs/promises"
 import { join } from "node:path"
 
@@ -5,6 +6,7 @@ import { compileMDX } from "next-mdx-remote/rsc"
 
 import type { Product, ProductCategory, ProductSpec } from "@/lib/cms/types"
 import { getProductMdxSource } from "@/lib/content/get-product-mdx-source"
+import { listProductMdxSlugsFromDatabase } from "@/lib/mongodb/list-product-mdx-slugs"
 
 const PRODUCTS_ROOT = join(process.cwd(), "content", "products")
 const PRODUCT_IMAGE_PUBLIC_ROOT = "/images/products"
@@ -89,14 +91,30 @@ async function readCategoryConfig(categoryPath: string): Promise<CategoryConfig 
 	}
 }
 
-async function discoverCategoryDirs() {
-	const entries = await readdir(PRODUCTS_ROOT, { withFileTypes: true })
-	return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)
+function isEnoentError(error: unknown) {
+	return Boolean(error && typeof error === "object" && "code" in error && (error as NodeJS.ErrnoException).code === "ENOENT")
 }
 
-async function discoverProductDirs(categorySlug: string) {
+async function discoverCategoryDirsFromFilesystem(): Promise<string[]> {
+	try {
+		const entries = await readdir(PRODUCTS_ROOT, { withFileTypes: true })
+		return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)
+	} catch (error) {
+		if (isEnoentError(error)) return []
+		throw error
+	}
+}
+
+async function discoverProductDirsFromFilesystem(categorySlug: string): Promise<string[]> {
 	const categoryPath = join(PRODUCTS_ROOT, categorySlug)
-	const entries = await readdir(categoryPath, { withFileTypes: true })
+	let entries: Dirent[]
+	try {
+		entries = await readdir(categoryPath, { withFileTypes: true })
+	} catch (error) {
+		if (isEnoentError(error)) return []
+		throw error
+	}
+
 	const productSlugs: string[] = []
 
 	for (const entry of entries) {
@@ -112,6 +130,24 @@ async function discoverProductDirs(categorySlug: string) {
 	}
 
 	return productSlugs
+}
+
+/**
+ * Slugs to index: MongoDB when `MONGODB_URI` is set and the collection has rows; else repo `content/products`.
+ */
+async function discoverProductSlugPairs(): Promise<Array<{ categorySlug: string; productSlug: string }>> {
+	if (process.env.MONGODB_URI?.trim()) {
+		const fromDb = await listProductMdxSlugsFromDatabase()
+		if (fromDb.length > 0) return fromDb
+	}
+
+	const pairs: Array<{ categorySlug: string; productSlug: string }> = []
+	for (const categorySlug of await discoverCategoryDirsFromFilesystem()) {
+		for (const productSlug of await discoverProductDirsFromFilesystem(categorySlug)) {
+			pairs.push({ categorySlug, productSlug })
+		}
+	}
+	return pairs
 }
 
 async function discoverProductImages(categorySlug: string, productSlug: string): Promise<string[]> {
@@ -240,22 +276,41 @@ async function loadProductFromMdx(categorySlug: string, productSlug: string): Pr
 	return product
 }
 
-async function buildFilesystemCatalog(): Promise<Catalog> {
-	const categorySlugs = await discoverCategoryDirs()
+async function buildCatalog(): Promise<Catalog> {
+	const pairs = await discoverProductSlugPairs()
+
+	if (pairs.length === 0) {
+		return { categories: [], products: [] }
+	}
+
+	const byCategory = new Map<string, string[]>()
+	for (const { categorySlug, productSlug } of pairs) {
+		if (!byCategory.has(categorySlug)) byCategory.set(categorySlug, [])
+		byCategory.get(categorySlug)!.push(productSlug)
+	}
+
+	const categorySlugs = [...byCategory.keys()].sort((a, b) => a.localeCompare(b))
 
 	const fsProducts: Product[] = []
 	const fsCategories: ProductCategory[] = []
 
 	for (const categorySlug of categorySlugs) {
-		const productSlugs = await discoverProductDirs(categorySlug)
+		const rawSlugs = byCategory.get(categorySlug) ?? []
+		const productSlugs = [...new Set(rawSlugs)].sort((a, b) => a.localeCompare(b))
 		if (!productSlugs.length) continue
 
 		const productsForCategory: Product[] = []
 		for (const productSlug of productSlugs) {
-			const product = await loadProductFromMdx(categorySlug, productSlug)
-			productsForCategory.push(product)
-			fsProducts.push(product)
+			try {
+				const product = await loadProductFromMdx(categorySlug, productSlug)
+				productsForCategory.push(product)
+				fsProducts.push(product)
+			} catch {
+				// Skip broken or missing MDX for this slug (e.g. stale index row).
+			}
 		}
+
+		if (productsForCategory.length === 0) continue
 
 		const categoryPath = join(PRODUCTS_ROOT, categorySlug)
 		const config = await readCategoryConfig(categoryPath)
@@ -321,7 +376,7 @@ export function resetCatalogCache() {
 
 export async function loadCatalog(): Promise<Catalog> {
 	if (!catalogPromise) {
-		catalogPromise = buildFilesystemCatalog()
+		catalogPromise = buildCatalog()
 	}
 	return catalogPromise
 }

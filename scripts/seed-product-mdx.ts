@@ -9,7 +9,8 @@
  */
 
 import { config } from "dotenv"
-import { readdir, readFile, stat } from "node:fs/promises"
+import { constants } from "node:fs"
+import { access, readdir, readFile, stat } from "node:fs/promises"
 import { join } from "node:path"
 
 import { MongoClient } from "mongodb"
@@ -55,6 +56,16 @@ async function discoverProductSlugs(categorySlug: string): Promise<string[]> {
 }
 
 async function main() {
+	try {
+		await access(PRODUCTS_ROOT, constants.F_OK)
+	} catch {
+		console.error(
+			`Missing folder: ${PRODUCTS_ROOT}\n` +
+				"This script reads MDX files from disk. Restore `content/products` from git history, or add documents directly in MongoDB.",
+		)
+		process.exit(1)
+	}
+
 	const { uri, dbName, collectionName } = getMongoEnvFromProcess()
 	const client = new MongoClient(uri)
 
