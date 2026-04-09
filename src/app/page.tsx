@@ -47,8 +47,14 @@ export default async function Home() {
 			<FeaturedProductsSection products={featuredProducts} />
 			<ClientsSection clients={clientList} settings={settings} />
 			<CategoriesSection categories={categories} />
-			<SupportSection />
-			<CareersDisciplinedSection />
+			<section aria-label="Support and careers" className="bg-slate-50 py-16 lg:py-20">
+				<div className="mx-auto max-w-6xl px-4 lg:px-6">
+					<div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+						<SupportSection variant="card" />
+						<CareersDisciplinedSection variant="card" />
+					</div>
+				</div>
+			</section>
 			<GalleryTeaserSection galleryCategories={galleryCategories} />
 		</main>
 	)
