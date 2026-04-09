@@ -20,6 +20,9 @@ type ProductPageProps = {
   params: Promise<{ categorySlug: string; productSlug: string }>;
 };
 
+/** Always resolve MDX from Mongo (when configured) on each request — avoids stale SSG HTML from build-time filesystem. */
+export const dynamic = "force-dynamic";
+
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((product) => ({
