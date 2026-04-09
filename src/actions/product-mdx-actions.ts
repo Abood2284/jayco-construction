@@ -23,31 +23,34 @@ interface ProductMdxData extends Record<string, unknown> {
 
 function mapMongoSaveError(error: unknown): { code: string; message: string } {
 	if (!error || typeof error !== "object") {
-		return { code: "UNKNOWN", message: "Could not save to MongoDB. Unknown failure." }
+		return { code: "UNKNOWN", message: "Could not save to MongoDB [UNKNOWN]. Unknown failure." }
 	}
 
+	const maybeName = "name" in error ? String(error.name ?? "") : ""
 	const maybeMessage = "message" in error ? String(error.message ?? "") : ""
 	const maybeCode = "code" in error ? String(error.code ?? "") : ""
 	const message = maybeMessage.toLowerCase()
+	const details = [maybeName, maybeCode].filter(Boolean).join("/")
+	const suffix = details ? ` (${details})` : ""
 
 	if (maybeCode === "8000" || message.includes("bad auth") || message.includes("authentication failed")) {
 		return {
 			code: "AUTH_FAILED",
-			message: "Could not save to MongoDB [AUTH_FAILED]. Check DB username/password in MONGODB_URI.",
+			message: `Could not save to MongoDB [AUTH_FAILED]. Check DB username/password in MONGODB_URI.${suffix}`,
 		}
 	}
 
 	if (message.includes("querysrv") || message.includes("enotfound") || message.includes("eai_again")) {
 		return {
 			code: "DNS_ERROR",
-			message: "Could not save to MongoDB [DNS_ERROR]. Check cluster hostname in MONGODB_URI.",
+			message: `Could not save to MongoDB [DNS_ERROR]. Check cluster hostname in MONGODB_URI.${suffix}`,
 		}
 	}
 
 	if (message.includes("server selection timed out")) {
 		return {
 			code: "SERVER_SELECTION_TIMEOUT",
-			message: "Could not save to MongoDB [SERVER_SELECTION_TIMEOUT]. Check Atlas network access and cluster health.",
+			message: `Could not save to MongoDB [SERVER_SELECTION_TIMEOUT]. Check Atlas network access and cluster health.${suffix}`,
 		}
 	}
 
@@ -59,20 +62,20 @@ function mapMongoSaveError(error: unknown): { code: string; message: string } {
 	) {
 		return {
 			code: "TLS_ERROR",
-			message: "Could not save to MongoDB [TLS_ERROR]. Check TLS/SSL connectivity between host and Atlas.",
+			message: `Could not save to MongoDB [TLS_ERROR]. Check TLS/SSL connectivity between host and Atlas.${suffix}`,
 		}
 	}
 
 	if (message.includes("econnreset") || message.includes("econnrefused") || message.includes("etimedout")) {
 		return {
 			code: "NETWORK_ERROR",
-			message: "Could not save to MongoDB [NETWORK_ERROR]. Check outbound network/firewall from your runtime.",
+			message: `Could not save to MongoDB [NETWORK_ERROR]. Check outbound network/firewall from your runtime.${suffix}`,
 		}
 	}
 
 	return {
 		code: "MONGO_WRITE_FAILED",
-		message: "Could not save to MongoDB [MONGO_WRITE_FAILED]. Check runtime env vars and Atlas logs.",
+		message: `Could not save to MongoDB [MONGO_WRITE_FAILED]. Check runtime env vars and Atlas logs.${suffix}`,
 	}
 }
 

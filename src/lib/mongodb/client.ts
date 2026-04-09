@@ -9,7 +9,11 @@ export function getMongoClient(): Promise<MongoClient> {
 	if (!clientPromise) {
 		const { uri } = getMongoEnv()
 		const client = new MongoClient(uri)
-		clientPromise = client.connect()
+		clientPromise = client.connect().catch((error) => {
+			// Avoid locking the process to a permanently rejected promise after transient failures.
+			clientPromise = null
+			throw error
+		})
 	}
 	return clientPromise
 }
