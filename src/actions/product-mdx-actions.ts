@@ -17,6 +17,10 @@ const saveProductMdxSchema = z.object({
 
 export type SaveProductMdxResult = { ok: true } | { ok: false; message: string }
 
+interface ProductMdxData extends Record<string, unknown> {
+	heroImage?: unknown
+}
+
 export async function saveProductMdx(
 	raw: z.infer<typeof saveProductMdxSchema>,
 ): Promise<SaveProductMdxResult> {
@@ -38,7 +42,7 @@ export async function saveProductMdx(
 		return { ok: false, message: "Title and description are required" }
 	}
 
-	const data = {
+	const data: ProductMdxData = {
 		...frontmatter,
 		categorySlug,
 		productSlug,
