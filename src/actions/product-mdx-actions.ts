@@ -21,6 +21,61 @@ interface ProductMdxData extends Record<string, unknown> {
 	heroImage?: unknown
 }
 
+function mapMongoSaveError(error: unknown): { code: string; message: string } {
+	if (!error || typeof error !== "object") {
+		return { code: "UNKNOWN", message: "Could not save to MongoDB. Unknown failure." }
+	}
+
+	const maybeMessage = "message" in error ? String(error.message ?? "") : ""
+	const maybeCode = "code" in error ? String(error.code ?? "") : ""
+	const message = maybeMessage.toLowerCase()
+
+	if (maybeCode === "8000" || message.includes("bad auth") || message.includes("authentication failed")) {
+		return {
+			code: "AUTH_FAILED",
+			message: "Could not save to MongoDB [AUTH_FAILED]. Check DB username/password in MONGODB_URI.",
+		}
+	}
+
+	if (message.includes("querysrv") || message.includes("enotfound") || message.includes("eai_again")) {
+		return {
+			code: "DNS_ERROR",
+			message: "Could not save to MongoDB [DNS_ERROR]. Check cluster hostname in MONGODB_URI.",
+		}
+	}
+
+	if (message.includes("server selection timed out")) {
+		return {
+			code: "SERVER_SELECTION_TIMEOUT",
+			message: "Could not save to MongoDB [SERVER_SELECTION_TIMEOUT]. Check Atlas network access and cluster health.",
+		}
+	}
+
+	if (
+		message.includes("tls") ||
+		message.includes("ssl") ||
+		message.includes("certificate") ||
+		message.includes("handshake")
+	) {
+		return {
+			code: "TLS_ERROR",
+			message: "Could not save to MongoDB [TLS_ERROR]. Check TLS/SSL connectivity between host and Atlas.",
+		}
+	}
+
+	if (message.includes("econnreset") || message.includes("econnrefused") || message.includes("etimedout")) {
+		return {
+			code: "NETWORK_ERROR",
+			message: "Could not save to MongoDB [NETWORK_ERROR]. Check outbound network/firewall from your runtime.",
+		}
+	}
+
+	return {
+		code: "MONGO_WRITE_FAILED",
+		message: "Could not save to MongoDB [MONGO_WRITE_FAILED]. Check runtime env vars and Atlas logs.",
+	}
+}
+
 export async function saveProductMdx(
 	raw: z.infer<typeof saveProductMdxSchema>,
 ): Promise<SaveProductMdxResult> {
@@ -77,8 +132,9 @@ export async function saveProductMdx(
 			},
 			{ upsert: true },
 		)
-	} catch {
-		return { ok: false, message: "Could not save to MongoDB. Check MONGODB_URI and network access." }
+	} catch (error) {
+		const mapped = mapMongoSaveError(error)
+		return { ok: false, message: mapped.message }
 	}
 
 	resetCatalogCache()
