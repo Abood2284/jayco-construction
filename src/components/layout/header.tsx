@@ -169,8 +169,8 @@ function Header({ settings, categories }: HeaderProps) {
 										: "pointer-events-none -translate-y-1 opacity-0"
 								}`}
 							>
-								<div className="overflow-hidden rounded-sm border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.16)]">
-									<div className="grid gap-0 border-b border-slate-200 bg-slate-50/80 md:grid-cols-[220px_minmax(0,1fr)]">
+								<div className="flex max-h-[calc(100vh-7rem)] flex-col overflow-hidden rounded-sm border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.16)] lg:max-h-[calc(100dvh-7rem)]">
+									<div className="grid flex-1 gap-0 overflow-y-auto border-b border-slate-200 bg-slate-50/80 md:grid-cols-[220px_minmax(0,1fr)]">
 										<div className="border-b border-slate-200 px-6 py-5 md:border-b-0 md:border-r">
 											<p className="text-[0.68rem] font-bold uppercase tracking-[0.26em] text-slate-500">
 												Product Access
