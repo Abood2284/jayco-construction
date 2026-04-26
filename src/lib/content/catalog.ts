@@ -1,6 +1,9 @@
+// src/lib/content/catalog.ts
+import productImageManifest from "./product-image-manifest.json";
 import type { Dirent } from "node:fs"
 import { readdir, readFile, stat } from "node:fs/promises"
 import { join } from "node:path"
+
 
 import { compileMDX } from "next-mdx-remote/rsc"
 
@@ -13,6 +16,7 @@ const PRODUCT_IMAGE_PUBLIC_ROOT = "/images/products"
 const PRODUCT_IMAGE_FS_ROOT = join(process.cwd(), "public", "images", "products")
 
 const GALLERY_EXTENSIONS = [".webp", ".jpg", ".jpeg", ".png"]
+const PRODUCT_IMAGE_MANIFEST = productImageManifest as Record<string, string[]>;
 
 function hasGalleryExtension(name: string): boolean {
 	const lower = name.toLowerCase()
@@ -150,37 +154,12 @@ async function discoverProductSlugPairs(): Promise<Array<{ categorySlug: string;
 	return pairs
 }
 
-async function discoverProductImages(categorySlug: string, productSlug: string): Promise<string[]> {
-	const dirPath = join(PRODUCT_IMAGE_FS_ROOT, categorySlug, productSlug)
-	let entries: string[]
-	try {
-		entries = await readdir(dirPath)
-	} catch {
-		return []
-	}
-
-	const heroMatch = entries.find(
-		(name) => hasGalleryExtension(name) && name.toLowerCase().startsWith("hero."),
-	)
-	const galleryNums: number[] = []
-	for (let n = 1; n <= 6; n++) {
-		const prefix = `gallery-${n}.`
-		const found = entries.find(
-			(name) => hasGalleryExtension(name) && name.toLowerCase().startsWith(prefix),
-		)
-		if (found) galleryNums.push(n)
-	}
-
-	const baseUrl = `${PRODUCT_IMAGE_PUBLIC_ROOT}/${categorySlug}/${productSlug}`
-	const ordered: string[] = []
-	if (heroMatch) ordered.push(`${baseUrl}/${heroMatch}`)
-	for (const n of galleryNums) {
-		const name = entries.find(
-			(e) => hasGalleryExtension(e) && e.toLowerCase().startsWith(`gallery-${n}.`),
-		)
-		if (name) ordered.push(`${baseUrl}/${name}`)
-	}
-	return ordered
+async function discoverProductImages(
+  categorySlug: string,
+  productSlug: string,
+): Promise<string[]> {
+  const manifestKey = `${categorySlug}/${productSlug}`;
+  return PRODUCT_IMAGE_MANIFEST[manifestKey] ?? [];
 }
 
 async function loadProductFromMdx(categorySlug: string, productSlug: string): Promise<Product> {

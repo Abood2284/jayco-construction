@@ -1,3 +1,5 @@
+// scripts/seed-product-mdx.ts
+
 /**
  * Upserts every `content/products/{category}/{product}/index.mdx` into MongoDB.
  *

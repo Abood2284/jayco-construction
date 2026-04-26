@@ -1,3 +1,4 @@
+
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { NextConfig } from "next";
@@ -9,14 +10,26 @@ const redirectRules = JSON.parse(
 ) as RedirectRule[];
 
 const nextConfig: NextConfig = {
-	trailingSlash: false,
-	async redirects() {
-		return redirectRules.map((rule) => ({
-			source: rule.oldPath,
-			destination: rule.newPath,
-			permanent: true,
-		}));
-	},
+  images: {
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
+    ],
+  },
+  outputFileTracingExcludes: {
+    "*": ["./public/images/products/**/*"],
+  },
+  trailingSlash: false,
+  async redirects() {
+    return redirectRules.map((rule) => ({
+      source: rule.oldPath,
+      destination: rule.newPath,
+      permanent: true,
+    }));
+  },
 };
 
 // Only load Cloudflare dev init when not on Vercel (avoids workerd/GLIBC on Vercel builds).

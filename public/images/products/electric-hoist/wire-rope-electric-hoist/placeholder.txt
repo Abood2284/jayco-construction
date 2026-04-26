@@ -1,3 +1,0 @@
-This folder is reserved for product-specific images for the Heavy Duty Screw Conveyor page.
-Replace this file with real WebP or SVG assets as they become available.
-

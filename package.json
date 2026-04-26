@@ -18,6 +18,7 @@
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",
 		"@opennextjs/cloudflare": "^1.17.1",
+		"@vercel/blob": "^2.3.3",
 		"gray-matter": "^4.0.3",
 		"lucide-react": "^0.577.0",
 		"mongodb": "^7.1.1",
