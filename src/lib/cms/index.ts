@@ -30,11 +30,8 @@ export const getProductBySlug = async (slug: string) => {
 };
 
 export const getProductByCategoryAndSlug = async (categorySlug: string, productSlug: string) => {
-	const product = await getProductBySlug(productSlug);
-	if (!product || product.categorySlug !== categorySlug) {
-		return null;
-	}
-	return product;
+	const products = await loadProducts();
+	return products.find((product) => product.categorySlug === categorySlug && product.slug === productSlug) ?? null;
 };
 
 export const getRelatedProducts = async (product: Product, limit = 4) => {

@@ -10,6 +10,11 @@ const redirectRules = JSON.parse(
 ) as RedirectRule[];
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "64mb",
+    },
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

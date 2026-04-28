@@ -1,7 +1,6 @@
-import { MongoClient, type Collection } from "mongodb"
+import { MongoClient } from "mongodb"
 
 import { getMongoEnv } from "@/lib/mongodb/env"
-import type { ProductMdxDocument } from "@/lib/mongodb/product-mdx-document"
 
 let clientPromise: Promise<MongoClient> | null = null
 
@@ -16,10 +15,4 @@ export function getMongoClient(): Promise<MongoClient> {
 		})
 	}
 	return clientPromise
-}
-
-export async function getProductMdxCollection(): Promise<Collection<ProductMdxDocument>> {
-	const { dbName, collectionName } = getMongoEnv()
-	const client = await getMongoClient()
-	return client.db(dbName).collection<ProductMdxDocument>(collectionName)
 }

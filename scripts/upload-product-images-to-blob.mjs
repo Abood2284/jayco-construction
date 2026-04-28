@@ -159,8 +159,6 @@ async function main() {
       )} KB)`,
     );
 
-    const fileBuffer = await readFile(filePath);
-
     const blob = await uploadWithRetry(blobPath, filePath);
 
     if (!manifest[productKey]) {

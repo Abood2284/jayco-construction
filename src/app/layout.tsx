@@ -3,11 +3,14 @@ import { Suspense } from "react"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import {
-	getProductCategories,
 	getProducts,
 	getSiteSettings,
 } from "@/lib/cms"
 import { headingFont, bodyFont } from "@/lib/font"
+import {
+	listProductCategoriesFromDatabase,
+	type ProductCategoryRecord,
+} from "@/lib/mongodb/product-categories"
 import { siteUrl } from "@/lib/seo/config"
 import "./globals.css"
 
@@ -19,11 +22,12 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-	const [settings, categories, products] = await Promise.all([
+	const [settings, rawCategories, products] = await Promise.all([
 		getSiteSettings(),
-		getProductCategories(),
+		listProductCategoriesFromDatabase({ includeDrafts: false, includeArchived: false }),
 		getProducts(),
 	])
+	const categories = rawCategories.map(toHeaderCategory)
 
 	return (
 		<html lang="en">
@@ -41,4 +45,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 			</body>
 		</html>
 	)
+}
+
+function toHeaderCategory(category: ProductCategoryRecord) {
+	return {
+		slug: category.slug,
+		name: category.name,
+		intro: category.intro ?? "",
+		seoCopy: category.seoCopy ?? "",
+		order: category.order,
+		status: category.status,
+		createdAt: category.createdAt,
+		updatedAt: category.updatedAt,
+	}
 }

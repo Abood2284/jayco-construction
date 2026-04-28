@@ -5,12 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, FileText, LayoutGrid, Menu, Phone, X } from "lucide-react";
-import type { ProductCategory, SiteSettings } from "@/lib/cms/types";
+import type { SiteSettings } from "@/lib/cms/types";
 import { buildPhoneHref, headerNavConfig } from "@/lib/content/navigation";
+import type { ProductCategoryRecord } from "@/lib/mongodb/product-categories";
 
 interface HeaderProps {
 	settings: SiteSettings;
-	categories: ProductCategory[];
+	categories: ProductCategoryRecord[];
 }
 
 function isActivePath(pathname: string, href: string, match: "exact" | "prefix") {

@@ -24,6 +24,10 @@ function chunkProducts(products: Product[], chunkSize: number) {
 
 const ALL_FILTER = "all"
 
+function productKey(product: Product): string {
+	return `${product.categorySlug}/${product.slug}`
+}
+
 function EquipmentProductCard({ product }: { product: Product }) {
 	const image = product.heroImages[0]
 
@@ -33,7 +37,7 @@ function EquipmentProductCard({ product }: { product: Product }) {
 			className="group flex min-h-0 flex-col gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
 		>
 			<div className="overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-sm transition-[box-shadow,border-color,transform] duration-200 motion-reduce:transition-none group-hover:border-slate-300 group-hover:shadow-md group-hover:ring-1 group-hover:ring-slate-200/80 motion-safe:sm:group-hover:-translate-y-0.5 motion-reduce:sm:group-hover:translate-y-0">
-				<div className="relative aspect-[3/2] w-full overflow-hidden bg-slate-100">
+				<div className="relative aspect-3/2 w-full overflow-hidden bg-slate-100">
 					{image ? (
 						<Image
 							src={image.src}
@@ -113,7 +117,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 			: `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? "product" : "products"}${activeGroupId === ALL_FILTER ? "" : ` in ${activeLabel}`}.`
 
 	return (
-		<section className="border-b border-slate-200 border-t border-slate-100 bg-slate-50/70 pt-8 pb-12 sm:pt-10 sm:pb-14 lg:py-20">
+		<section className="border-y border-b-slate-200 border-t-slate-100 bg-slate-50/70 pt-8 pb-12 sm:pt-10 sm:pb-14 lg:py-20">
 			<div className="mx-auto max-w-7xl px-4 lg:px-6">
 				<div className="mb-8 w-full sm:mb-10">
 					<h2 className="w-full text-xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-2xl md:text-3xl lg:max-w-none lg:text-[clamp(2rem,4vw,3.3rem)]">
@@ -189,7 +193,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 										className="grid min-w-[84%] shrink-0 snap-start grid-cols-2 gap-2"
 									>
 										{productGroup.map((product) => (
-											<EquipmentProductCard key={product.slug} product={product} />
+											<EquipmentProductCard key={productKey(product)} product={product} />
 										))}
 									</div>
 								))}
@@ -197,7 +201,7 @@ export function EquipmentGridSection({ products }: EquipmentGridSectionProps) {
 
 							<div className="hidden grid-cols-2 gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 sm:gap-2.5 lg:gap-3">
 								{filteredProducts.map((product) => (
-									<EquipmentProductCard key={product.slug} product={product} />
+									<EquipmentProductCard key={productKey(product)} product={product} />
 								))}
 							</div>
 						</>

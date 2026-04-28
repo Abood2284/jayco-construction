@@ -1,7 +1,6 @@
 export interface MongoEnv {
 	uri: string
 	dbName: string
-	collectionName: string
 }
 
 export function getMongoEnv(): MongoEnv {
@@ -11,7 +10,6 @@ export function getMongoEnv(): MongoEnv {
 	}
 
 	const dbName = process.env.MONGODB_DB?.trim() || "jayco"
-	const collectionName = process.env.MONGODB_COLLECTION?.trim() || "product_mdx"
 
-	return { uri, dbName, collectionName }
+	return { uri, dbName }
 }
