@@ -30,7 +30,7 @@ export const siteSettings: SiteSettings = {
 		width: 1200,
 		height: 630,
 	},
-	yearsInBusiness: 22,
+	yearsInBusiness: 40,
 	industriesServed: ["Oil & Gas", "Power", "Process Manufacturing", "Infrastructure"],
 	serviceSupport: "24/7 project response with commissioning and maintenance support.",
 };
