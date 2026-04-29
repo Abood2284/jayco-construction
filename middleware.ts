@@ -5,7 +5,8 @@ import { getRedirectMap } from "@/lib/seo/redirects";
 
 const redirectMap = getRedirectMap();
 
-const staticAssetPattern = /\.(?:css|js|mjs|png|jpe?g|gif|webp|avif|svg|ico|txt|woff2?|ttf|map)$/i;
+const staticAssetPattern =
+	/\.(?:css|js|mjs|png|jpe?g|gif|webp|avif|svg|ico|txt|woff2?|ttf|map|pdf)$/i;
 
 const isAssetPath = (pathname: string) =>
 	pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname.startsWith("/images") || staticAssetPattern.test(pathname);
