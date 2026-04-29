@@ -51,7 +51,7 @@ export function Footer({ settings, products }: FooterProps) {
 							/>
 						</Link>
 						<p className="mt-4 max-w-[32ch] text-[0.75rem] font-medium leading-relaxed text-slate-600">
-							Engineering heavy-duty material handling solutions for over 4 decades. Built for extreme environments, designed for safety, and trusted by core industries worldwide.
+							Engineering heavy-duty material handling solutions for over 2 decades. Built for extreme environments, designed for safety, and trusted by core industries worldwide.
 						</p>
 						<p className="mt-5 text-[0.7rem] font-bold tracking-wide text-amber-600">{settings.address}</p>
 					</div>
