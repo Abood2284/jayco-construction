@@ -7,6 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint src scripts next.config.ts middleware.ts --max-warnings=0",
+		"admin:indexes": "tsx scripts/setup-admin-mongo-indexes.ts",
+		"admin:create": "tsx scripts/create-admin-user.ts",
 		"seo:crawl": "node scripts/crawl-legacy-urls.mjs",
 		"seo:redirects": "node scripts/generate-redirect-map.mjs",
 		"catalog:sync-categories": "tsx scripts/sync-product-categories-from-products.ts",
@@ -18,9 +20,9 @@
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
 	},
 	"dependencies": {
-		"@neondatabase/serverless": "^1.0.2",
 		"@opennextjs/cloudflare": "^1.17.1",
 		"@vercel/blob": "^2.3.3",
+		"bcryptjs": "^3.0.3",
 		"gray-matter": "^4.0.3",
 		"lucide-react": "^0.577.0",
 		"mongodb": "^7.1.1",

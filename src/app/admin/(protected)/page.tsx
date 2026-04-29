@@ -21,6 +21,11 @@ const adminSections = [
 		description: "Prepare product image and Blob media workflows.",
 		href: "/admin/catalog/media",
 	},
+	{
+		title: "Inquiries",
+		description: "Review contact form submissions from the public site.",
+		href: "/admin/contact-submissions",
+	},
 ]
 
 export default function AdminPage() {
