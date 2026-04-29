@@ -32,7 +32,6 @@ export const siteSettings: SiteSettings = {
 	},
 	yearsInBusiness: 22,
 	industriesServed: ["Oil & Gas", "Power", "Process Manufacturing", "Infrastructure"],
-	standards: ["ISO 9001", "ASME", "AWS D1.1"],
 	serviceSupport: "24/7 project response with commissioning and maintenance support.",
 };
 

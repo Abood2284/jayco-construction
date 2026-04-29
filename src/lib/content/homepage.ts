@@ -138,11 +138,7 @@ export function buildHomepageHeroContent(settings: SiteSettings, products: Produ
 				title: `${pluralize(settings.industriesServed.length, "sector")} served`,
 				description: sectorsServed,
 			},
-			{
-				icon: "shield",
-				title: "Standards-aware fabrication",
-				description: settings.standards.join(" • "),
-			},
+			
 			{
 				icon: "wrench",
 				title: "Lifecycle support",

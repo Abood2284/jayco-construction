@@ -143,7 +143,6 @@ export function buildAboutPageContent(
 	const productFamilyCount = categories.length
 	const productCount = products.length
 	const sectorsServed = settings.industriesServed.join(", ")
-	const standardsSummary = settings.standards.join(" • ")
 
 	return {
 		pageEyebrow: "About Jayco",
@@ -190,10 +189,7 @@ export function buildAboutPageContent(
 				title: `${settings.industriesServed.length} sectors`,
 				description: sectorsServed,
 			},
-			{
-				title: "Standards & support",
-				description: `${standardsSummary}. ${settings.serviceSupport}`,
-			},
+			
 		],
 		capabilitySection: {
 			eyebrow: "Capabilities",

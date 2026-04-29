@@ -23,7 +23,6 @@ export type SiteSettings = {
 	defaultOgImage: ImageAsset;
 	yearsInBusiness: number;
 	industriesServed: string[];
-	standards: string[];
 	serviceSupport: string;
 };
 

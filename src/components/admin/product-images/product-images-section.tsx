@@ -322,7 +322,6 @@ function ProductImageUploadForm({
 	return (
 		<form
 			action={uploadProductImageAction}
-			encType="multipart/form-data"
 			className="space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-4"
 		>
 			<div>

@@ -204,11 +204,12 @@ function Header({ settings, categories }: HeaderProps) {
 										<p className="text-sm text-slate-600">{headerNavConfig.primaryLinks[0]?.description}</p>
 										<div className="flex items-center gap-3">
 											<a
-												href={phoneHref}
+												href="/pdf/Catalogue.pdf"
+												download="Catalogue.pdf"
 												className="inline-flex min-h-11 items-center gap-2 border border-slate-300 px-4 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-slate-700 transition-colors hover:border-slate-950 hover:text-slate-950"
 											>
-												<Phone className="h-4 w-4" aria-hidden="true" />
-												Call Now
+												<FileText className="h-4 w-4" aria-hidden="true" />
+												Download Catalogue
 											</a>
 											<Link
 												href="/products"
